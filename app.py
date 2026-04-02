@@ -6,10 +6,17 @@ import os
 # CONFIG DA PÁGINA
 # -------------------------
 st.set_page_config(
+    page_title="Precificação 3D",
+    page_icon="🧮",
+    layout="centered"
+)
+
+# -------------------------
+# TÍTULO
+# -------------------------
 st.title("🧮 Precificação de Impressão 3D")
 st.markdown("### Sistema de Precificação para Makers")
 st.caption("Calcule custo, preço e lucro das suas peças")
-)
 
 # -------------------------
 # FUNÇÕES DE DADOS
