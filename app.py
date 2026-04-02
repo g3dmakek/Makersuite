@@ -78,7 +78,7 @@ if st.button("💰 Calcular preço"):
         custo_maquina = tempo * custo_hora
         custo_energia = tempo * custo_kwh * consumo_maquina
 
-        custo_total = custo_material + custo_maquina + custo_energia * 1,3
+        custo_total = custo_material + custo_maquina + custo_energia
 
         preco_venda = custo_total * multiplicador
         lucro = preco_venda - custo_total
