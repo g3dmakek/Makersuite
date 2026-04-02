@@ -64,6 +64,7 @@ st.subheader("📥 Dados da peça")
 nome = st.text_input("Nome do produto")
 peso = st.number_input("Peso (g)", min_value=0.0, value=50.0)
 tempo = st.number_input("Tempo de impressão (horas)", min_value=0.0, value=2.0)
+quantidade = st.number_input("Quantidade de peças", min_value=1, value=10)
 
 # -------------------------
 # CÁLCULO
@@ -84,6 +85,10 @@ if st.button("💰 Calcular preço"):
         margem_real = (lucro / preco_venda) * 100 if preco_venda > 0 else 0
         lucro_por_hora = lucro / tempo if tempo > 0 else 0
 
+        faturamento_total = preco_venda * quantidade
+        lucro_total = lucro * quantidade
+        tempo_total = tempo * quantidade
+
         # -------------------------
         # RESULTADOS
         # -------------------------
@@ -101,6 +106,15 @@ if st.button("💰 Calcular preço"):
         col2.metric("⚡ Energia", f"R$ {custo_energia:.2f}")
 
         st.divider()
+
+        st.subheader("📦 Simulação de Produção")
+
+        col3, col4 = st.columns(2)
+        
+        col3.metric("Faturamento Total", f"R$ {faturamento_total:.2f}")
+        col4.metric("Lucro Total", f"R$ {lucro_total:.2f}")
+        
+        col3.metric("Tempo Total (h)", f"{tempo_total:.1f}")
 
         # -------------------------
         # INDICADOR INTELIGENTE
