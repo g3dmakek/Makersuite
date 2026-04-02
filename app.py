@@ -137,7 +137,7 @@ if st.button("💰 Calcular preço"):
                 "custo_total": custo_total,
                 "preco_venda": preco_venda,
                 "lucro": lucro,
-                "tipo": tipo_produto
+                "tipo": tipo_produto,
                 "lucro_por_hora": lucro_por_hora
             }
 
