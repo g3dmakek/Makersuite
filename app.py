@@ -57,12 +57,6 @@ margens = {
 multiplicador = margens[tipo_produto]
 
 # -------------------------
-# TÍTULO
-# -------------------------
-st.title("🧮 Precificação de Impressão 3D")
-st.caption("Calcule custo, preço e lucro das suas peças")
-
-# -------------------------
 # INPUTS
 # -------------------------
 st.subheader("📥 Dados da peça")
