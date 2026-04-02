@@ -168,7 +168,24 @@ else:
                 dados["produtos"].pop(i)
                 salvar_dados(dados)
                 st.rerun()
-            
+                
+st.subheader("🧹 Exclusão em massa")
+
+selecionados = []
+
+for i, p in enumerate(dados["produtos"]):
+    if st.checkbox(f"{p['nome']} ({p['tipo']})", key=f"check_{i}"):
+        selecionados.append(i)
+
+if selecionados:
+    if st.button("🗑️ Excluir selecionados"):
+        for i in sorted(selecionados, reverse=True):
+            dados["produtos"].pop(i)
+
+        salvar_dados(dados)
+        st.success("Produtos excluídos!")
+        st.rerun()         
+        
 # -------------------------
 # RANKING
 # -------------------------
