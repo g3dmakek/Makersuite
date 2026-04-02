@@ -7,6 +7,7 @@ import os
 # -------------------------
 st.set_page_config(
     page_title="Precificação 3D",
+    st.markdown("### 🚀 Sistema de Precificação para Makers")
     page_icon="🧮",
     layout="centered"
 )
@@ -79,6 +80,15 @@ if st.button("💰 Calcular preço"):
         lucro = preco_venda - custo_total
         margem_real = (lucro / preco_venda) * 100 if preco_venda > 0 else 0
 
+        lucro_por_hora = lucro / tempo if tempo > 0 else 0
+
+        if lucro_por_hora < 2:
+    st.error("❌ Baixa rentabilidade — não vale a pena")
+elif lucro_por_hora < 5:
+    st.warning("⚠️ Rentabilidade média — pode melhorar")
+else:
+    st.success("✅ Alta rentabilidade — ótimo produto")
+
         # -------------------------
         # RESULTADOS
         # -------------------------
@@ -93,6 +103,8 @@ if st.button("💰 Calcular preço"):
         col2.metric("Margem", f"{margem_real:.1f}%")
 
         st.divider()
+
+        col1.metric("Lucro por hora", f"R$ {lucro_por_hora:.2f}")
 
         # -------------------------
         # SALVAR PRODUTO
