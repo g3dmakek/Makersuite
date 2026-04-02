@@ -14,7 +14,7 @@ st.set_page_config(
 # -------------------------
 # TÍTULO
 # -------------------------
-st.title("🧮 Precificação de Impressão 3D")
+st.title("🧮 MakerSuite")
 st.markdown("### Sistema de Precificação para Makers")
 st.caption("Calcule custo, preço e lucro das suas peças")
 
