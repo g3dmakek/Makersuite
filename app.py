@@ -11,7 +11,9 @@ st.set_page_config(
     layout="centered"
 )
 
- st.markdown("### 🚀 Sistema de Precificação para Makers")
+st.title("🧮 Precificação de Impressão 3D")
+st.markdown("### Sistema de Precificação para Makers")
+st.caption("Calcule custo, preço e lucro das suas peças")
 
 # -------------------------
 # FUNÇÕES DE DADOS
