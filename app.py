@@ -138,6 +138,7 @@ if st.button("💰 Calcular preço"):
                 "preco_venda": preco_venda,
                 "lucro": lucro,
                 "tipo": tipo_produto
+                "lucro_por_hora": lucro_por_hora
             }
 
             dados["produtos"].append(novo_produto)
@@ -159,3 +160,24 @@ else:
             st.write(f"Tempo: {p['tempo']} h")
             st.write(f"Preço: R$ {p['preco_venda']:.2f}")
             st.write(f"Lucro: R$ {p['lucro']:.2f}")
+            
+# -------------------------
+# RANKING
+# -------------------------
+
+st.subheader("🏆 Ranking de Produtos (Mais lucrativos)")
+
+if len(dados["produtos"]) == 0:
+    st.info("Nenhum produto para analisar")
+else:
+    produtos_ordenados = sorted(
+        dados["produtos"],
+        key=lambda x: x.get("lucro_por_hora", 0),
+        reverse=True
+    )
+
+    for i, p in enumerate(produtos_ordenados[:5], start=1):
+        st.write(f"{i}º - {p['nome']}")
+        st.write(f"💰 Lucro/hora: R$ {p.get('lucro_por_hora', 0):.2f}")
+        st.write(f"🏷️ Preço: R$ {p['preco_venda']:.2f}")
+        st.write("---")
