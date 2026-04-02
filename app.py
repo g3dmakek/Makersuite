@@ -155,12 +155,19 @@ st.subheader("📦 Produtos salvos")
 if len(dados["produtos"]) == 0:
     st.info("Nenhum produto salvo ainda")
 else:
-    for p in dados["produtos"]:
+    for i, p in enumerate(dados["produtos"]):
         with st.expander(f"{p['nome']} ({p['tipo']})"):
+
             st.write(f"Peso: {p['peso']} g")
             st.write(f"Tempo: {p['tempo']} h")
             st.write(f"Preço: R$ {p['preco_venda']:.2f}")
             st.write(f"Lucro: R$ {p['lucro']:.2f}")
+
+            # BOTÃO EXCLUIR
+            if st.button(f"🗑️ Excluir {p['nome']}", key=f"delete_{i}"):
+                dados["produtos"].pop(i)
+                salvar_dados(dados)
+                st.rerun()
             
 # -------------------------
 # RANKING
