@@ -89,6 +89,18 @@ if st.button("💰 Calcular preço"):
         lucro_total = lucro * quantidade
         tempo_total = tempo * quantidade
 
+        # 👉 SALVA O CÁLCULO NA MEMÓRIA
+        st.session_state["calculo"] = {
+            "nome": nome,
+            "peso": peso,
+            "tempo": tempo,
+            "custo_total": custo_total,
+            "preco_venda": preco_venda,
+            "lucro": lucro,
+            "tipo": tipo_produto,
+            "lucro_por_hora": lucro_por_hora
+        }
+
         # -------------------------
         # RESULTADOS
         # -------------------------
@@ -110,10 +122,10 @@ if st.button("💰 Calcular preço"):
         st.subheader("📦 Simulação de Produção")
 
         col3, col4 = st.columns(2)
-        
+
         col3.metric("Faturamento Total", f"R$ {faturamento_total:.2f}")
         col4.metric("Lucro Total", f"R$ {lucro_total:.2f}")
-        
+
         col3.metric("Tempo Total (h)", f"{tempo_total:.1f}")
 
         # -------------------------
@@ -125,26 +137,15 @@ if st.button("💰 Calcular preço"):
             st.warning("⚠️ Rentabilidade média — pode melhorar")
         else:
             st.success("✅ Alta rentabilidade — ótimo produto")
-            
-        # -------------------------
-        # SALVAR PRODUTO
-        # -------------------------
-        if st.button("💾 Salvar produto"):
-            novo_produto = {
-                "nome": nome,
-                "peso": peso,
-                "tempo": tempo,
-                "custo_total": custo_total,
-                "preco_venda": preco_venda,
-                "lucro": lucro,
-                "tipo": tipo_produto,
-                "lucro_por_hora": lucro_por_hora
-            }
 
-            dados["produtos"].append(novo_produto)
-            salvar_dados(dados)
-
-            st.success("Produto salvo com sucesso!")
+# -------------------------
+# BOTÃO DE SALVAR (FORA DO CÁLCULO)
+# -------------------------
+if "calculo" in st.session_state:
+    if st.button("💾 Salvar produto"):
+        dados["produtos"].append(st.session_state["calculo"])
+        salvar_dados(dados)
+        st.success("Produto salvo com sucesso!")
 
 # -------------------------
 # LISTAGEM
