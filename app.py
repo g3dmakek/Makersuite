@@ -6,7 +6,7 @@ import os
 # CONFIG DA PÁGINA
 # -------------------------
 st.set_page_config(
-    page_title="Precificação 3D",
+    page_title="MakerSuite",
     page_icon="🧮",
     layout="centered"
 )
