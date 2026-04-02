@@ -7,10 +7,11 @@ import os
 # -------------------------
 st.set_page_config(
     page_title="Precificação 3D",
-    st.markdown("### 🚀 Sistema de Precificação para Makers")
     page_icon="🧮",
     layout="centered"
 )
+
+ st.markdown("### 🚀 Sistema de Precificação para Makers")
 
 # -------------------------
 # FUNÇÕES DE DADOS
