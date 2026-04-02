@@ -5,7 +5,15 @@ import os
 # -------------------------
 # CONFIG DA PÁGINA
 # -------------------------
+st.set_page_config(
+    page_title="Precificação 3D",
+    page_icon="🧮",
+    layout="centered"
+)
 
+# -------------------------
+# TÍTULO
+# -------------------------
 st.title("🧮 Precificação de Impressão 3D")
 st.markdown("### Sistema de Precificação para Makers")
 st.caption("Calcule custo, preço e lucro das suas peças")
@@ -32,7 +40,8 @@ st.sidebar.header("⚙️ Configurações")
 
 preco_kg = st.sidebar.number_input("Preço do filamento (R$/kg)", value=100.0)
 custo_hora = st.sidebar.number_input("Custo por hora máquina (R$)", value=2.5)
-custo_fixo = st.sidebar.number_input("Custo fixo por peça (R$)", value=2.0)
+custo_kwh = st.sidebar.number_input("Custo energia (R$/kWh)", value=0.80)
+consumo_maquina = st.sidebar.number_input("Consumo da impressora (kW)", value=0.12)
 
 tipo_produto = st.sidebar.selectbox(
     "Tipo de produto",
@@ -72,7 +81,8 @@ if st.button("💰 Calcular preço"):
     else:
         custo_material = (peso / 1000) * preco_kg
         custo_maquina = tempo * custo_hora
-        custo_total = custo_material + custo_maquina + custo_fixo
+        custo_energia = tempo * custo_kwh * consumo_maquina
+        custo_total = custo_material + custo_maquina + custo_energia
 
         preco_venda = custo_total * multiplicador
         lucro = preco_venda - custo_total
@@ -82,18 +92,19 @@ if st.button("💰 Calcular preço"):
         # -------------------------
         # RESULTADOS
         # -------------------------
-        st.subheader("📊 Resultados")
+       st.subheader("📊 Resultados")
 
         col1, col2 = st.columns(2)
 
         col1.metric("Custo Total", f"R$ {custo_total:.2f}")
         col2.metric("Preço Sugerido", f"R$ {preco_venda:.2f}")
-
+        
         col1.metric("Lucro", f"R$ {lucro:.2f}")
         col2.metric("Margem", f"{margem_real:.1f}%")
-
+        
         col1.metric("Lucro por hora", f"R$ {lucro_por_hora:.2f}")
-
+        col2.metric("⚡ Energia", f"R$ {custo_energia:.2f}")
+        
         st.divider()
 
         # -------------------------
