@@ -155,36 +155,34 @@ st.subheader("📦 Produtos salvos")
 if len(dados["produtos"]) == 0:
     st.info("Nenhum produto salvo ainda")
 else:
+    selecionados = []
+
     for i, p in enumerate(dados["produtos"]):
-        with st.expander(f"{p['nome']} ({p['tipo']})"):
+        col1, col2 = st.columns([1, 5])
 
-            st.write(f"Peso: {p['peso']} g")
-            st.write(f"Tempo: {p['tempo']} h")
-            st.write(f"Preço: R$ {p['preco_venda']:.2f}")
-            st.write(f"Lucro: R$ {p['lucro']:.2f}")
+        # CHECKBOX (lado esquerdo)
+        with col1:
+            if st.checkbox("", key=f"check_{i}"):
+                selecionados.append(i)
 
-            # BOTÃO EXCLUIR
-            if st.button(f"🗑️ Excluir {p['nome']}", key=f"delete_{i}"):
+        # INFORMAÇÕES (lado direito)
+        with col2:
+            with st.expander(f"{p['nome']} ({p['tipo']})"):
+                st.write(f"Peso: {p['peso']} g")
+                st.write(f"Tempo: {p['tempo']} h")
+                st.write(f"Preço: R$ {p['preco_venda']:.2f}")
+                st.write(f"Lucro: R$ {p['lucro']:.2f}")
+                st.write(f"Lucro/hora: R$ {p.get('lucro_por_hora', 0):.2f}")
+
+    # BOTÃO DE EXCLUSÃO EM MASSA
+    if selecionados:
+        if st.button("🗑️ Excluir selecionados"):
+            for i in sorted(selecionados, reverse=True):
                 dados["produtos"].pop(i)
-                salvar_dados(dados)
-                st.rerun()
-                
-st.subheader("🧹 Exclusão em massa")
 
-selecionados = []
-
-for i, p in enumerate(dados["produtos"]):
-    if st.checkbox(f"{p['nome']} ({p['tipo']})", key=f"check_{i}"):
-        selecionados.append(i)
-
-if selecionados:
-    if st.button("🗑️ Excluir selecionados"):
-        for i in sorted(selecionados, reverse=True):
-            dados["produtos"].pop(i)
-
-        salvar_dados(dados)
-        st.success("Produtos excluídos!")
-        st.rerun()         
+            salvar_dados(dados)
+            st.success("Produtos excluídos!")
+            st.rerun()
         
 # -------------------------
 # RANKING
