@@ -82,15 +82,7 @@ if st.button("💰 Calcular preço"):
         preco_venda = custo_total * multiplicador
         lucro = preco_venda - custo_total
         margem_real = (lucro / preco_venda) * 100 if preco_venda > 0 else 0
-
         lucro_por_hora = lucro / tempo if tempo > 0 else 0
-
-        if lucro_por_hora < 2:
-    st.error("❌ Baixa rentabilidade — não vale a pena")
-elif lucro_por_hora < 5:
-    st.warning("⚠️ Rentabilidade média — pode melhorar")
-else:
-    st.success("✅ Alta rentabilidade — ótimo produto")
 
         # -------------------------
         # RESULTADOS
@@ -105,10 +97,20 @@ else:
         col1.metric("Lucro", f"R$ {lucro:.2f}")
         col2.metric("Margem", f"{margem_real:.1f}%")
 
-        st.divider()
-
         col1.metric("Lucro por hora", f"R$ {lucro_por_hora:.2f}")
 
+        st.divider()
+
+        # -------------------------
+        # INDICADOR INTELIGENTE
+        # -------------------------
+        if lucro_por_hora < 2:
+            st.error("❌ Baixa rentabilidade — não vale a pena")
+        elif lucro_por_hora < 5:
+            st.warning("⚠️ Rentabilidade média — pode melhorar")
+        else:
+            st.success("✅ Alta rentabilidade — ótimo produto")
+            
         # -------------------------
         # SALVAR PRODUTO
         # -------------------------
