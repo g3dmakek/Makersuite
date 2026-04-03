@@ -114,7 +114,11 @@ tempo = st.number_input("Tempo de impressão (h)", value=2.0)
 # -------------------------
 # CÁLCULO
 # -------------------------
-if st.button("💰 Calcular preço"):
+st.divider()
+
+calcular = st.button("💰 Calcular preço", use_container_width=True)
+
+if calcular:
 
     if nome == "":
         st.warning("Digite um nome para o produto")
