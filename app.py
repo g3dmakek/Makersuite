@@ -7,20 +7,35 @@ import os
 # -------------------------
 st.markdown("""
 <style>
+
+/* Espaçamento geral */
 .block-container {
     padding-top: 2rem;
 }
 
-div[data-testid="metric-container"] {
+/* Cards de métricas */
+div[data-testid="stMetric"] {
     background-color: #1A1F2B;
     border: 1px solid #2D3748;
-    padding: 15px;
-    border-radius: 12px;
+    padding: 20px;
+    border-radius: 14px;
     text-align: center;
 }
+
+/* Valor grande */
+div[data-testid="stMetric"] > div {
+    color: #00C2FF;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+/* Label menor */
+div[data-testid="stMetric"] label {
+    color: #A0AEC0;
+}
+
 </style>
 """, unsafe_allow_html=True)
-
 # -------------------------
 # CONFIG DA PÁGINA
 # -------------------------
