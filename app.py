@@ -110,6 +110,7 @@ st.subheader("⚙️ Produção")
 
 peso = st.number_input("Peso (g)", value=50.0)
 tempo = st.number_input("Tempo de impressão (h)", value=2.0)
+quantidade = st.number_input("Quantidade de peças", min_value=1, value=10)
 
 # -------------------------
 # CÁLCULO
