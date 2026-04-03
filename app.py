@@ -156,16 +156,17 @@ if calcular:
         # -------------------------
         st.subheader("📊 Resultados")
 
-        col1, col2 = st.columns(2)
-
-        col1.metric("Custo Total", f"R$ {custo_total:.2f}")
-        col2.metric("Preço Sugerido", f"R$ {preco_venda:.2f}")
-
-        col1.metric("Lucro", f"R$ {lucro:.2f}")
-        col2.metric("Margem", f"{margem_real:.1f}%")
-
-        col1.metric("Lucro por hora", f"R$ {lucro_por_hora:.2f}")
-        col2.metric("⚡ Energia", f"R$ {custo_energia:.2f}")
+        col1, col2, col3 = st.columns(3)
+        
+        col1.metric("💰 Custo Total", f"R$ {custo_total:.2f}")
+        col2.metric("🏷️ Preço", f"R$ {preco_venda:.2f}")
+        col3.metric("📈 Lucro", f"R$ {lucro:.2f}")
+        
+        col4, col5, col6 = st.columns(3)
+        
+        col4.metric("⏱️ Lucro/hora", f"R$ {lucro_por_hora:.2f}")
+        col5.metric("⚡ Energia", f"R$ {custo_energia:.2f}")
+        col6.metric("📊 Margem", f"{margem_real:.1f}%")
 
         st.divider()
 
