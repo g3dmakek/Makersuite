@@ -182,8 +182,6 @@ if calcular:
         # -------------------------
         # STATUS DO PRODUTO
         # -------------------------
-        st.divider()
-        
         if lucro_por_hora > 5:
             st.success("🟢 Produto Excelente — alta rentabilidade")
         elif lucro_por_hora > 2:
