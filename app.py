@@ -194,6 +194,8 @@ if calcular:
 # -------------------------
 # BOTÃO DE SALVAR (FORA DO CÁLCULO)
 # -------------------------
+st.divider()
+
 if "calculo" in st.session_state:
     if st.button("💾 Salvar produto"):
         dados["produtos"].append(st.session_state["calculo"])
