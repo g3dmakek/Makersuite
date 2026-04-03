@@ -115,7 +115,6 @@ quantidade = st.number_input("Quantidade de peças", min_value=1, value=10)
 # -------------------------
 # CÁLCULO
 # -------------------------
-st.divider()
 
 calcular = st.button("💰 Calcular preço", use_container_width=True)
 
