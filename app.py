@@ -178,15 +178,17 @@ if calcular:
 
         col3.metric("Tempo Total (h)", f"{tempo_total:.1f}")
 
-        # -------------------------
-        # INDICADOR INTELIGENTE
-        # -------------------------
-        if lucro_por_hora < 2:
-            st.error("❌ Baixa rentabilidade — não vale a pena")
-        elif lucro_por_hora < 5:
-            st.warning("⚠️ Rentabilidade média — pode melhorar")
-        else:
-            st.success("✅ Alta rentabilidade — ótimo produto")
+# -------------------------
+# STATUS DO PRODUTO
+# -------------------------
+st.divider()
+
+if lucro_por_hora > 5:
+    st.success("🟢 Produto Excelente — alta rentabilidade")
+elif lucro_por_hora > 2:
+    st.warning("🟡 Produto OK — pode melhorar")
+else:
+    st.error("🔴 Produto Ruim — baixa rentabilidade")
 
 # -------------------------
 # BOTÃO DE SALVAR (FORA DO CÁLCULO)
