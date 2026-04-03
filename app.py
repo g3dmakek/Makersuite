@@ -161,7 +161,6 @@ if calcular:
         col1, col2, col3 = st.columns(3)
         
         col1.metric("💰 Custo Total", f"R$ {custo_total:.2f}")
-        col2.metric("🏷️ Preço", f"R$ {preco_venda:.2f}")
         col3.metric("📈 Lucro", f"R$ {lucro:.2f}")
         
         col4, col5, col6 = st.columns(3)
