@@ -3,6 +3,25 @@ import json
 import os
 
 # -------------------------
+# STYLE DA PÁGINA
+# -------------------------
+st.markdown("""
+<style>
+.block-container {
+    padding-top: 2rem;
+}
+
+div[data-testid="metric-container"] {
+    background-color: #1A1F2B;
+    border: 1px solid #2D3748;
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# -------------------------
 # CONFIG DA PÁGINA
 # -------------------------
 st.set_page_config(
