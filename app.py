@@ -240,6 +240,7 @@ else:
 # -------------------------
 # RANKING
 # -------------------------
+st.divider()
 
 st.subheader("🏆 Ranking de Produtos (Mais lucrativos)")
 
