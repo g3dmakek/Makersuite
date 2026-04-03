@@ -111,43 +111,6 @@ st.subheader("⚙️ Produção")
 peso = st.number_input("Peso (g)", value=50.0)
 tempo = st.number_input("Tempo de impressão (h)", value=2.0)
 
-st.divider()
-
-# -------------------------
-# CUSTOS
-# -------------------------
-st.subheader("💰 Custos")
-
-preco_kg = st.number_input("Preço do filamento (R$/kg)", value=100.0)
-custo_hora = st.number_input("Custo da máquina por hora (R$)", value=2.0)
-# -------------------------
-# DADOS DO PRODUTO
-# -------------------------
-st.subheader("📦 Dados do Produto")
-
-nome = st.text_input("Nome do produto")
-tipo_produto = st.selectbox("Tipo", ["Chaveiro", "Decoração", "Personalizado"])
-
-st.divider()
-
-# -------------------------
-# PRODUÇÃO
-# -------------------------
-st.subheader("⚙️ Produção")
-
-peso = st.number_input("Peso (g)", value=50.0)
-tempo = st.number_input("Tempo de impressão (h)", value=2.0)
-
-st.divider()
-
-# -------------------------
-# CUSTOS
-# -------------------------
-st.subheader("💰 Custos")
-
-preco_kg = st.number_input("Preço do filamento (R$/kg)", value=100.0)
-custo_hora = st.number_input("Custo da máquina por hora (R$)", value=2.0)
-
 # -------------------------
 # CÁLCULO
 # -------------------------
