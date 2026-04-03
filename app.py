@@ -40,8 +40,45 @@ st.sidebar.header("⚙️ Configurações")
 
 preco_kg = st.sidebar.number_input("Preço do filamento (R$/kg)", value=100.0)
 custo_hora = st.sidebar.number_input("Custo por hora máquina (R$)", value=2.5)
-custo_kwh = st.sidebar.number_input("Custo energia (R$/kWh)", value=0.80)
-consumo_maquina = st.sidebar.number_input("Consumo da impressora (kW)", value=0.12)
+st.sidebar.subheader("⚡ Energia")
+
+distribuidoras = {
+    "Neoenergia Cosern (RN)": 0.92,
+    "Enel SP": 0.95,
+    "Enel RJ": 1.05,
+    "Cemig (MG)": 0.85,
+    "CPFL (SP)": 0.90,
+    "Equatorial (MA/PA)": 0.88,
+    "Outra": None
+}
+
+distribuidora = st.sidebar.selectbox("Distribuidora de energia", list(distribuidoras.keys()))
+
+if distribuidoras[distribuidora] is not None:
+    custo_kwh = distribuidoras[distribuidora]
+    st.sidebar.info(f"Tarifa média: R$ {custo_kwh}/kWh")
+else:
+    custo_kwh = st.sidebar.number_input("Custo energia (R$/kWh)", value=0.80)
+
+st.sidebar.subheader("⚙️ Impressora")
+
+impressoras = {
+    "Bambu Lab A1": 0.12,
+    "Bambu Lab P1P": 0.15,
+    "Bambu Lab X1 Carbon": 0.20,
+    "Ender 3 V3 KE": 0.12,
+    "Ender 3": 0.10,
+    "Prusa MK3": 0.13,
+    "Outro": None
+}
+
+modelo = st.sidebar.selectbox("Selecione sua impressora", list(impressoras.keys()))
+
+if impressoras[modelo] is not None:
+    consumo_maquina = impressoras[modelo]
+    st.sidebar.info(f"Consumo médio: {consumo_maquina} kW")
+else:
+    consumo_maquina = st.sidebar.number_input("Consumo da impressora (kW)", value=0.12)
 
 tipo_produto = st.sidebar.selectbox(
     "Tipo de produto",
