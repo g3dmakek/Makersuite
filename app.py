@@ -156,6 +156,8 @@ if calcular:
         # -------------------------
         st.subheader("📊 Resultados")
 
+        st.metric("🔥 Preço sugerido", f"R$ {preco_venda:.2f}")
+
         col1, col2, col3 = st.columns(3)
         
         col1.metric("💰 Custo Total", f"R$ {custo_total:.2f}")
