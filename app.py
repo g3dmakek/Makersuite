@@ -182,14 +182,6 @@ if calcular:
         # -------------------------
         # STATUS DO PRODUTO
         # -------------------------
-        st.subheader("📌 Resumo")
-        
-        st.info(f"""
-        💰 Preço sugerido: R$ {preco_venda:.2f}  
-        📈 Lucro: R$ {lucro:.2f}  
-        ⏱️ Lucro/hora: R$ {lucro_por_hora:.2f}
-        """)
-        
         st.divider()
         
         if lucro_por_hora > 5:
