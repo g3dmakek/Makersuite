@@ -175,75 +175,81 @@ with col4:
 st.caption("💡 Ex: 100 peças com capacidade de 20 → 5 impressões")
 
 # -------------------------
-# CUSTOS (AJUSTADO PARA LOTE)
+# EXECUÇÃO DO CÁLCULO
 # -------------------------
+if calcular:
 
-# Material (lote → depois divide)
-custo_material_total = (peso / 1000) * preco_kg
-custo_material_unitario = custo_material_total / pecas_por_impressao
+    # -------------------------
+    # CUSTOS (AJUSTADO PARA LOTE)
+    # -------------------------
+    custo_material_total = (peso / 1000) * preco_kg
+    custo_material_unitario = custo_material_total / pecas_por_impressao
 
-# Custo da impressão inteira (lote)
-custo_maquina_total = tempo * custo_hora
-custo_energia_total = tempo * custo_kwh * consumo_maquina
+    custo_maquina_total = tempo * custo_hora
+    custo_energia_total = tempo * custo_kwh * consumo_maquina
 
-# Divisão por peça
-custo_maquina_unitario = custo_maquina_total / pecas_por_impressao
-custo_energia_unitario = custo_energia_total / pecas_por_impressao
+    custo_maquina_unitario = custo_maquina_total / pecas_por_impressao
+    custo_energia_unitario = custo_energia_total / pecas_por_impressao
 
-# Custo final por peça
-custo_total = custo_material_unitario + custo_maquina_unitario + custo_energia_unitario
+    custo_total = custo_material_unitario + custo_maquina_unitario + custo_energia_unitario
 
-# -------------------------
-# MARKUP BASEADO NO TEMPO
-# -------------------------
-if tempo < 1:
-    multiplicador = 3.5
-elif tempo < 3:
-    multiplicador = 3.0
-elif tempo < 6:
-    multiplicador = 2.5
-else:
-    multiplicador = 2.2
+    # -------------------------
+    # MARKUP BASEADO NO TEMPO
+    # -------------------------
+    if tempo < 1:
+        multiplicador = 3.5
+    elif tempo < 3:
+        multiplicador = 3.0
+    elif tempo < 6:
+        multiplicador = 2.5
+    else:
+        multiplicador = 2.2
 
-# -------------------------
-# PREÇO E LUCRO (UNITÁRIO)
-# -------------------------
-preco_venda = custo_total * multiplicador
-lucro = preco_venda - custo_total
-margem_real = (lucro / preco_venda) * 100 if preco_venda > 0 else 0
-lucro_por_hora = lucro / tempo if tempo > 0 else 0
+    # -------------------------
+    # PREÇO E LUCRO
+    # -------------------------
+    preco_venda = custo_total * multiplicador
+    lucro = preco_venda - custo_total
+    margem_real = (lucro / preco_venda) * 100 if preco_venda > 0 else 0
+    lucro_por_hora = lucro / tempo if tempo > 0 else 0
 
-# -------------------------
-# SIMULAÇÃO (PRODUÇÃO REAL)
-# -------------------------
-import math
+    # -------------------------
+    # SIMULAÇÃO
+    # -------------------------
+    import math
 
-numero_impressoes = math.ceil(quantidade / pecas_por_impressao)
-tempo_total = numero_impressoes * tempo
+    numero_impressoes = math.ceil(quantidade / pecas_por_impressao)
+    tempo_total = numero_impressoes * tempo
 
-# 💰 TOTAL REAL (AGORA CORRETO)
-custo_total_lote = (
-    custo_material_total * numero_impressoes +
-    custo_maquina_total * numero_impressoes +
-    custo_energia_total * numero_impressoes
-)
+    custo_total_lote = (
+        custo_material_total * numero_impressoes +
+        custo_maquina_total * numero_impressoes +
+        custo_energia_total * numero_impressoes
+    )
 
-faturamento_total = preco_venda * quantidade
-lucro_total = faturamento_total - custo_total_lote
+    faturamento_total = preco_venda * quantidade
+    lucro_total = faturamento_total - custo_total_lote
 
-# 👉 SALVA O CÁLCULO
-st.session_state["calculo"] = {
-    "nome": nome,
-    "peso": peso,
-    "tempo": tempo,
-    "quantidade": quantidade,
-    "pecas_por_impressao": pecas_por_impressao,
-    "custo_unitario": custo_total,
-    "preco_venda": preco_venda,
-    "lucro_unitario": lucro,
-    "lucro_total": lucro_total,
-    "lucro_por_hora": lucro_por_hora
-}
+    # 👉 SALVA RESULTADO COMPLETO
+    st.session_state["calculo"] = {
+        "nome": nome,
+        "peso": peso,
+        "tempo": tempo,
+        "quantidade": quantidade,
+        "pecas_por_impressao": pecas_por_impressao,
+        "custo_unitario": custo_total,
+        "preco_venda": preco_venda,
+        "lucro_unitario": lucro,
+        "lucro_total": lucro_total,
+        "lucro_por_hora": lucro_por_hora,
+        "margem": margem_real,
+        "energia_unitaria": custo_energia_unitario,
+        "multiplicador": multiplicador,
+        "tempo_total": tempo_total,
+        "faturamento_total": faturamento_total,
+        "numero_impressoes": numero_impressoes,
+        "custo_total_lote": custo_total_lote
+    }
 
 # -------------------------
 # DASHBOARD PRINCIPAL (NOVA UI)
