@@ -128,7 +128,7 @@ st.divider()
 # -------------------------
 # PRODUÇÃO
 # -------------------------
-st.subheader("⚙️ Produção")
+st.subheader("🏭 Produção")
 
 peso = st.number_input("Peso (g)", value=50.0)
 tempo = st.number_input("Tempo de impressão (h)", value=2.0)
@@ -218,42 +218,59 @@ st.session_state["calculo"] = {
 }
 
 # -------------------------
-# RESULTADOS (UNITÁRIO)
+# DASHBOARD PRINCIPAL (NOVA UI)
 # -------------------------
-st.subheader("📊 Resultados")
 
-st.metric("🔥 Preço unitário", f"R$ {preco_venda:.2f}")
+# 🔥 KPIs NO TOPO
+col_top1, col_top2, col_top3, col_top4 = st.columns(4)
 
-col1, col2, col3 = st.columns(3)
-
-col1.metric("💰 Custo unitário", f"R$ {custo_total:.2f}")
-col2.metric("📈 Lucro unitário", f"R$ {lucro:.2f}")
-col3.metric("⏱️ Lucro/hora", f"R$ {lucro_por_hora:.2f}")
-
-col4, col5, col6 = st.columns(3)
-
-col4.metric("⚡ Energia (un)", f"R$ {custo_energia_unitario:.2f}")
-col5.metric("📊 Multiplicador", f"{multiplicador:.2f}x")
-col6.metric("📊 Margem", f"{margem_real:.1f}%")
+col_top1.metric("💰 Preço", f"R$ {preco_venda:.2f}")
+col_top2.metric("📈 Lucro", f"R$ {lucro:.2f}")
+col_top3.metric("📊 Margem", f"{margem_real:.1f}%")
+col_top4.metric("⚡ Lucro/h", f"R$ {lucro_por_hora:.2f}")
 
 st.divider()
 
+# 📊 LAYOUT EM DUAS COLUNAS
+col_esq, col_dir = st.columns(2)
+
 # -------------------------
-# SIMULAÇÃO DE PRODUÇÃO (TOTAL)
+# 📊 UNITÁRIO (ESQUERDA)
 # -------------------------
-st.subheader("📦 Simulação de Produção")
+with col_esq:
+    st.subheader("📊 Unitário")
 
-col7, col8, col9 = st.columns(3)
+    col1, col2 = st.columns(2)
+    col1.metric("💰 Custo", f"R$ {custo_total:.2f}")
+    col2.metric("📈 Lucro", f"R$ {lucro:.2f}")
 
-col7.metric("📦 Peças", quantidade)
-col8.metric("🖨️ Impressões", numero_impressoes)
-col9.metric("⏱️ Tempo total (h)", f"{tempo_total:.1f}")
+    col3, col4 = st.columns(2)
+    col3.metric("⚡ Energia", f"R$ {custo_energia_unitario:.2f}")
+    col4.metric("📊 Multiplicador", f"{multiplicador:.2f}x")
 
-col10, col11, col12 = st.columns(3)
+# -------------------------
+# 📦 PRODUÇÃO (DIREITA)
+# -------------------------
+with col_dir:
+    st.subheader("📦 Produção")
 
-col10.metric("💰 Faturamento", f"R$ {faturamento_total:.2f}")
-col11.metric("💸 Custo total", f"R$ {custo_total_lote:.2f}")
-col12.metric("📈 Lucro total", f"R$ {lucro_total:.2f}")
+    col5, col6 = st.columns(2)
+    col5.metric("📦 Peças", quantidade)
+    col6.metric("🖨️ Impressões", numero_impressoes)
+
+    col7, col8 = st.columns(2)
+    col7.metric("⏱️ Tempo", f"{tempo_total:.1f}h")
+    col8.metric("💰 Faturamento", f"R$ {faturamento_total:.2f}")
+
+    st.metric("📈 Lucro total", f"R$ {lucro_total:.2f}")
+
+st.divider()
+
+# 🔍 DETALHES (ESCONDIDOS)
+with st.expander("🔍 Ver detalhes completos"):
+    st.write(f"💰 Custo material total: R$ {custo_material_total:.2f}")
+    st.write(f"⚙️ Custo máquina total: R$ {custo_maquina_total:.2f}")
+    st.write(f"⚡ Custo energia total: R$ {custo_energia_total:.2f}")
 
 # -------------------------
 # STATUS DO PRODUTO
