@@ -3,47 +3,67 @@ import json
 import os
 
 # -------------------------
-# STYLE DA PÁGINA
+# CONFIG DA PÁGINA (PRIMEIRO SEMPRE)
+# -------------------------
+st.set_page_config(
+    page_title="MakerSuite",
+    page_icon="🧮",
+    layout="wide"
+)
+
+# -------------------------
+# STYLE DA PÁGINA (PROFISSIONAL)
 # -------------------------
 st.markdown("""
 <style>
 
-/* Espaçamento geral */
+/* Reduz margem lateral e topo */
 .block-container {
-    padding-top: 2rem;
+    padding-top: 1rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    max-width: 100%;
+}
+
+/* Remove limite de largura central */
+.main {
+    max-width: 100%;
 }
 
 /* Cards de métricas */
 div[data-testid="stMetric"] {
     background-color: #1A1F2B;
     border: 1px solid #2D3748;
-    padding: 20px;
-    border-radius: 14px;
+    padding: 14px;
+    border-radius: 12px;
     text-align: center;
 }
 
 /* Valor grande */
 div[data-testid="stMetric"] > div {
     color: #00C2FF;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: bold;
 }
 
 /* Label menor */
 div[data-testid="stMetric"] label {
     color: #A0AEC0;
+    font-size: 12px;
+}
+
+/* Reduz espaço entre blocos */
+div[data-testid="stVerticalBlock"] > div {
+    gap: 0.6rem;
+}
+
+/* Ajusta colunas para não “quebrar” */
+[data-testid="column"] {
+    padding: 0.2rem;
 }
 
 </style>
 """, unsafe_allow_html=True)
-# -------------------------
-# CONFIG DA PÁGINA
-# -------------------------
-st.set_page_config(
-    page_title="MakerSuite",
-    page_icon="🧮",
-    layout="centered"
-)
 
 # -------------------------
 # TÍTULO
