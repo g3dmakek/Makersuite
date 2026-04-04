@@ -326,7 +326,7 @@ if len(dados["produtos"]) == 0:
 else:
     produtos_ordenados = sorted(
         dados["produtos"],
-        key=lambda x: x.get("lucro_por_hora", 0),
+        key=lambda x: x.get("lucro_total", 0),
         reverse=True
     )
 
