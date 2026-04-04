@@ -288,23 +288,27 @@ with col_esq:
         col3, col4 = st.columns(2)
         col3.metric("⚡ Energia", f"R$ {c['energia_unitaria']:.2f}")
         col4.metric("📊 Multiplicador", f"{c['multiplicador']:.2f}x")
-
+        
 # -------------------------
 # 📦 PRODUÇÃO (DIREITA)
 # -------------------------
 with col_dir:
     st.subheader("📦 Produção")
 
-    col5, col6 = st.columns(2)
-    col5.metric("📦 Peças", quantidade)
-    col6.metric("🖨️ Impressões", numero_impressoes)
+    if "calculo" in st.session_state:
+        c = st.session_state["calculo"]
 
-    col7, col8 = st.columns(2)
-    col7.metric("⏱️ Tempo", f"{tempo_total:.1f}h")
-    col8.metric("💰 Faturamento", f"R$ {faturamento_total:.2f}")
+        col5, col6, col7 = st.columns(3)
 
-    st.metric("📈 Lucro total", f"R$ {lucro_total:.2f}")
+        col5.metric("📦 Peças", c["quantidade"])
+        col6.metric("🖨️ Impressões", c["numero_impressoes"])
+        col7.metric("⏱️ Tempo total", f"{c['tempo_total']:.1f}h")
 
+        col8, col9, col10 = st.columns(3)
+
+        col8.metric("💰 Faturamento", f"R$ {c['faturamento_total']:.2f}")
+        col9.metric("💸 Custo total", f"R$ {c['custo_total_lote']:.2f}")
+        col10.metric("📈 Lucro total", f"R$ {c['lucro_total']:.2f}")
 st.divider()
 
 # 🔍 DETALHES (ESCONDIDOS)
