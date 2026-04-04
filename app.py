@@ -163,7 +163,7 @@ if calcular:
         # -------------------------
         
         # Material (sempre unitário)
-        custo_material = (peso / 1000) * preco_kg
+        custo_material_unitario = ((peso / pecas_por_impressao) / 1000) * preco_kg
         
         # Custo da impressão inteira (lote)
         custo_maquina_total = tempo * custo_hora
@@ -174,7 +174,7 @@ if calcular:
         custo_energia_unitario = custo_energia_total / pecas_por_impressao
         
         # Custo final por peça
-        custo_total = custo_material + custo_maquina_unitario + custo_energia_unitario
+        custo_total = custo_material_unitario + custo_maquina_unitario + custo_energia_unitario
 
         # -------------------------
         # MARKUP BASEADO NO TEMPO
