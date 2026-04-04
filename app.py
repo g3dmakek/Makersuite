@@ -135,6 +135,17 @@ modelo = st.sidebar.selectbox(
 
 dados_impressora = impressoras[modelo]
 
+# 🔥 DETECTA MUDANÇA DE MODELO
+if "modelo_anterior" not in st.session_state:
+    st.session_state.modelo_anterior = modelo
+
+if modelo != st.session_state.modelo_anterior:
+    st.session_state["valor_maquina_input"] = dados_impressora["valor"] or 3000.0
+    st.session_state["vida_util_input"] = dados_impressora["vida_util"] or 3000
+    st.session_state["consumo_input"] = dados_impressora["consumo"] or 0.12
+
+    st.session_state.modelo_anterior = modelo
+
 # VALOR
 valor_maquina = st.sidebar.number_input(
     "Valor da impressora (R$)",
