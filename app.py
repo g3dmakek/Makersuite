@@ -253,8 +253,8 @@ st.session_state["calculo"] = {
 col_top1, col_top2, col_top3, col_top4 = st.columns(4)
 
 col_top1.metric("💰 Preço", f"R$ {preco_venda:.2f}")
-col_top2.metric("📈 Lucro", f"R$ {lucro:.2f}")
-col_top3.metric("📊 Margem", f"{margem_real:.1f}%")
+col_top2.metric("📊 Margem", f"{margem_real:.1f}%")
+col_top3.metric("📈 Lucro", f"R$ {lucro:.2f}")
 col_top4.metric("⚡ Lucro/h", f"R$ {lucro_por_hora:.2f}")
 
 st.divider()
