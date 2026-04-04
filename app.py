@@ -299,7 +299,7 @@ else:
 
         # INFORMAÇÕES (lado direito)
         with col2:
-            with st.expander(f"{p['nome']} ({p['tipo']})"):
+            with st.expander(f"{p['nome']}"):
                 st.write(f"Peso: {p['peso']} g")
                 st.write(f"Tempo: {p['tempo']} h")
                 st.write(f"Preço: R$ {p['preco_venda']:.2f}")
