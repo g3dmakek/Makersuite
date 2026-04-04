@@ -229,7 +229,7 @@ if calcular:
         col4, col5, col6 = st.columns(3)
         
         col4.metric("⏱️ Lucro/hora", f"R$ {lucro_por_hora:.2f}")
-        col5.metric("⚡ Energia", f"R$ {custo_energia:.2f}")
+        col5.metric("⚡ Energia (un)", f"R$ {custo_energia_unitario:.2f}")
         col6.metric("📊 Margem", f"{margem_real:.1f}%")
         
         st.divider()
