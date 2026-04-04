@@ -136,35 +136,43 @@ else:
 
 
 # -------------------------
-# DADOS DO PRODUTO
+# INPUTS EM GRID (PROFISSIONAL)
 # -------------------------
-st.subheader("📦 Dados do Produto")
 
-nome = st.text_input("Nome do produto")
-tipo_produto = st.selectbox("Tipo", ["Chaveiro", "Decoração", "Personalizado"])
+col1, col2 = st.columns(2)
 
-st.divider()
+# 📦 DADOS DO PRODUTO
+with col1:
+    st.subheader("📦 Produto")
 
-# -------------------------
-# PRODUÇÃO
-# -------------------------
-st.subheader("🏭 Produção")
+    nome = st.text_input("Nome do produto")
+    tipo_produto = st.selectbox("Tipo", ["Chaveiro", "Decoração", "Personalizado"])
 
-peso = st.number_input("Peso (g)", value=50.0)
-tempo = st.number_input("Tempo de impressão (h)", value=2.0)
-quantidade = st.number_input(
-    "Quantidade total de peças (produção)",
-    min_value=1,
-    value=10
-)
+# 🏭 PRODUÇÃO (PRINCIPAL)
+with col2:
+    st.subheader("🏭 Produção")
 
-pecas_por_impressao = st.number_input(
-    "Peças produzidas por impressão (capacidade da mesa)",
-    min_value=1,
-    value=1
-)
+    peso = st.number_input("Peso (g)", value=50.0)
+    tempo = st.number_input("Tempo (h)", value=2.0)
 
-st.caption("💡 Ex: quer produzir 100 peças e sua mesa comporta 20 → serão 5 impressões")
+# 🔽 SEGUNDA LINHA (PRODUÇÃO AVANÇADA)
+col3, col4 = st.columns(2)
+
+with col3:
+    quantidade = st.number_input(
+        "Quantidade total",
+        min_value=1,
+        value=10
+    )
+
+with col4:
+    pecas_por_impressao = st.number_input(
+        "Peças por impressão",
+        min_value=1,
+        value=1
+    )
+
+st.caption("💡 Ex: 100 peças com capacidade de 20 → 5 impressões")
 
 # -------------------------
 # CUSTOS (AJUSTADO PARA LOTE)
