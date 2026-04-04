@@ -257,12 +257,15 @@ if "calculo" in st.session_state:
 # -------------------------
 
 # 🔥 KPIs NO TOPO
-col_top1, col_top2, col_top3, col_top4 = st.columns(4)
+if "calculo" in st.session_state:
+    c = st.session_state["calculo"]
 
-col_top1.metric("💰 Preço", f"R$ {preco_venda:.2f}")
-col_top2.metric("📊 Margem", f"{margem_real:.1f}%")
-col_top3.metric("📈 Lucro", f"R$ {lucro:.2f}")
-col_top4.metric("⚡ Lucro/h", f"R$ {lucro_por_hora:.2f}")
+    col_top1, col_top2, col_top3, col_top4 = st.columns(4)
+
+    col_top1.metric("💰 Preço", f"R$ {c['preco_venda']:.2f}")
+    col_top2.metric("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}")
+    col_top3.metric("📊 Margem", f"{c['margem']:.1f}%")
+    col_top4.metric("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}")
 
 st.divider()
 
