@@ -194,6 +194,10 @@ if "calculo" in st.session_state:
 
     custo_total = custo_material_unitario + custo_maquina_unitario + custo_energia_unitario
 
+    "custo_material_total": custo_material_total,
+    "custo_maquina_total": custo_maquina_total,
+    "custo_energia_total": custo_energia_total,
+
     # -------------------------
     # MARKUP BASEADO NO TEMPO
     # -------------------------
@@ -313,9 +317,12 @@ st.divider()
 
 # 🔍 DETALHES (ESCONDIDOS)
 with st.expander("🔍 Ver detalhes completos"):
-    st.write(f"💰 Custo material total: R$ {custo_material_total:.2f}")
-    st.write(f"⚙️ Custo máquina total: R$ {custo_maquina_total:.2f}")
-    st.write(f"⚡ Custo energia total: R$ {custo_energia_total:.2f}")
+    if "calculo" in st.session_state:
+        c = st.session_state["calculo"]
+
+        st.write(f"💰 Custo material total: R$ {c['custo_material_total']:.2f}")
+        st.write(f"⚙️ Custo máquina total: R$ {c['custo_maquina_total']:.2f}")
+        st.write(f"⚡ Custo energia total: R$ {c['custo_energia_total']:.2f}")
 
 # -------------------------
 # STATUS DO PRODUTO
