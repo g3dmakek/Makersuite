@@ -114,18 +114,6 @@ if impressoras[modelo] is not None:
 else:
     consumo_maquina = st.sidebar.number_input("Consumo da impressora (kW)", value=0.12)
 
-tipo_produto = st.sidebar.selectbox(
-    "Tipo de produto",
-    ["Chaveiro", "Decoração", "Peça Técnica"]
-)
-
-margens = {
-    "Chaveiro": 4.0,
-    "Decoração": 3.0,
-    "Peça Técnica": 2.5
-}
-
-multiplicador = margens[tipo_produto]
 
 # -------------------------
 # DADOS DO PRODUTO
@@ -157,21 +145,41 @@ if calcular:
     if nome == "":
         st.warning("Digite um nome para o produto")
     else:
+        # -------------------------
+        # CUSTOS
+        # -------------------------
         custo_material = (peso / 1000) * preco_kg
         custo_maquina = tempo * custo_hora
         custo_energia = tempo * custo_kwh * consumo_maquina
 
         custo_total = custo_material + custo_maquina + custo_energia
 
+        # -------------------------
+        # MARKUP BASEADO NO TEMPO
+        # -------------------------
+        if tempo < 1:
+            multiplicador = 3.5
+        elif tempo < 3:
+            multiplicador = 3.0
+        elif tempo < 6:
+            multiplicador = 2.5
+        else:
+            multiplicador = 2.2
+
+        # -------------------------
+        # PREÇO E LUCRO
+        # -------------------------
         preco_venda = custo_total * multiplicador
         lucro = preco_venda - custo_total
         margem_real = (lucro / preco_venda) * 100 if preco_venda > 0 else 0
         lucro_por_hora = lucro / tempo if tempo > 0 else 0
 
+        # -------------------------
+        # SIMULAÇÃO
+        # -------------------------
         faturamento_total = preco_venda * quantidade
         lucro_total = lucro * quantidade
         tempo_total = tempo * quantidade
-
         # 👉 SALVA O CÁLCULO NA MEMÓRIA
         st.session_state["calculo"] = {
             "nome": nome,
@@ -195,6 +203,7 @@ if calcular:
         
         col1.metric("💰 Custo Total", f"R$ {custo_total:.2f}")
         col2.metric("📈 Lucro", f"R$ {lucro:.2f}")
+        col3.metric("📊 Multiplicador", f"{multiplicador:.2f}x")
         
         col4, col5, col6 = st.columns(3)
         
