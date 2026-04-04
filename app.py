@@ -231,12 +231,13 @@ if calcular:
         
         col1.metric("💰 Custo Total", f"R$ {custo_total:.2f}")
         col2.metric("📈 Lucro", f"R$ {lucro:.2f}")
-        col3.metric("📊 Multiplicador", f"{multiplicador:.2f}x")
+        col3.metric("⏱️ Lucro/hora", f"R$ {lucro_por_hora:.2f}")
+        
         
         col4, col5, col6 = st.columns(3)
-        
-        col4.metric("⏱️ Lucro/hora", f"R$ {lucro_por_hora:.2f}")
-        col5.metric("⚡ Energia (un)", f"R$ {custo_energia_unitario:.2f}")
+
+        col4.metric("⚡ Energia (un)", f"R$ {custo_energia_unitario:.2f}")
+        col5.metric("📊 Multiplicador", f"{multiplicador:.2f}x")
         col6.metric("📊 Margem", f"{margem_real:.1f}%")
         
         st.divider()
