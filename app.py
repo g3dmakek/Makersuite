@@ -278,13 +278,16 @@ col_esq, col_dir = st.columns(2)
 with col_esq:
     st.subheader("📊 Unitário")
 
-    col1, col2 = st.columns(2)
-    col1.metric("💰 Custo", f"R$ {custo_total:.2f}")
-    col2.metric("📈 Lucro", f"R$ {lucro:.2f}")
+    if "calculo" in st.session_state:
+        c = st.session_state["calculo"]
 
-    col3, col4 = st.columns(2)
-    col3.metric("⚡ Energia", f"R$ {custo_energia_unitario:.2f}")
-    col4.metric("📊 Multiplicador", f"{multiplicador:.2f}x")
+        col1, col2 = st.columns(2)
+        col1.metric("💰 Custo", f"R$ {c['custo_unitario']:.2f}")
+        col2.metric("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}")
+
+        col3, col4 = st.columns(2)
+        col3.metric("⚡ Energia", f"R$ {c['energia_unitaria']:.2f}")
+        col4.metric("📊 Multiplicador", f"{c['multiplicador']:.2f}x")
 
 # -------------------------
 # 📦 PRODUÇÃO (DIREITA)
