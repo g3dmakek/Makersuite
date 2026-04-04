@@ -177,7 +177,8 @@ st.caption("💡 Ex: 100 peças com capacidade de 20 → 5 impressões")
 # -------------------------
 # EXECUÇÃO DO CÁLCULO
 # -------------------------
-if calcular:
+if "calculo" in st.session_state:
+    dados = st.session_state["calculo"]
 
     # -------------------------
     # CUSTOS (AJUSTADO PARA LOTE)
