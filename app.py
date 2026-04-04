@@ -331,7 +331,12 @@ else:
     )
 
     for i, p in enumerate(produtos_ordenados[:5], start=1):
-        st.write(f"{i}º - {p['nome']}")
-        st.write(f"💰 Lucro/hora: R$ {p.get('lucro_por_hora', 0):.2f}")
-        st.write(f"🏷️ Preço: R$ {p['preco_venda']:.2f}")
-        st.write("---")
+        st.write(f"**{i}º - {p['nome']}**")
+        
+        col1, col2, col3 = st.columns(3)
+        
+        col1.metric("📈 Lucro total", f"R$ {p.get('lucro_total', 0):.2f}")
+        col2.metric("💰 Lucro/hora", f"R$ {p.get('lucro_por_hora', 0):.2f}")
+        col3.metric("🏷️ Preço", f"R$ {p.get('preco_venda', 0):.2f}")
+        
+        st.divider()
