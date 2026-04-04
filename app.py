@@ -93,17 +93,6 @@ dados = carregar_dados()
 st.sidebar.header("⚙️ Configurações")
 
 preco_kg = st.sidebar.number_input("Preço do filamento (R$/kg)", value=100.0)
-st.sidebar.subheader("🖨️ Custo da Máquina")
-
-valor_maquina = st.sidebar.number_input("Valor da impressora (R$)", value=3000.0)
-vida_util = st.sidebar.number_input("Vida útil estimada (horas)", value=3000)
-manutencao_hora = st.sidebar.number_input("Manutenção (R$/h)", value=1.0)
-
-# 👉 cálculo automático
-custo_hora = (valor_maquina / vida_util) + manutencao_hora
-
-st.sidebar.info(f"💰 Custo real: R$ {custo_hora:.2f}/h")
-st.sidebar.subheader("⚡ Energia")
 
 distribuidoras = {
     "Neoenergia Cosern (RN)": 0.92,
