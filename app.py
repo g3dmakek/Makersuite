@@ -19,7 +19,7 @@ st.markdown("""
 
 /* Reduz margem lateral e topo */
 .block-container {
-    padding-top: 1rem;
+    padding-top: 2rem;
     padding-left: 2rem;
     padding-right: 2rem;
     max-width: 100%;
