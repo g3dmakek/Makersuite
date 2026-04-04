@@ -194,10 +194,6 @@ if "calculo" in st.session_state:
 
     custo_total = custo_material_unitario + custo_maquina_unitario + custo_energia_unitario
 
-    "custo_material_total": custo_material_total,
-    "custo_maquina_total": custo_maquina_total,
-    "custo_energia_total": custo_energia_total,
-
     # -------------------------
     # MARKUP BASEADO NO TEMPO
     # -------------------------
@@ -253,7 +249,10 @@ if "calculo" in st.session_state:
         "tempo_total": tempo_total,
         "faturamento_total": faturamento_total,
         "numero_impressoes": numero_impressoes,
-        "custo_total_lote": custo_total_lote
+        "custo_total_lote": custo_total_lote,
+        "custo_material_total": custo_material_total,
+        "custo_maquina_total": custo_maquina_total,
+        "custo_energia_total": custo_energia_total,
     }
 
 # -------------------------
