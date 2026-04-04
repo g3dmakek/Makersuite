@@ -132,12 +132,19 @@ st.subheader("⚙️ Produção")
 
 peso = st.number_input("Peso (g)", value=50.0)
 tempo = st.number_input("Tempo de impressão (h)", value=2.0)
-quantidade = st.number_input("Quantidade de peças", min_value=1, value=10)
+quantidade = st.number_input(
+    "Quantidade total de peças (produção)",
+    min_value=1,
+    value=10
+)
+
 pecas_por_impressao = st.number_input(
-    "Peças por impressão (quantas você imprime ao mesmo tempo)",
+    "Peças produzidas por impressão (capacidade da mesa)",
     min_value=1,
     value=1
 )
+
+st.caption("💡 Ex: quer produzir 100 peças e sua mesa comporta 20 → serão 5 impressões")
 
 # -------------------------
 # CÁLCULO
