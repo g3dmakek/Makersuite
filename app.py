@@ -145,14 +145,24 @@ if calcular:
     if nome == "":
         st.warning("Digite um nome para o produto")
     else:
+        
         # -------------------------
-        # CUSTOS
+        # CUSTOS (AJUSTADO PARA LOTE)
         # -------------------------
+        
+        # Material (sempre unitário)
         custo_material = (peso / 1000) * preco_kg
-        custo_maquina = tempo * custo_hora
-        custo_energia = tempo * custo_kwh * consumo_maquina
-
-        custo_total = custo_material + custo_maquina + custo_energia
+        
+        # Custo da impressão inteira (lote)
+        custo_maquina_total = tempo * custo_hora
+        custo_energia_total = tempo * custo_kwh * consumo_maquina
+        
+        # Divisão por peça
+        custo_maquina_unitario = custo_maquina_total / pecas_por_impressao
+        custo_energia_unitario = custo_energia_total / pecas_por_impressao
+        
+        # Custo final por peça
+        custo_total = custo_material + custo_maquina_unitario + custo_energia_unitario
 
         # -------------------------
         # MARKUP BASEADO NO TEMPO
@@ -174,31 +184,37 @@ if calcular:
         margem_real = (lucro / preco_venda) * 100 if preco_venda > 0 else 0
         lucro_por_hora = lucro / tempo if tempo > 0 else 0
 
-        # -------------------------
-        # SIMULAÇÃO
-        # -------------------------
+       # -------------------------
+       # SIMULAÇÃO (AJUSTADA PARA PRODUÇÃO EM LOTE)
+       # -------------------------
+        import math
+        
+        numero_impressoes = math.ceil(quantidade / pecas_por_impressao)
+        tempo_total = numero_impressoes * tempo
+        
         faturamento_total = preco_venda * quantidade
         lucro_total = lucro * quantidade
-        tempo_total = tempo * quantidade
+        
         # 👉 SALVA O CÁLCULO NA MEMÓRIA
         st.session_state["calculo"] = {
             "nome": nome,
             "peso": peso,
             "tempo": tempo,
+            "quantidade": quantidade,
+            "pecas_por_impressao": pecas_por_impressao,
             "custo_total": custo_total,
             "preco_venda": preco_venda,
             "lucro": lucro,
-            "tipo": tipo_produto,
             "lucro_por_hora": lucro_por_hora
         }
-
+        
         # -------------------------
         # RESULTADOS
         # -------------------------
         st.subheader("📊 Resultados")
-
+        
         st.metric("🔥 Preço sugerido", f"R$ {preco_venda:.2f}")
-
+        
         col1, col2, col3 = st.columns(3)
         
         col1.metric("💰 Custo Total", f"R$ {custo_total:.2f}")
@@ -210,17 +226,24 @@ if calcular:
         col4.metric("⏱️ Lucro/hora", f"R$ {lucro_por_hora:.2f}")
         col5.metric("⚡ Energia", f"R$ {custo_energia:.2f}")
         col6.metric("📊 Margem", f"{margem_real:.1f}%")
-
+        
         st.divider()
-
+        
+        # -------------------------
+        # SIMULAÇÃO DE PRODUÇÃO
+        # -------------------------
         st.subheader("📦 Simulação de Produção")
-
-        col3, col4 = st.columns(2)
-
-        col3.metric("Faturamento Total", f"R$ {faturamento_total:.2f}")
-        col4.metric("Lucro Total", f"R$ {lucro_total:.2f}")
-
-        col3.metric("Tempo Total (h)", f"{tempo_total:.1f}")
+        
+        col7, col8, col9 = st.columns(3)
+        
+        col7.metric("📦 Peças", quantidade)
+        col8.metric("🖨️ Impressões necessárias", numero_impressoes)
+        col9.metric("⏱️ Tempo total (h)", f"{tempo_total:.1f}")
+        
+        col10, col11 = st.columns(2)
+        
+        col10.metric("💰 Faturamento Total", f"R$ {faturamento_total:.2f}")
+        col11.metric("📈 Lucro Total", f"R$ {lucro_total:.2f}")
 
         # -------------------------
         # STATUS DO PRODUTO
