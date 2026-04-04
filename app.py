@@ -255,15 +255,15 @@ col10.metric("💰 Faturamento", f"R$ {faturamento_total:.2f}")
 col11.metric("💸 Custo total", f"R$ {custo_total_lote:.2f}")
 col12.metric("📈 Lucro total", f"R$ {lucro_total:.2f}")
 
-        # -------------------------
-        # STATUS DO PRODUTO
-        # -------------------------
-        if lucro_por_hora > 5:
-            st.success("🟢 Produto Excelente — alta rentabilidade")
-        elif lucro_por_hora > 2:
-            st.warning("🟡 Produto OK — pode melhorar")
-        else:
-            st.error("🔴 Produto Ruim — baixa rentabilidade")
+# -------------------------
+# STATUS DO PRODUTO
+# -------------------------
+if lucro_por_hora > 5:
+  st.success("🟢 Produto Excelente — alta rentabilidade")
+elif lucro_por_hora > 2:
+  st.warning("🟡 Produto OK — pode melhorar")
+else:
+  st.error("🔴 Produto Ruim — baixa rentabilidade")
 
 # -------------------------
 # BOTÃO DE SALVAR (FORA DO CÁLCULO)
