@@ -123,26 +123,56 @@ if distribuidoras[distribuidora] is not None:
 else:
     custo_kwh = st.sidebar.number_input("Custo energia (R$/kWh)", value=0.80)
 
-st.sidebar.subheader("⚙️ Impressora")
+st.sidebar.subheader("🖨️ Impressora")
 
 impressoras = {
-    "Bambu Lab A1": 0.12,
-    "Bambu Lab P1P": 0.15,
-    "Bambu Lab X1 Carbon": 0.20,
-    "Ender 3 V3 KE": 0.12,
-    "Ender 3": 0.10,
-    "Prusa MK3": 0.13,
-    "Outro": None
+    "Bambu Lab A1": {"valor": 3500, "vida_util": 4000, "consumo": 0.12},
+    "Bambu Lab P1P": {"valor": 6000, "vida_util": 5000, "consumo": 0.15},
+    "Bambu Lab X1 Carbon": {"valor": 9000, "vida_util": 6000, "consumo": 0.20},
+    "Ender 3 V3 KE": {"valor": 2500, "vida_util": 3000, "consumo": 0.12},
+    "Ender 3": {"valor": 1500, "vida_util": 2500, "consumo": 0.10},
+    "Prusa MK3": {"valor": 5000, "vida_util": 5000, "consumo": 0.13},
+    "Outro": {"valor": None, "vida_util": None, "consumo": None}
 }
 
 modelo = st.sidebar.selectbox("Selecione sua impressora", list(impressoras.keys()))
 
-if impressoras[modelo] is not None:
-    consumo_maquina = impressoras[modelo]
+dados_impressora = impressoras[modelo]
+
+# VALOR
+if dados_impressora["valor"] is not None:
+    valor_maquina = st.sidebar.number_input(
+        "Valor da impressora (R$)",
+        value=float(dados_impressora["valor"])
+    )
+else:
+    valor_maquina = st.sidebar.number_input("Valor da impressora (R$)", value=3000.0)
+
+# VIDA ÚTIL
+if dados_impressora["vida_util"] is not None:
+    vida_util = st.sidebar.number_input(
+        "Vida útil estimada (horas)",
+        value=float(dados_impressora["vida_util"])
+    )
+else:
+    vida_util = st.sidebar.number_input("Vida útil estimada (horas)", value=3000)
+
+# MANUTENÇÃO
+manutencao_hora = st.sidebar.number_input("Manutenção (R$/h)", value=1.0)
+
+# CONSUMO
+if dados_impressora["consumo"] is not None:
+    consumo_maquina = dados_impressora["consumo"]
     st.sidebar.info(f"Consumo médio: {consumo_maquina} kW")
 else:
-    consumo_maquina = st.sidebar.number_input("Consumo da impressora (kW)", value=0.12)
+    consumo_maquina = st.sidebar.number_input("Consumo da impressora (kW)", value=0.12)    
 
+if vida_util > 0:
+    custo_hora = (valor_maquina / vida_util) + manutencao_hora
+else:
+    custo_hora = 0
+
+st.sidebar.info(f"💰 Custo real: R$ {custo_hora:.2f}/h")
 
 # -------------------------
 # INPUTS EM GRID (PROFISSIONAL)
