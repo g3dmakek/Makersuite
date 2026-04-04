@@ -300,7 +300,8 @@ else:
                 st.write(f"Peso: {p['peso']} g")
                 st.write(f"Tempo: {p['tempo']} h")
                 st.write(f"Preço: R$ {p['preco_venda']:.2f}")
-                st.write(f"Lucro: R$ {p['lucro']:.2f}")
+                st.write(f"Lucro unitário: R$ {p['lucro_unitario']:.2f}")
+                st.write(f"Lucro total: R$ {p['lucro_total']:.2f}")
                 st.write(f"Lucro/hora: R$ {p.get('lucro_por_hora', 0):.2f}")
 
     # BOTÃO DE EXCLUSÃO EM MASSA
