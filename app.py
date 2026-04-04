@@ -175,14 +175,18 @@ with col4:
 st.caption("💡 Ex: 100 peças com capacidade de 20 → 5 impressões")
 
 # -------------------------
+# BOTÃO DE CÁLCULO
+# -------------------------
+calcular = st.button("💰 Calcular", use_container_width=True)
+
+# -------------------------
 # EXECUÇÃO DO CÁLCULO
 # -------------------------
-if "calculo" in st.session_state:
-    calculo = st.session_state["calculo"]
+if calcular:
 
-    # -------------------------
-    # CUSTOS (AJUSTADO PARA LOTE)
-    # -------------------------
+    import math
+
+    # CUSTOS
     custo_material_total = (peso / 1000) * preco_kg
     custo_material_unitario = custo_material_total / pecas_por_impressao
 
@@ -194,9 +198,7 @@ if "calculo" in st.session_state:
 
     custo_total = custo_material_unitario + custo_maquina_unitario + custo_energia_unitario
 
-    # -------------------------
-    # MARKUP BASEADO NO TEMPO
-    # -------------------------
+    # MARKUP
     if tempo < 1:
         multiplicador = 3.5
     elif tempo < 3:
@@ -206,19 +208,13 @@ if "calculo" in st.session_state:
     else:
         multiplicador = 2.2
 
-    # -------------------------
-    # PREÇO E LUCRO
-    # -------------------------
+    # PREÇO
     preco_venda = custo_total * multiplicador
     lucro = preco_venda - custo_total
     margem_real = (lucro / preco_venda) * 100 if preco_venda > 0 else 0
     lucro_por_hora = lucro / tempo if tempo > 0 else 0
 
-    # -------------------------
     # SIMULAÇÃO
-    # -------------------------
-    import math
-
     numero_impressoes = math.ceil(quantidade / pecas_por_impressao)
     tempo_total = numero_impressoes * tempo
 
@@ -231,7 +227,7 @@ if "calculo" in st.session_state:
     faturamento_total = preco_venda * quantidade
     lucro_total = faturamento_total - custo_total_lote
 
-    # 👉 SALVA RESULTADO COMPLETO
+    # SALVAR
     st.session_state["calculo"] = {
         "nome": nome,
         "peso": peso,
@@ -326,12 +322,15 @@ with st.expander("🔍 Ver detalhes completos"):
 # -------------------------
 # STATUS DO PRODUTO
 # -------------------------
-if lucro_por_hora > 5:
-  st.success("🟢 Produto Excelente — alta rentabilidade")
-elif lucro_por_hora > 2:
-  st.warning("🟡 Produto OK — pode melhorar")
-else:
-  st.error("🔴 Produto Ruim — baixa rentabilidade")
+if "calculo" in st.session_state:
+    c = st.session_state["calculo"]
+
+    if c["lucro_por_hora"] > 5:
+        st.success("🟢 Produto Excelente — alta rentabilidade")
+    elif c["lucro_por_hora"] > 2:
+        st.warning("🟡 Produto OK — pode melhorar")
+    else:
+        st.error("🔴 Produto Ruim — baixa rentabilidade")
 
 # -------------------------
 # BOTÃO DE SALVAR (FORA DO CÁLCULO)
