@@ -123,6 +123,9 @@ if distribuidoras[distribuidora] is not None:
 else:
     custo_kwh = st.sidebar.number_input("Custo energia (R$/kWh)", value=0.80)
 
+# -------------------------
+# IMPRESSORA (CORRIGIDO)
+# -------------------------
 st.sidebar.subheader("🖨️ Impressora")
 
 impressoras = {
@@ -135,44 +138,50 @@ impressoras = {
     "Outro": {"valor": None, "vida_util": None, "consumo": None}
 }
 
-modelo = st.sidebar.selectbox("Selecione sua impressora", list(impressoras.keys()))
+modelo = st.sidebar.selectbox(
+    "Selecione sua impressora",
+    list(impressoras.keys()),
+    key="modelo_impressora"
+)
 
 dados_impressora = impressoras[modelo]
 
 # VALOR
-if dados_impressora["valor"] is not None:
-    valor_maquina = st.sidebar.number_input(
-        "Valor da impressora (R$)",
-        value=float(dados_impressora["valor"])
-    )
-else:
-    valor_maquina = st.sidebar.number_input("Valor da impressora (R$)", value=3000.0)
+valor_maquina = st.sidebar.number_input(
+    "Valor da impressora (R$)",
+    value=float(dados_impressora["valor"]) if dados_impressora["valor"] else 3000.0,
+    key="valor_maquina_input"
+)
 
 # VIDA ÚTIL
-if dados_impressora["vida_util"] is not None:
-    vida_util = st.sidebar.number_input(
-        "Vida útil estimada (horas)",
-        value=float(dados_impressora["vida_util"])
-    )
-else:
-    vida_util = st.sidebar.number_input("Vida útil estimada (horas)", value=3000)
+vida_util = st.sidebar.number_input(
+    "Vida útil estimada (horas)",
+    value=int(dados_impressora["vida_util"]) if dados_impressora["vida_util"] else 3000,
+    key="vida_util_input"
+)
 
-# MANUTENÇÃO
-manutencao_hora = st.sidebar.number_input("Manutenção (R$/h)", value=1.0)
+# MANUTENÇÃO (⚠️ nome de key único)
+manutencao_hora = st.sidebar.number_input(
+    "Manutenção (R$/h)",
+    value=1.0,
+    key="manutencao_input"
+)
 
 # CONSUMO
-if dados_impressora["consumo"] is not None:
-    consumo_maquina = dados_impressora["consumo"]
-    st.sidebar.info(f"Consumo médio: {consumo_maquina} kW")
-else:
-    consumo_maquina = st.sidebar.number_input("Consumo da impressora (kW)", value=0.12)    
+consumo_maquina = st.sidebar.number_input(
+    "Consumo da impressora (kW)",
+    value=float(dados_impressora["consumo"]) if dados_impressora["consumo"] else 0.12,
+    key="consumo_input"
+)
 
+# CUSTO HORA
 if vida_util > 0:
     custo_hora = (valor_maquina / vida_util) + manutencao_hora
 else:
-    custo_hora = 0
+    custo_hora = manutencao_hora
 
 st.sidebar.info(f"💰 Custo real: R$ {custo_hora:.2f}/h")
+st.sidebar.caption("💡 Valores automáticos — você pode ajustar")
 
 # -------------------------
 # INPUTS EM GRID (PROFISSIONAL)
