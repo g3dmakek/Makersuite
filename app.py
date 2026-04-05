@@ -7,60 +7,57 @@ import streamlit.components.v1 as components
 def card(titulo, valor):
     return f"""
     <div style="
-        background: linear-gradient(145deg, #1A1F2B, #11151F);
-        padding: 20px;
-        border-radius: 18px;
-        border: 1px solid rgba(255,255,255,0.08);
-        height: 110px;
+        background: linear-gradient(180deg, #0F172A, #111827);
+        padding: 18px 16px;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.06);
+        height: 100px;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
         position: relative;
-        text-align: center;
         color: white;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-        transition: all 0.25s ease;
-        overflow: hidden;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+        transition: all 0.2s ease;
     "
-    onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 14px 40px rgba(0,0,0,0.6)';"
-    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.4)';"
+    onmouseover="this.style.transform='translateY(-3px)'; this.style.borderColor='rgba(0,194,255,0.4)';"
+    onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(255,255,255,0.06)';"
     >
-
-        <!-- Glow decorativo -->
-        <div style="
-            position: absolute;
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle, rgba(0,194,255,0.12), transparent 70%);
-            top: -40px;
-            right: -40px;
-            pointer-events: none;
-        "></div>
 
         <!-- Título -->
         <div style="
-            position: absolute;
-            top: 10px;
-            left: 14px;
             font-size: 12px;
-            letter-spacing: 0.5px;
-            color: #FFFFFF;
-            opacity: 0.8;
-            font-weight: 500;
+            color: rgba(255,255,255,0.65);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         ">
             {titulo}
         </div>
 
         <!-- Valor -->
         <div style="
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 700;
             color: #FFFFFF;
-            margin-top: 12px;
+            letter-spacing: 0.5px;
         ">
             {valor}
         </div>
+
+        <!-- Linha inferior destaque -->
+        <div style="
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #00C2FF, #22D3EE);
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            opacity: 0.8;
+        "></div>
 
     </div>
     """
