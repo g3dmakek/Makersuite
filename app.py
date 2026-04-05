@@ -140,23 +140,6 @@ else:
 
 st.sidebar.info(f"💰 Custo: R$ {custo_hora:.2f}/h")
 
-# -------------------------
-# PÁGINA: CALCULADORA
-# -------------------------
-if pagina == "🧮 Calculadora":
-
-    st.title("🧮 Calculadora Maker")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        nome = st.text_input("Nome do produto")
-        peso = st.number_input("Peso (g)", value=50.0)
-        tempo = st.number_input("Tempo (h)", value=2.0)
-
-    with col2:
-        quantidade = st.number_input("Quantidade", value=10)
-        pecas_por_impressao = st.number_input("Peças por impressão", value=1)
 
     calcular = st.button("💰 Calcular", use_container_width=True)
 
@@ -202,43 +185,8 @@ if pagina == "🧮 Calculadora":
 
         faturamento_total = preco_venda * quantidade
         lucro_total = faturamento_total - custo_total_lote
-
-        # SALVAR
-        st.session_state["calculo"] = {
-            "nome": nome,
-            "peso": peso,
-            "tempo": tempo,
-            "quantidade": quantidade,
-            "pecas_por_impressao": pecas_por_impressao,
-
-            "preco_venda": preco_venda,
-            "lucro_unitario": lucro,
-            "lucro_por_hora": lucro_hora,
-            "margem": margem,
-
-            "numero_impressoes": numero_impressoes,
-            "tempo_total": tempo_total,
-
-            "faturamento_total": faturamento_total,
-            "custo_total_lote": custo_total_lote,
-            "lucro_total": lucro_total,
-
-            "custo_material_total": custo_material_total,
-            "custo_maquina_total": custo_maquina_total,
-            "custo_energia_total": custo_energia_total,
-
-            "status": "Pedidos"
-        }
     
-    st.markdown("""
-<style>
-div[data-testid="column"] {
-    padding: 6px;
-}
-</style>
-""", unsafe_allow_html=True)
-    
-    # -------------------------
+# -------------------------
 # PÁGINA: CALCULADORA
 # -------------------------
 if pagina == "🧮 Calculadora":
