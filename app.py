@@ -4,6 +4,45 @@ import os
 import math
 
 # -------------------------
+# FUNÇÃO DE CARD (UI)
+# -------------------------
+def card(titulo, valor):
+    return f"""
+    <div style="
+        background-color: #1A1F2B;
+        padding: 18px;
+        border-radius: 12px;
+        border: 1px solid #2D3748;
+        height: 90px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    ">
+
+        <div style="
+            position: absolute;
+            top: 10px;
+            left: 12px;
+            font-size: 12px;
+            color: #A0AEC0;
+        ">
+            {titulo}
+        </div>
+
+        <div style="
+            font-size: 22px;
+            font-weight: bold;
+            color: #00C2FF;
+        ">
+            {valor}
+        </div>
+
+    </div>
+    """
+    
+# -------------------------
 # CONFIG
 # -------------------------
 st.set_page_config(
@@ -197,93 +236,81 @@ if pagina == "🧮 Calculadora":
     # -------------------------
     if "calculo" in st.session_state:
 
-        c = st.session_state["calculo"]
-    
-        st.divider()
-    
-        # 🔥 KPIs PRINCIPAIS (CARDS)
-        col_top1, col_top2, col_top3, col_top4 = st.columns(4)
-    
-        with col_top1:
-            with st.container(border=True):
-                st.metric("💰 Preço", f"R$ {c['preco_venda']:.2f}")
-    
-        with col_top2:
-            with st.container(border=True):
-                st.metric("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}")
-    
-        with col_top3:
-            with st.container(border=True):
-                st.metric("📊 Margem", f"{c['margem']:.1f}%")
-    
-        with col_top4:
-            with st.container(border=True):
-                st.metric("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}")
-    
-        st.divider()
-    
-        # 📊 DETALHES EM CARDS
-        col_esq, col_dir = st.columns(2)
-    
-        with col_esq:
-            st.subheader("📊 Unitário")
-    
-            col1, col2 = st.columns(2)
-    
-            with col1:
-                with st.container(border=True):
-                    st.metric("💰 Custo", f"R$ {(c['preco_venda'] - c['lucro_unitario']):.2f}")
-    
-            with col2:
-                with st.container(border=True):
-                    st.metric("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}")
-    
-        with col_dir:
-            st.subheader("📦 Produção")
-    
-            col3, col4, col5 = st.columns(3)
-    
-            with col3:
-                with st.container(border=True):
-                    st.metric("📦 Peças", c["quantidade"])
-    
-            with col4:
-                with st.container(border=True):
-                    st.metric("🖨️ Impressões", c["numero_impressoes"])
-    
-            with col5:
-                with st.container(border=True):
-                    st.metric("⏱️ Tempo", f"{c['tempo_total']:.1f}h")
-    
-            col6, col7, col8 = st.columns(3)
-    
-            with col6:
-                with st.container(border=True):
-                    st.metric("💰 Faturamento", f"R$ {c['faturamento_total']:.2f}")
-    
-            with col7:
-                with st.container(border=True):
-                    st.metric("💸 Custo total", f"R$ {c['custo_total_lote']:.2f}")
-    
-            with col8:
-                with st.container(border=True):
-                    st.metric("📈 Lucro total", f"R$ {c['lucro_total']:.2f}")
-    
-        st.divider()
-    
-        # 🔍 DETALHES
-        with st.expander("🔍 Ver detalhes completos"):
-            st.write(f"💰 Custo material total: R$ {c['custo_material_total']:.2f}")
-            st.write(f"⚙️ Custo máquina total: R$ {c['custo_maquina_total']:.2f}")
-            st.write(f"⚡ Custo energia total: R$ {c['custo_energia_total']:.2f}")
-    
-        # 🔥 STATUS
-        if c["lucro_por_hora"] > 5:
-            st.success("🟢 Produto Excelente — alta rentabilidade")
-        elif c["lucro_por_hora"] > 2:
-            st.warning("🟡 Produto OK — pode melhorar")
-        else:
-            st.error("🔴 Produto Ruim — baixa rentabilidade")
+    c = st.session_state["calculo"]
+
+    st.divider()
+
+    # 🔥 CARDS PRINCIPAIS
+    col_top1, col_top2, col_top3, col_top4 = st.columns(4)
+
+    with col_top1:
+        st.markdown(card("💰 Preço", f"R$ {c['preco_venda']:.2f}"), unsafe_allow_html=True)
+
+    with col_top2:
+        st.markdown(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), unsafe_allow_html=True)
+
+    with col_top3:
+        st.markdown(card("📊 Margem", f"{c['margem']:.1f}%"), unsafe_allow_html=True)
+
+    with col_top4:
+        st.markdown(card("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}"), unsafe_allow_html=True)
+
+    st.divider()
+
+    # 📊 SEÇÃO UNITÁRIO E PRODUÇÃO
+    col_esq, col_dir = st.columns(2)
+
+    with col_esq:
+        st.subheader("📊 Unitário")
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.markdown(card("💰 Custo", f"R$ {(c['preco_venda'] - c['lucro_unitario']):.2f}"), unsafe_allow_html=True)
+
+        with col2:
+            st.markdown(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), unsafe_allow_html=True)
+
+    with col_dir:
+        st.subheader("📦 Produção")
+
+        col3, col4, col5 = st.columns(3)
+
+        with col3:
+            st.markdown(card("📦 Peças", c["quantidade"]), unsafe_allow_html=True)
+
+        with col4:
+            st.markdown(card("🖨️ Impressões", c["numero_impressoes"]), unsafe_allow_html=True)
+
+        with col5:
+            st.markdown(card("⏱️ Tempo", f"{c['tempo_total']:.1f}h"), unsafe_allow_html=True)
+
+        col6, col7, col8 = st.columns(3)
+
+        with col6:
+            st.markdown(card("💰 Faturamento", f"R$ {c['faturamento_total']:.2f}"), unsafe_allow_html=True)
+
+        with col7:
+            st.markdown(card("💸 Custo total", f"R$ {c['custo_total_lote']:.2f}"), unsafe_allow_html=True)
+
+        with col8:
+            st.markdown(card("📈 Lucro total", f"R$ {c['lucro_total']:.2f}"), unsafe_allow_html=True)
+
+    st.divider()
+
+    # 🔍 DETALHES
+    with st.expander("🔍 Ver detalhes completos"):
+        st.write(f"💰 Custo material total: R$ {c['custo_material_total']:.2f}")
+        st.write(f"⚙️ Custo máquina total: R$ {c['custo_maquina_total']:.2f}")
+        st.write(f"⚡ Custo energia total: R$ {c['custo_energia_total']:.2f}")
+
+    # 🔥 STATUS
+    if c["lucro_por_hora"] > 5:
+        st.success("🟢 Produto Excelente — alta rentabilidade")
+    elif c["lucro_por_hora"] > 2:
+        st.warning("🟡 Produto OK — pode melhorar")
+    else:
+        st.error("🔴 Produto Ruim — baixa rentabilidade")
             
 # -------------------------
 # PÁGINA: PRODUÇÃO
