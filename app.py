@@ -2,15 +2,6 @@ import streamlit as st
 import json
 import os
 import math
-    
-# -------------------------
-# CONFIG
-# -------------------------
-st.set_page_config(
-    page_title="Calculadora Maker",
-    page_icon="🧮",
-    layout="wide"
-)
 
 # -------------------------
 # FUNÇÃO DE CARD (UI)
@@ -22,17 +13,18 @@ def card(titulo, valor):
         padding: 18px;
         border-radius: 12px;
         border: 1px solid #2D3748;
-        height: 90px;
+        height: 100px;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         position: relative;
+        text-align: center;
     ">
 
         <div style="
             position: absolute;
-            top: 10px;
+            top: 8px;
             left: 12px;
             font-size: 12px;
             color: #A0AEC0;
@@ -44,12 +36,22 @@ def card(titulo, valor):
             font-size: 22px;
             font-weight: bold;
             color: #00C2FF;
+            margin-top: 10px;
         ">
             {valor}
         </div>
 
     </div>
     """
+    
+# -------------------------
+# CONFIG
+# -------------------------
+st.set_page_config(
+    page_title="Calculadora Maker",
+    page_icon="🧮",
+    layout="wide"
+)
 
 # -------------------------
 # MENU
