@@ -10,6 +10,32 @@ st.set_page_config(
     page_icon="🧮",
     layout="wide"
 )
+
+import streamlit as st
+
+st.set_page_config(layout="wide")
+
+# -------------------------
+# MENU
+# -------------------------
+tab1, tab2 = st.tabs(["🧮 Calculadora", "📋 Produção"])
+
+# -------------------------
+# ABA 1
+# -------------------------
+with tab1:
+    st.title("🧮 Calculadora Maker")
+
+    st.write("Aqui entra toda sua calculadora")
+
+# -------------------------
+# ABA 2
+# -------------------------
+with tab2:
+    st.title("📋 Kanban de Produção")
+
+    st.write("Aqui entra o kanban")
+    
 # -------------------------
 # STYLE DA PÁGINA (PROFISSIONAL)
 # -------------------------
