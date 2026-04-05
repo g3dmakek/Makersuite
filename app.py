@@ -7,31 +7,35 @@ import streamlit.components.v1 as components
 def card(titulo, valor):
     return f"""
     <div style="
-        background: linear-gradient(180deg, #0F172A, #111827);
+        background: linear-gradient(180deg, #111827, #0B1220);
         padding: 18px 16px;
-        border-radius: 16px;
-        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 18px;
         height: 100px;
         display: flex;
         flex-direction: column;
         justify-content: center;
         position: relative;
         color: white;
-        box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+
+        /* ESSENCIAL PRA MOSTRAR O RADIUS */
+        margin: 8px 4px;
+        
+        /* BORDA INTERNA (truque visual) */
+        box-shadow: 
+            0 0 0 1px rgba(255,255,255,0.08),
+            0 8px 25px rgba(0,0,0,0.45);
+
         transition: all 0.2s ease;
     "
-    onmouseover="this.style.transform='translateY(-3px)'; this.style.borderColor='rgba(0,194,255,0.4)';"
-    onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(255,255,255,0.06)';"
+    onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 0 0 1px rgba(0,194,255,0.5), 0 12px 30px rgba(0,0,0,0.6)';"
+    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 0 0 1px rgba(255,255,255,0.08), 0 8px 25px rgba(0,0,0,0.45)';"
     >
 
         <!-- Título -->
         <div style="
             font-size: 12px;
-            color: rgba(255,255,255,0.65);
+            color: rgba(255,255,255,0.7);
             margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         ">
             {titulo}
         </div>
@@ -41,23 +45,9 @@ def card(titulo, valor):
             font-size: 24px;
             font-weight: 700;
             color: #FFFFFF;
-            letter-spacing: 0.5px;
         ">
             {valor}
         </div>
-
-        <!-- Linha inferior destaque -->
-        <div style="
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, #00C2FF, #22D3EE);
-            border-bottom-left-radius: 16px;
-            border-bottom-right-radius: 16px;
-            opacity: 0.8;
-        "></div>
 
     </div>
     """
