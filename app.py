@@ -214,16 +214,16 @@ if pagina == "🧮 Calculadora":
         col1, col2, col3, col4 = st.columns(4)
 
         with col1:
-            components.html(card("💰 Preço", f"R$ {c['preco_venda']:.2f}"), height=140)
+            components.html(card("💰 Preço", f"R$ {c['preco_venda']:.2f}"), height=150)
 
         with col2:
-            components.html(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), height=140)
+            components.html(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), height=150)
 
         with col3:
-            components.html(card("📊 Margem", f"{c['margem']:.1f}%"), height=140)
+            components.html(card("📊 Margem", f"{c['margem']:.1f}%"), height=150)
 
         with col4:
-            components.html(card("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}"), height=140)
+            components.html(card("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}"), height=150)
 
         st.divider()
 
@@ -235,10 +235,10 @@ if pagina == "🧮 Calculadora":
             col1, col2 = st.columns(2)
 
             with col1:
-                components.html(card("💰 Custo", f"R$ {(c['preco_venda'] - c['lucro_unitario']):.2f}"), height=140)
+                components.html(card("💰 Custo", f"R$ {(c['preco_venda'] - c['lucro_unitario']):.2f}"), height=150)
 
             with col2:
-                components.html(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), height=140)
+                components.html(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), height=150)
 
         with col_dir:
             st.subheader("📦 Produção")
@@ -246,12 +246,12 @@ if pagina == "🧮 Calculadora":
             col3, col4, col5 = st.columns(3)
 
             with col3:
-                components.html(card("📦 Peças", c["quantidade"]), height=140)
+                components.html(card("📦 Peças", c["quantidade"]), height=150)
 
             with col4:
-                components.html(card("🖨️ Impressões", c["numero_impressoes"]), height=140)
+                components.html(card("🖨️ Impressões", c["numero_impressoes"]), height=150)
 
             with col5:
-                components.html(card("⏱️ Tempo", f"{c['tempo_total']:.1f}h"), height=140)
+                components.html(card("⏱️ Tempo", f"{c['tempo_total']:.1f}h"), height=150)
 
         st.divider()
