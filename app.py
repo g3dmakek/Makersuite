@@ -4,6 +4,19 @@ import os
 import math
 import streamlit.components.v1 as components
 
+st.markdown("""
+<style>
+.block-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+[data-testid="column"] {
+    padding: 0 6px;
+}
+</style>
+""", unsafe_allow_html=True)
+
 def card(titulo, valor):
     return f"""
     <div style="
