@@ -28,7 +28,7 @@ pagina = st.radio(
 # -------------------------
 # PÁGINA: CALCULADORA
 # -------------------------
-    if pagina == "🧮 Calculadora":
+if pagina == "🧮 Calculadora":
 
     # -------------------------
     # INPUTS EM GRID (PROFISSIONAL)
