@@ -7,11 +7,11 @@ import streamlit.components.v1 as components
 def card(titulo, valor):
     return f"""
     <div style="
-        background-color: #1A1F2B;
-        padding: 18px;
-        border-radius: 12px;
-        border: 1px solid #2D3748;
-        height: 100px;
+        background: linear-gradient(145deg, #1A1F2B, #11151F);
+        padding: 20px;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.05);
+        height: 110px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -19,25 +19,49 @@ def card(titulo, valor):
         position: relative;
         text-align: center;
         color: white;
-    ">
+        box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+        transition: all 0.25s ease;
+        overflow: hidden;
+    "
+    onmouseover="this.style.transform='translateY(-4px) scale(1.02)'; this.style.boxShadow='0 12px 35px rgba(0,0,0,0.5)';"
+    onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.35)';"
+    >
+
+        <!-- Glow decorativo -->
         <div style="
             position: absolute;
-            top: 8px;
-            left: 12px;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(0,194,255,0.15), transparent 70%);
+            top: -40px;
+            right: -40px;
+        "></div>
+
+        <!-- Título -->
+        <div style="
+            position: absolute;
+            top: 10px;
+            left: 14px;
             font-size: 12px;
-            color: #A0AEC0;
+            letter-spacing: 0.5px;
+            color: #94A3B8;
+            font-weight: 500;
         ">
             {titulo}
         </div>
 
+        <!-- Valor -->
         <div style="
-            font-size: 22px;
-            font-weight: bold;
-            color: #00C2FF;
-            margin-top: 10px;
+            font-size: 26px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #00C2FF, #00FFA3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 12px;
         ">
             {valor}
         </div>
+
     </div>
     """
     
