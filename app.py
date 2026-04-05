@@ -251,16 +251,16 @@ div[data-testid="column"] {
         col_top1, col_top2, col_top3, col_top4 = st.columns(4, gap="medium")
     
         with col_top1:
-    components.html(card("💰 Preço", f"R$ {c['preco_venda']:.2f}"), height=120)
+            components.html(card("💰 Preço", f"R$ {c['preco_venda']:.2f}"), height=120)
 
-with col_top2:
-    components.html(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), height=120)
-
-with col_top3:
-    components.html(card("📊 Margem", f"{c['margem']:.1f}%"), height=120)
-
-with col_top4:
-    components.html(card("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}"), height=120)
+        with col_top2:
+            components.html(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), height=120)
+        
+        with col_top3:
+            components.html(card("📊 Margem", f"{c['margem']:.1f}%"), height=120)
+        
+        with col_top4:
+            components.html(card("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}"), height=120)
     
         st.divider()
     
