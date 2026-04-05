@@ -19,49 +19,43 @@ st.markdown("""
 
 def card(titulo, valor):
     return f"""
-    <div style="
-        background: linear-gradient(180deg, #111827, #0B1220);
-        padding: 18px 16px;
-        border-radius: 18px;
-        height: 100px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        position: relative;
-        color: white;
-
-        /* ESSENCIAL PRA MOSTRAR O RADIUS */
-        margin: 8px 4px;
-        
-        /* BORDA INTERNA (truque visual) */
-        box-shadow: 
-            0 0 0 1px rgba(255,255,255,0.08),
-            0 8px 25px rgba(0,0,0,0.45);
-
-        transition: all 0.2s ease;
-    "
-    onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 0 0 1px rgba(0,194,255,0.5), 0 12px 30px rgba(0,0,0,0.6)';"
-    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 0 0 1px rgba(255,255,255,0.08), 0 8px 25px rgba(0,0,0,0.45)';"
-    >
-
-        <!-- Título -->
+    <div style="padding:6px;">
         <div style="
-            font-size: 12px;
-            color: rgba(255,255,255,0.7);
-            margin-bottom: 6px;
-        ">
-            {titulo}
-        </div>
+            background: linear-gradient(180deg, #111827, #0B1220);
+            padding: 18px 16px;
+            border-radius: 18px;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            color: white;
 
-        <!-- Valor -->
-        <div style="
-            font-size: 24px;
-            font-weight: 700;
-            color: #FFFFFF;
-        ">
-            {valor}
-        </div>
+            box-shadow: 0 10px 25px rgba(0,0,0,0.45);
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.2s ease;
+        "
+        onmouseover="this.style.transform='translateY(-3px)'"
+        onmouseout="this.style.transform='translateY(0)'"
+        >
 
+            <div style="
+                font-size: 12px;
+                color: rgba(255,255,255,0.7);
+                margin-bottom: 6px;
+            ">
+                {titulo}
+            </div>
+
+            <div style="
+                font-size: 24px;
+                font-weight: 700;
+                color: #FFFFFF;
+            ">
+                {valor}
+            </div>
+
+        </div>
     </div>
     """
     
