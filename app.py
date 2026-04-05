@@ -197,50 +197,93 @@ if pagina == "🧮 Calculadora":
     # -------------------------
     if "calculo" in st.session_state:
 
-        c = st.session_state["calculo"]
+    c = st.session_state["calculo"]
 
-        st.divider()
+    st.divider()
 
-        col_top1, col_top2, col_top3, col_top4 = st.columns(4)
+    # 🔥 KPIs PRINCIPAIS (CARDS)
+    col_top1, col_top2, col_top3, col_top4 = st.columns(4)
 
-        col_top1.metric("💰 Preço", f"R$ {c['preco_venda']:.2f}")
-        col_top2.metric("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}")
-        col_top3.metric("📊 Margem", f"{c['margem']:.1f}%")
-        col_top4.metric("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}")
+    with col_top1:
+        with st.container(border=True):
+            st.metric("💰 Preço", f"R$ {c['preco_venda']:.2f}")
 
-        st.divider()
+    with col_top2:
+        with st.container(border=True):
+            st.metric("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}")
 
-        col_esq, col_dir = st.columns(2)
+    with col_top3:
+        with st.container(border=True):
+            st.metric("📊 Margem", f"{c['margem']:.1f}%")
 
-        with col_esq:
-            st.subheader("📊 Unitário")
+    with col_top4:
+        with st.container(border=True):
+            st.metric("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}")
 
-            col1, col2 = st.columns(2)
-            col1.metric("💰 Custo", f"R$ {(c['preco_venda'] - c['lucro_unitario']):.2f}")
-            col2.metric("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}")
+    st.divider()
 
-        with col_dir:
-            st.subheader("📦 Produção")
+    # 📊 DETALHES EM CARDS
+    col_esq, col_dir = st.columns(2)
 
-            col3, col4, col5 = st.columns(3)
-            col3.metric("📦 Peças", c["quantidade"])
-            col4.metric("🖨️ Impressões", c["numero_impressoes"])
-            col5.metric("⏱️ Tempo", f"{c['tempo_total']:.1f}h")
+    with col_esq:
+        st.subheader("📊 Unitário")
 
-            col6, col7, col8 = st.columns(3)
-            col6.metric("💰 Faturamento", f"R$ {c['faturamento_total']:.2f}")
-            col7.metric("💸 Custo", f"R$ {c['custo_total_lote']:.2f}")
-            col8.metric("📈 Lucro", f"R$ {c['lucro_total']:.2f}")
+        col1, col2 = st.columns(2)
 
-        st.divider()
+        with col1:
+            with st.container(border=True):
+                st.metric("💰 Custo", f"R$ {(c['preco_venda'] - c['lucro_unitario']):.2f}")
 
-        # STATUS
-        if c["lucro_por_hora"] > 5:
-            st.success("🟢 Produto Excelente")
-        elif c["lucro_por_hora"] > 2:
-            st.warning("🟡 Produto OK")
-        else:
-            st.error("🔴 Produto Ruim")
+        with col2:
+            with st.container(border=True):
+                st.metric("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}")
+
+    with col_dir:
+        st.subheader("📦 Produção")
+
+        col3, col4, col5 = st.columns(3)
+
+        with col3:
+            with st.container(border=True):
+                st.metric("📦 Peças", c["quantidade"])
+
+        with col4:
+            with st.container(border=True):
+                st.metric("🖨️ Impressões", c["numero_impressoes"])
+
+        with col5:
+            with st.container(border=True):
+                st.metric("⏱️ Tempo", f"{c['tempo_total']:.1f}h")
+
+        col6, col7, col8 = st.columns(3)
+
+        with col6:
+            with st.container(border=True):
+                st.metric("💰 Faturamento", f"R$ {c['faturamento_total']:.2f}")
+
+        with col7:
+            with st.container(border=True):
+                st.metric("💸 Custo total", f"R$ {c['custo_total_lote']:.2f}")
+
+        with col8:
+            with st.container(border=True):
+                st.metric("📈 Lucro total", f"R$ {c['lucro_total']:.2f}")
+
+    st.divider()
+
+    # 🔍 DETALHES
+    with st.expander("🔍 Ver detalhes completos"):
+        st.write(f"💰 Custo material total: R$ {c['custo_material_total']:.2f}")
+        st.write(f"⚙️ Custo máquina total: R$ {c['custo_maquina_total']:.2f}")
+        st.write(f"⚡ Custo energia total: R$ {c['custo_energia_total']:.2f}")
+
+    # 🔥 STATUS
+    if c["lucro_por_hora"] > 5:
+        st.success("🟢 Produto Excelente — alta rentabilidade")
+    elif c["lucro_por_hora"] > 2:
+        st.warning("🟡 Produto OK — pode melhorar")
+    else:
+        st.error("🔴 Produto Ruim — baixa rentabilidade")
             
 # -------------------------
 # PÁGINA: PRODUÇÃO
