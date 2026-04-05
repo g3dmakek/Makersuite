@@ -236,81 +236,81 @@ if pagina == "🧮 Calculadora":
     # -------------------------
     if "calculo" in st.session_state:
 
-    c = st.session_state["calculo"]
-
-    st.divider()
-
-    # 🔥 CARDS PRINCIPAIS
-    col_top1, col_top2, col_top3, col_top4 = st.columns(4)
-
-    with col_top1:
-        st.markdown(card("💰 Preço", f"R$ {c['preco_venda']:.2f}"), unsafe_allow_html=True)
-
-    with col_top2:
-        st.markdown(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), unsafe_allow_html=True)
-
-    with col_top3:
-        st.markdown(card("📊 Margem", f"{c['margem']:.1f}%"), unsafe_allow_html=True)
-
-    with col_top4:
-        st.markdown(card("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}"), unsafe_allow_html=True)
-
-    st.divider()
-
-    # 📊 SEÇÃO UNITÁRIO E PRODUÇÃO
-    col_esq, col_dir = st.columns(2)
-
-    with col_esq:
-        st.subheader("📊 Unitário")
-
-        col1, col2 = st.columns(2)
-
-        with col1:
-            st.markdown(card("💰 Custo", f"R$ {(c['preco_venda'] - c['lucro_unitario']):.2f}"), unsafe_allow_html=True)
-
-        with col2:
+        c = st.session_state["calculo"]
+    
+        st.divider()
+    
+        # 🔥 CARDS PRINCIPAIS
+        col_top1, col_top2, col_top3, col_top4 = st.columns(4)
+    
+        with col_top1:
+            st.markdown(card("💰 Preço", f"R$ {c['preco_venda']:.2f}"), unsafe_allow_html=True)
+    
+        with col_top2:
             st.markdown(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), unsafe_allow_html=True)
-
-    with col_dir:
-        st.subheader("📦 Produção")
-
-        col3, col4, col5 = st.columns(3)
-
-        with col3:
-            st.markdown(card("📦 Peças", c["quantidade"]), unsafe_allow_html=True)
-
-        with col4:
-            st.markdown(card("🖨️ Impressões", c["numero_impressoes"]), unsafe_allow_html=True)
-
-        with col5:
-            st.markdown(card("⏱️ Tempo", f"{c['tempo_total']:.1f}h"), unsafe_allow_html=True)
-
-        col6, col7, col8 = st.columns(3)
-
-        with col6:
-            st.markdown(card("💰 Faturamento", f"R$ {c['faturamento_total']:.2f}"), unsafe_allow_html=True)
-
-        with col7:
-            st.markdown(card("💸 Custo total", f"R$ {c['custo_total_lote']:.2f}"), unsafe_allow_html=True)
-
-        with col8:
-            st.markdown(card("📈 Lucro total", f"R$ {c['lucro_total']:.2f}"), unsafe_allow_html=True)
-
-    st.divider()
-
-    # 🔍 DETALHES
-    with st.expander("🔍 Ver detalhes completos"):
-        st.write(f"💰 Custo material total: R$ {c['custo_material_total']:.2f}")
-        st.write(f"⚙️ Custo máquina total: R$ {c['custo_maquina_total']:.2f}")
-        st.write(f"⚡ Custo energia total: R$ {c['custo_energia_total']:.2f}")
-
-    # 🔥 STATUS
-    if c["lucro_por_hora"] > 5:
-        st.success("🟢 Produto Excelente — alta rentabilidade")
-    elif c["lucro_por_hora"] > 2:
-        st.warning("🟡 Produto OK — pode melhorar")
-    else:
-        st.error("🔴 Produto Ruim — baixa rentabilidade")
+    
+        with col_top3:
+            st.markdown(card("📊 Margem", f"{c['margem']:.1f}%"), unsafe_allow_html=True)
+    
+        with col_top4:
+            st.markdown(card("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}"), unsafe_allow_html=True)
+    
+        st.divider()
+    
+        # 📊 SEÇÃO UNITÁRIO E PRODUÇÃO
+        col_esq, col_dir = st.columns(2)
+    
+        with col_esq:
+            st.subheader("📊 Unitário")
+    
+            col1, col2 = st.columns(2)
+    
+            with col1:
+                st.markdown(card("💰 Custo", f"R$ {(c['preco_venda'] - c['lucro_unitario']):.2f}"), unsafe_allow_html=True)
+    
+            with col2:
+                st.markdown(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), unsafe_allow_html=True)
+    
+        with col_dir:
+            st.subheader("📦 Produção")
+    
+            col3, col4, col5 = st.columns(3)
+    
+            with col3:
+                st.markdown(card("📦 Peças", c["quantidade"]), unsafe_allow_html=True)
+    
+            with col4:
+                st.markdown(card("🖨️ Impressões", c["numero_impressoes"]), unsafe_allow_html=True)
+    
+            with col5:
+                st.markdown(card("⏱️ Tempo", f"{c['tempo_total']:.1f}h"), unsafe_allow_html=True)
+    
+            col6, col7, col8 = st.columns(3)
+    
+            with col6:
+                st.markdown(card("💰 Faturamento", f"R$ {c['faturamento_total']:.2f}"), unsafe_allow_html=True)
+    
+            with col7:
+                st.markdown(card("💸 Custo total", f"R$ {c['custo_total_lote']:.2f}"), unsafe_allow_html=True)
+    
+            with col8:
+                st.markdown(card("📈 Lucro total", f"R$ {c['lucro_total']:.2f}"), unsafe_allow_html=True)
+    
+        st.divider()
+    
+        # 🔍 DETALHES
+        with st.expander("🔍 Ver detalhes completos"):
+            st.write(f"💰 Custo material total: R$ {c['custo_material_total']:.2f}")
+            st.write(f"⚙️ Custo máquina total: R$ {c['custo_maquina_total']:.2f}")
+            st.write(f"⚡ Custo energia total: R$ {c['custo_energia_total']:.2f}")
+    
+        # 🔥 STATUS
+        if c["lucro_por_hora"] > 5:
+            st.success("🟢 Produto Excelente — alta rentabilidade")
+        elif c["lucro_por_hora"] > 2:
+            st.warning("🟡 Produto OK — pode melhorar")
+        else:
+            st.error("🔴 Produto Ruim — baixa rentabilidade")
             
 # -------------------------
 # PÁGINA: PRODUÇÃO
