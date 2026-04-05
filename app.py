@@ -141,6 +141,24 @@ else:
 st.sidebar.info(f"💰 Custo: R$ {custo_hora:.2f}/h")
 
 
+    # -------------------------
+# PÁGINA: CALCULADORA
+# -------------------------
+if pagina == "🧮 Calculadora":
+
+    st.title("🧮 Calculadora Maker")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        nome = st.text_input("Nome do produto", key="nome_produto")
+        peso = st.number_input("Peso (g)", value=50.0, key="peso_produto")
+        tempo = st.number_input("Tempo (h)", value=2.0, key="tempo_produto")
+
+    with col2:
+        quantidade = st.number_input("Quantidade", value=10, key="quantidade_produto")
+        pecas_por_impressao = st.number_input("Peças por impressão", value=1, key="pecas_produto")
+
     calcular = st.button("💰 Calcular", use_container_width=True)
 
     # -------------------------
@@ -185,30 +203,8 @@ st.sidebar.info(f"💰 Custo: R$ {custo_hora:.2f}/h")
 
         faturamento_total = preco_venda * quantidade
         lucro_total = faturamento_total - custo_total_lote
-    
-# -------------------------
-# PÁGINA: CALCULADORA
-# -------------------------
-if pagina == "🧮 Calculadora":
 
-    st.title("🧮 Calculadora Maker")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        nome = st.text_input("Nome do produto")
-        peso = st.number_input("Peso (g)", value=50.0)
-        tempo = st.number_input("Tempo (h)", value=2.0)
-
-    with col2:
-        quantidade = st.number_input("Quantidade", value=10)
-        pecas_por_impressao = st.number_input("Peças por impressão", value=1)
-
-    calcular = st.button("💰 Calcular", use_container_width=True)
-
-    if calcular:
-        # (SEU CÁLCULO CONTINUA IGUAL)
-
+        # SALVAR NO STATE
         st.session_state["calculo"] = {
             "nome": nome,
             "peso": peso,
@@ -234,7 +230,7 @@ if pagina == "🧮 Calculadora":
 
             "status": "Pedidos"
         }
-
+        
     # -------------------------
     # DASHBOARD
     # -------------------------
