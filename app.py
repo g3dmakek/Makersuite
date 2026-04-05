@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import json
 import os
 import math
@@ -13,7 +14,7 @@ st.set_page_config(
 )
 
 # -------------------------
-# ESTILO GLOBAL (IMPORTANTE)
+# ESTILO GLOBAL
 # -------------------------
 st.markdown("""
 <style>
@@ -29,33 +30,33 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # -------------------------
-# CARD
+# CARD (VERSÃO FINAL)
 # -------------------------
 def card(titulo, valor):
     return f"""
-<div style="padding:6px;">
-  <div style="background:#111827;
-              padding:16px;
-              border-radius:16px;
-              height:100px;
-              display:flex;
-              flex-direction:column;
-              justify-content:center;
-              color:white;
-              box-shadow:0 8px 20px rgba(0,0,0,0.4);
-              border:1px solid rgba(255,255,255,0.08);">
+    <div style="padding:10px;">
+        <div style="
+            background: linear-gradient(180deg, #111827, #0B1220);
+            padding:16px;
+            border-radius:16px;
+            height:100px;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            color:white;
+            box-shadow:0 10px 25px rgba(0,0,0,0.45);
+            border:1px solid rgba(255,255,255,0.08);
+        ">
+            <div style="font-size:12px; opacity:0.7;">
+                {titulo}
+            </div>
 
-    <div style="font-size:12px; opacity:0.7;">
-      {titulo}
+            <div style="font-size:24px; font-weight:700; margin-top:6px;">
+                {valor}
+            </div>
+        </div>
     </div>
-
-    <div style="font-size:24px; font-weight:700; margin-top:6px;">
-      {valor}
-    </div>
-
-  </div>
-</div>
-"""
+    """
 
 # -------------------------
 # MENU
@@ -213,13 +214,16 @@ if pagina == "🧮 Calculadora":
         col1, col2, col3, col4 = st.columns(4)
 
         with col1:
-            st.markdown(card("💰 Preço", f"R$ {c['preco_venda']:.2f}"), unsafe_allow_html=True)
+            components.html(card("💰 Preço", f"R$ {c['preco_venda']:.2f}"), height=140)
+
         with col2:
-            st.markdown(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), unsafe_allow_html=True)
+            components.html(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), height=140)
+
         with col3:
-            st.markdown(card("📊 Margem", f"{c['margem']:.1f}%"), unsafe_allow_html=True)
+            components.html(card("📊 Margem", f"{c['margem']:.1f}%"), height=140)
+
         with col4:
-            st.markdown(card("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}"), unsafe_allow_html=True)
+            components.html(card("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}"), height=140)
 
         st.divider()
 
@@ -227,12 +231,14 @@ if pagina == "🧮 Calculadora":
 
         with col_esq:
             st.subheader("📊 Unitário")
+
             col1, col2 = st.columns(2)
 
             with col1:
-                st.markdown(card("💰 Custo", f"R$ {(c['preco_venda'] - c['lucro_unitario']):.2f}"), unsafe_allow_html=True)
+                components.html(card("💰 Custo", f"R$ {(c['preco_venda'] - c['lucro_unitario']):.2f}"), height=140)
+
             with col2:
-                st.markdown(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), unsafe_allow_html=True)
+                components.html(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), height=140)
 
         with col_dir:
             st.subheader("📦 Produção")
@@ -240,10 +246,12 @@ if pagina == "🧮 Calculadora":
             col3, col4, col5 = st.columns(3)
 
             with col3:
-                st.markdown(card("📦 Peças", c["quantidade"]), unsafe_allow_html=True)
+                components.html(card("📦 Peças", c["quantidade"]), height=140)
+
             with col4:
-                st.markdown(card("🖨️ Impressões", c["numero_impressoes"]), unsafe_allow_html=True)
+                components.html(card("🖨️ Impressões", c["numero_impressoes"]), height=140)
+
             with col5:
-                st.markdown(card("⏱️ Tempo", f"{c['tempo_total']:.1f}h"), unsafe_allow_html=True)
+                components.html(card("⏱️ Tempo", f"{c['tempo_total']:.1f}h"), height=140)
 
         st.divider()
