@@ -2,21 +2,44 @@ import streamlit as st
 import json
 import os
 import math
+import streamlit.components.v1 as components
 
 def card(titulo, valor):
     return f"""
-<div style="background-color:#1A1F2B;padding:18px;border-radius:12px;border:1px solid #2D3748;height:100px;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;text-align:center;">
+    <div style="
+        background-color: #1A1F2B;
+        padding: 18px;
+        border-radius: 12px;
+        border: 1px solid #2D3748;
+        height: 100px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        text-align: center;
+        color: white;
+    ">
+        <div style="
+            position: absolute;
+            top: 8px;
+            left: 12px;
+            font-size: 12px;
+            color: #A0AEC0;
+        ">
+            {titulo}
+        </div>
 
-    <div style="position:absolute;top:8px;left:12px;font-size:12px;color:#A0AEC0;">
-        {titulo}
+        <div style="
+            font-size: 22px;
+            font-weight: bold;
+            color: #00C2FF;
+            margin-top: 10px;
+        ">
+            {valor}
+        </div>
     </div>
-
-    <div style="font-size:22px;font-weight:bold;color:#00C2FF;margin-top:10px;">
-        {valor}
-    </div>
-
-</div>
-"""
+    """
     
 # -------------------------
 # CONFIG
@@ -228,16 +251,16 @@ div[data-testid="column"] {
         col_top1, col_top2, col_top3, col_top4 = st.columns(4, gap="medium")
     
         with col_top1:
-            st.markdown(card("💰 Preço", f"R$ {c['preco_venda']:.2f}"), unsafe_allow_html=True)
-    
-        with col_top2:
-            st.markdown(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), unsafe_allow_html=True)
-    
-        with col_top3:
-            st.markdown(card("📊 Margem", f"{c['margem']:.1f}%"), unsafe_allow_html=True)
-    
-        with col_top4:
-            st.markdown(card("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}"), unsafe_allow_html=True)
+    components.html(card("💰 Preço", f"R$ {c['preco_venda']:.2f}"), height=120)
+
+with col_top2:
+    components.html(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), height=120)
+
+with col_top3:
+    components.html(card("📊 Margem", f"{c['margem']:.1f}%"), height=120)
+
+with col_top4:
+    components.html(card("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}"), height=120)
     
         st.divider()
     
