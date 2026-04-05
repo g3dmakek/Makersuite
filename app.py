@@ -232,7 +232,15 @@ if pagina == "🧮 Calculadora":
 
             "status": "Pedidos"
         }
-
+    
+    st.markdown("""
+<style>
+div[data-testid="column"] {
+    padding: 6px;
+}
+</style>
+""", unsafe_allow_html=True)
+    
     # -------------------------
     # DASHBOARD (SE JÁ EXISTIR RESULTADO)
     # -------------------------
@@ -243,7 +251,7 @@ if pagina == "🧮 Calculadora":
         st.divider()
     
         # 🔥 CARDS PRINCIPAIS
-        col_top1, col_top2, col_top3, col_top4 = st.columns(4)
+        col_top1, col_top2, col_top3, col_top4 = st.columns(4, gap="medium")
     
         with col_top1:
             st.markdown(card("💰 Preço", f"R$ {c['preco_venda']:.2f}"), unsafe_allow_html=True)
