@@ -346,7 +346,7 @@ with col_dir:
 # -------------------------
 # PÁGINA: PRODUÇÃO
 # -------------------------
-    elif pagina == "📋 Produção":
+        elif pagina == "📋 Produção":
 
     st.title("📋 Kanban")
 
