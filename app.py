@@ -116,7 +116,7 @@ impressoras = {
     "Bambu Lab P1P": {"valor": 6000, "vida_util": 5000, "consumo": 0.15},
     "Bambu Lab X1 Carbon": {"valor": 9000, "vida_util": 6000, "consumo": 0.20},
     "Ender 3 V3 KE": {"valor": 2500, "vida_util": 3000, "consumo": 0.12},
-    "Ender 3": {"valor": 1500, "vida_util": 2500, "consumo": 0.10},
+    "Ender 3": {"valor": 1600, "vida_util": 2500, "consumo": 0.10},
     "Outro": {"valor": None, "vida_util": None, "consumo": None}
 }
 
@@ -214,16 +214,16 @@ if pagina == "🧮 Calculadora":
         col1, col2, col3, col4 = st.columns(4)
 
         with col1:
-            components.html(card("💰 Preço", f"R$ {c['preco_venda']:.2f}"), height=150)
+            components.html(card("💰 Preço", f"R$ {c['preco_venda']:.2f}"), height=160)
 
         with col2:
-            components.html(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), height=150)
+            components.html(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), height=160)
 
         with col3:
-            components.html(card("📊 Margem", f"{c['margem']:.1f}%"), height=150)
+            components.html(card("📊 Margem", f"{c['margem']:.1f}%"), height=160)
 
         with col4:
-            components.html(card("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}"), height=150)
+            components.html(card("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}"), height=160)
 
         st.divider()
 
@@ -235,10 +235,10 @@ if pagina == "🧮 Calculadora":
             col1, col2 = st.columns(2)
 
             with col1:
-                components.html(card("💰 Custo", f"R$ {(c['preco_venda'] - c['lucro_unitario']):.2f}"), height=150)
+                components.html(card("💰 Custo", f"R$ {(c['preco_venda'] - c['lucro_unitario']):.2f}"), height=160)
 
             with col2:
-                components.html(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), height=150)
+                components.html(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), height=160)
 
         with col_dir:
             st.subheader("📦 Produção")
@@ -246,12 +246,12 @@ if pagina == "🧮 Calculadora":
             col3, col4, col5 = st.columns(3)
 
             with col3:
-                components.html(card("📦 Peças", c["quantidade"]), height=150)
+                components.html(card("📦 Peças", c["quantidade"]), height=160)
 
             with col4:
-                components.html(card("🖨️ Impressões", c["numero_impressoes"]), height=150)
+                components.html(card("🖨️ Impressões", c["numero_impressoes"]), height=160)
 
             with col5:
-                components.html(card("⏱️ Tempo", f"{c['tempo_total']:.1f}h"), height=150)
+                components.html(card("⏱️ Tempo", f"{c['tempo_total']:.1f}h"), height=160)
 
         st.divider()
