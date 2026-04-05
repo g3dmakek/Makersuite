@@ -297,6 +297,8 @@ if calcular:
         "custo_material_total": custo_material_total,
         "custo_maquina_total": custo_maquina_total,
         "custo_energia_total": custo_energia_total,
+        # 🔥 KANBAN
+        "status": "Pedidos"
     }
 
 # -------------------------
