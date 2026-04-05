@@ -239,131 +239,138 @@ div[data-testid="column"] {
 """, unsafe_allow_html=True)
     
     # -------------------------
-    # DASHBOARD (SE JÁ EXISTIR RESULTADO)
+# PÁGINA: CALCULADORA
+# -------------------------
+if pagina == "🧮 Calculadora":
+
+    st.title("🧮 Calculadora Maker")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        nome = st.text_input("Nome do produto")
+        peso = st.number_input("Peso (g)", value=50.0)
+        tempo = st.number_input("Tempo (h)", value=2.0)
+
+    with col2:
+        quantidade = st.number_input("Quantidade", value=10)
+        pecas_por_impressao = st.number_input("Peças por impressão", value=1)
+
+    calcular = st.button("💰 Calcular", use_container_width=True)
+
+    if calcular:
+        # (SEU CÁLCULO CONTINUA IGUAL)
+
+        st.session_state["calculo"] = {
+            "nome": nome,
+            "peso": peso,
+            "tempo": tempo,
+            "quantidade": quantidade,
+            "pecas_por_impressao": pecas_por_impressao,
+
+            "preco_venda": preco_venda,
+            "lucro_unitario": lucro,
+            "lucro_por_hora": lucro_hora,
+            "margem": margem,
+
+            "numero_impressoes": numero_impressoes,
+            "tempo_total": tempo_total,
+
+            "faturamento_total": faturamento_total,
+            "custo_total_lote": custo_total_lote,
+            "lucro_total": lucro_total,
+
+            "custo_material_total": custo_material_total,
+            "custo_maquina_total": custo_maquina_total,
+            "custo_energia_total": custo_energia_total,
+
+            "status": "Pedidos"
+        }
+
+    # -------------------------
+    # DASHBOARD
     # -------------------------
     if "calculo" in st.session_state:
 
         c = st.session_state["calculo"]
-    
+
         st.divider()
-    
-        # 🔥 CARDS PRINCIPAIS
-        col_top1, col_top2, col_top3, col_top4 = st.columns(4, gap="medium")
-    
+
+        col_top1, col_top2, col_top3, col_top4 = st.columns(4)
+
         with col_top1:
             components.html(card("💰 Preço", f"R$ {c['preco_venda']:.2f}"), height=120)
 
         with col_top2:
             components.html(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), height=120)
-        
+
         with col_top3:
             components.html(card("📊 Margem", f"{c['margem']:.1f}%"), height=120)
-        
+
         with col_top4:
             components.html(card("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}"), height=120)
-    
+
         st.divider()
 
-    # 📊 SEÇÃO UNITÁRIO E PRODUÇÃO
-    col_esq, col_dir = st.columns(2)
+        # UNITÁRIO E PRODUÇÃO (AGORA DENTRO DO IF)
+        col_esq, col_dir = st.columns(2)
 
-with col_esq:
-    st.subheader("📊 Unitário")
+        with col_esq:
+            st.subheader("📊 Unitário")
 
-    col1, col2 = st.columns(2)
+            col1, col2 = st.columns(2)
 
-    with col1:
-        components.html(
-            card("💰 Custo", f"R$ {(c['preco_venda'] - c['lucro_unitario']):.2f}"),
-            height=120
-        )
+            with col1:
+                components.html(
+                    card("💰 Custo", f"R$ {(c['preco_venda'] - c['lucro_unitario']):.2f}"),
+                    height=120
+                )
 
-    with col2:
-        components.html(
-            card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"),
-            height=120
-        )
+            with col2:
+                components.html(
+                    card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"),
+                    height=120
+                )
 
-with col_dir:
-    st.subheader("📦 Produção")
+        with col_dir:
+            st.subheader("📦 Produção")
 
-    col3, col4, col5 = st.columns(3)
+            col3, col4, col5 = st.columns(3)
 
-    with col3:
-        components.html(
-            card("📦 Peças", c["quantidade"]),
-            height=120
-        )
+            with col3:
+                components.html(card("📦 Peças", c["quantidade"]), height=120)
 
-    with col4:
-        components.html(
-            card("🖨️ Impressões", c["numero_impressoes"]),
-            height=120
-        )
+            with col4:
+                components.html(card("🖨️ Impressões", c["numero_impressoes"]), height=120)
 
-    with col5:
-        components.html(
-            card("⏱️ Tempo", f"{c['tempo_total']:.1f}h"),
-            height=120
-        )
+            with col5:
+                components.html(card("⏱️ Tempo", f"{c['tempo_total']:.1f}h"), height=120)
 
-    col6, col7, col8 = st.columns(3)
+            col6, col7, col8 = st.columns(3)
 
-    with col6:
-        components.html(
-            card("💰 Faturamento", f"R$ {c['faturamento_total']:.2f}"),
-            height=120
-        )
+            with col6:
+                components.html(card("💰 Faturamento", f"R$ {c['faturamento_total']:.2f}"), height=120)
 
-    with col7:
-        components.html(
-            card("💸 Custo total", f"R$ {c['custo_total_lote']:.2f}"),
-            height=120
-        )
+            with col7:
+                components.html(card("💸 Custo total", f"R$ {c['custo_total_lote']:.2f}"), height=120)
 
-    with col8:
-        components.html(
-            card("📈 Lucro total", f"R$ {c['lucro_total']:.2f}"),
-            height=120
-        )
-                
+            with col8:
+                components.html(card("📈 Lucro total", f"R$ {c['lucro_total']:.2f}"), height=120)
+
         st.divider()
-    
-        # 🔍 DETALHES
+
         with st.expander("🔍 Ver detalhes completos"):
             st.write(f"💰 Custo material total: R$ {c['custo_material_total']:.2f}")
             st.write(f"⚙️ Custo máquina total: R$ {c['custo_maquina_total']:.2f}")
             st.write(f"⚡ Custo energia total: R$ {c['custo_energia_total']:.2f}")
-    
-        # 🔥 STATUS
+
         if c["lucro_por_hora"] > 5:
-            st.success("🟢 Produto Excelente — alta rentabilidade")
+            st.success("🟢 Produto Excelente")
         elif c["lucro_por_hora"] > 2:
-            st.warning("🟡 Produto OK — pode melhorar")
+            st.warning("🟡 Produto OK")
         else:
-            st.error("🔴 Produto Ruim — baixa rentabilidade")
+            st.error("🔴 Produto Ruim")
             
-# -------------------------
-# PÁGINA: PRODUÇÃO
-# -------------------------
-        elif pagina == "📋 Produção":
-
-    st.title("📋 Kanban")
-
-    if "calculo" in st.session_state:
-
-        c = st.session_state["calculo"]
-
-        st.write(f"Produto: {c['nome']}")
-
-        status = st.selectbox(
-            "Status",
-            ["Pedidos", "Produção", "Finalização", "Pronto", "Entregue"],
-            index=["Pedidos", "Produção", "Finalização", "Pronto", "Entregue"].index(c["status"])
-        )
-
-        st.session_state["calculo"]["status"] = status
-
 # -------------------------
 # BOTÃO SALVAR
 # -------------------------
