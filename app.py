@@ -11,11 +11,14 @@ st.set_page_config(
     layout="wide"
 )
 
+import math
 import streamlit as st
 
 st.set_page_config(layout="wide")
 
-# MENU
+# -------------------------
+# MENU DE PÁGINAS
+# -------------------------
 pagina = st.radio(
     "Menu",
     ["🧮 Calculadora", "📋 Produção"],
@@ -23,104 +26,126 @@ pagina = st.radio(
 )
 
 # -------------------------
-# ROTEAMENTO
+# PÁGINA: CALCULADORA
 # -------------------------
 if pagina == "🧮 Calculadora":
-    st.title("🧮 Calculadora Maker")
-    st.markdown("### Sistema de Precificação para Makers")
-    st.caption("Calcule custo, preço e lucro das suas peças")
 
-    # -------------------------
-# BOTÃO DE CÁLCULO
+    # BOTÃO DE CÁLCULO
+    calcular = st.button("💰 Calcular", use_container_width=True)
+
+    # EXECUÇÃO DO CÁLCULO
+    if calcular:
+
+        # CUSTOS
+        custo_material_total = (peso / 1000) * preco_kg
+        custo_material_unitario = custo_material_total / pecas_por_impressao
+
+        custo_maquina_total = tempo * custo_hora
+        custo_energia_total = tempo * custo_kwh * consumo_maquina
+
+        custo_maquina_unitario = custo_maquina_total / pecas_por_impressao
+        custo_energia_unitario = custo_energia_total / pecas_por_impressao
+
+        custo_total = custo_material_unitario + custo_maquina_unitario + custo_energia_unitario
+
+        # MARKUP
+        if tempo < 1:
+            multiplicador = 3.5
+        elif tempo < 3:
+            multiplicador = 3.0
+        elif tempo < 6:
+            multiplicador = 2.5
+        else:
+            multiplicador = 2.2
+
+        # PREÇO
+        preco_venda = custo_total * multiplicador
+        lucro = preco_venda - custo_total
+        margem_real = (lucro / preco_venda) * 100 if preco_venda > 0 else 0
+        lucro_por_hora = lucro / tempo if tempo > 0 else 0
+
+        # SIMULAÇÃO
+        numero_impressoes = math.ceil(quantidade / pecas_por_impressao)
+        tempo_total = numero_impressoes * tempo
+
+        custo_total_lote = (
+            custo_material_total * numero_impressoes +
+            custo_maquina_total * numero_impressoes +
+            custo_energia_total * numero_impressoes
+        )
+
+        faturamento_total = preco_venda * quantidade
+        lucro_total = faturamento_total - custo_total_lote
+
+        # SALVAR RESULTADOS
+        st.session_state["calculo"] = {
+            "nome": nome,
+            "peso": peso,
+            "tempo": tempo,
+            "quantidade": quantidade,
+            "pecas_por_impressao": pecas_por_impressao,
+
+            "custo_unitario": custo_total,
+            "preco_venda": preco_venda,
+            "lucro_unitario": lucro,
+            "lucro_total": lucro_total,
+            "lucro_por_hora": lucro_por_hora,
+            "margem": margem_real,
+
+            "energia_unitaria": custo_energia_unitario,
+            "multiplicador": multiplicador,
+
+            "tempo_total": tempo_total,
+            "faturamento_total": faturamento_total,
+            "numero_impressoes": numero_impressoes,
+            "custo_total_lote": custo_total_lote,
+
+            "custo_material_total": custo_material_total,
+            "custo_maquina_total": custo_maquina_total,
+            "custo_energia_total": custo_energia_total,
+
+            # 🔥 KANBAN
+            "status": "Pedidos"
+        }
+
+    # MOSTRAR RESULTADO (se existir)
+    if "calculo" in st.session_state:
+        dados = st.session_state["calculo"]
+
+        st.success("Cálculo realizado!")
+
+        st.write("💰 Preço:", dados["preco_venda"])
+        st.write("📈 Lucro:", dados["lucro_unitario"])
+        st.write("📦 Status:", dados["status"])
+
 # -------------------------
-calcular = st.button("💰 Calcular", use_container_width=True)
-
+# PÁGINA: PRODUÇÃO (KANBAN)
 # -------------------------
-# EXECUÇÃO DO CÁLCULO
-# -------------------------
-if calcular:
-
-    import math
-
-    # CUSTOS
-    custo_material_total = (peso / 1000) * preco_kg
-    custo_material_unitario = custo_material_total / pecas_por_impressao
-
-    custo_maquina_total = tempo * custo_hora
-    custo_energia_total = tempo * custo_kwh * consumo_maquina
-
-    custo_maquina_unitario = custo_maquina_total / pecas_por_impressao
-    custo_energia_unitario = custo_energia_total / pecas_por_impressao
-
-    custo_total = custo_material_unitario + custo_maquina_unitario + custo_energia_unitario
-
-    # MARKUP
-    if tempo < 1:
-        multiplicador = 3.5
-    elif tempo < 3:
-        multiplicador = 3.0
-    elif tempo < 6:
-        multiplicador = 2.5
-    else:
-        multiplicador = 2.2
-
-    # PREÇO
-    preco_venda = custo_total * multiplicador
-    lucro = preco_venda - custo_total
-    margem_real = (lucro / preco_venda) * 100 if preco_venda > 0 else 0
-    lucro_por_hora = lucro / tempo if tempo > 0 else 0
-
-    # SIMULAÇÃO
-    numero_impressoes = math.ceil(quantidade / pecas_por_impressao)
-    tempo_total = numero_impressoes * tempo
-
-    custo_total_lote = (
-        custo_material_total * numero_impressoes +
-        custo_maquina_total * numero_impressoes +
-        custo_energia_total * numero_impressoes
-    )
-
-    faturamento_total = preco_venda * quantidade
-    lucro_total = faturamento_total - custo_total_lote
-
-    # SALVAR
-    st.session_state["calculo"] = {
-        "nome": nome,
-        "peso": peso,
-        "tempo": tempo,
-        "quantidade": quantidade,
-        "pecas_por_impressao": pecas_por_impressao,
-        "custo_unitario": custo_total,
-        "preco_venda": preco_venda,
-        "lucro_unitario": lucro,
-        "lucro_total": lucro_total,
-        "lucro_por_hora": lucro_por_hora,
-        "margem": margem_real,
-        "energia_unitaria": custo_energia_unitario,
-        "multiplicador": multiplicador,
-        "tempo_total": tempo_total,
-        "faturamento_total": faturamento_total,
-        "numero_impressoes": numero_impressoes,
-        "custo_total_lote": custo_total_lote,
-        "custo_material_total": custo_material_total,
-        "custo_maquina_total": custo_maquina_total,
-        "custo_energia_total": custo_energia_total,
-        # 🔥 KANBAN
-        "status": "Pedidos"
-    }
-
-
 elif pagina == "📋 Produção":
+
     st.title("📋 Kanban de Produção")
-    
-    import streamlit as st
-import json
-import os
 
-st.set_page_config(page_title="Produção", layout="wide")
+    if "calculo" in st.session_state:
 
-st.title("📋 Controle de Produção")
+        dados = st.session_state["calculo"]
 
+        st.write(f"📦 Produto: {dados['nome']}")
+        st.write(f"📊 Quantidade: {dados['quantidade']}")
+        st.write(f"🖨️ Impressões: {dados['numero_impressoes']}")
+
+        # STATUS (SELECT)
+        status = st.selectbox(
+            "Status do pedido",
+            ["Pedidos", "Em Produção", "Finalizado"],
+            index=["Pedidos", "Em Produção", "Finalizado"].index(dados["status"])
+        )
+
+        # ATUALIZA STATUS
+        st.session_state["calculo"]["status"] = status
+
+    else:
+        st.info("Nenhum cálculo realizado ainda.")
+        
 # -------------------------
 # CARREGAR DADOS
 # -------------------------
