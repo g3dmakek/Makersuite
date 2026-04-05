@@ -28,128 +28,128 @@ pagina = st.radio(
 # -------------------------
 # PÁGINA: CALCULADORA
 # -------------------------
-if pagina == "🧮 Calculadora":
+    if pagina == "🧮 Calculadora":
 
     # -------------------------
-# INPUTS EM GRID (PROFISSIONAL)
-# -------------------------
-
-col1, col2 = st.columns(2)
-
-# 📦 DADOS DO PRODUTO
-with col1:
-    st.subheader("📦 Produto")
-
-    nome = st.text_input("Nome do produto")
-    tipo_produto = st.selectbox("Tipo", ["Chaveiro", "Decoração", "Personalizado"])
-
-# 🏭 PRODUÇÃO (PRINCIPAL)
-with col2:
-    st.subheader("🏭 Produção")
-
-    peso = st.number_input("Peso (g)", value=50.0)
-    tempo = st.number_input("Tempo (h)", value=2.0)
-
-# 🔽 SEGUNDA LINHA (PRODUÇÃO AVANÇADA)
-col3, col4 = st.columns(2)
-
-with col3:
-    quantidade = st.number_input(
-        "Quantidade total",
-        min_value=1,
-        value=10
-    )
-
-with col4:
-    pecas_por_impressao = st.number_input(
-        "Peças por impressão",
-        min_value=1,
-        value=1
-    )
-
-st.caption("💡 Ex: 100 peças com capacidade de 20 → 5 impressões")
-
-
-# -------------------------
-# DASHBOARD PRINCIPAL (NOVA UI)
-# -------------------------
-
-# 🔥 KPIs NO TOPO
-if "calculo" in st.session_state:
-    c = st.session_state["calculo"]
-
-    col_top1, col_top2, col_top3, col_top4 = st.columns(4)
-
-    col_top1.metric("💰 Preço", f"R$ {c['preco_venda']:.2f}")
-    col_top2.metric("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}")
-    col_top3.metric("📊 Margem", f"{c['margem']:.1f}%")
-    col_top4.metric("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}")
-
-st.divider()
-
-# 📊 LAYOUT EM DUAS COLUNAS
-col_esq, col_dir = st.columns(2)
-
-# -------------------------
-# 📊 UNITÁRIO (ESQUERDA)
-# -------------------------
-with col_esq:
-    st.subheader("📊 Unitário")
-
+    # INPUTS EM GRID (PROFISSIONAL)
+    # -------------------------
+    
+    col1, col2 = st.columns(2)
+    
+    # 📦 DADOS DO PRODUTO
+    with col1:
+        st.subheader("📦 Produto")
+    
+        nome = st.text_input("Nome do produto")
+        tipo_produto = st.selectbox("Tipo", ["Chaveiro", "Decoração", "Personalizado"])
+    
+    # 🏭 PRODUÇÃO (PRINCIPAL)
+    with col2:
+        st.subheader("🏭 Produção")
+    
+        peso = st.number_input("Peso (g)", value=50.0)
+        tempo = st.number_input("Tempo (h)", value=2.0)
+    
+    # 🔽 SEGUNDA LINHA (PRODUÇÃO AVANÇADA)
+    col3, col4 = st.columns(2)
+    
+    with col3:
+        quantidade = st.number_input(
+            "Quantidade total",
+            min_value=1,
+            value=10
+        )
+    
+    with col4:
+        pecas_por_impressao = st.number_input(
+            "Peças por impressão",
+            min_value=1,
+            value=1
+        )
+    
+    st.caption("💡 Ex: 100 peças com capacidade de 20 → 5 impressões")
+    
+    
+    # -------------------------
+    # DASHBOARD PRINCIPAL (NOVA UI)
+    # -------------------------
+    
+    # 🔥 KPIs NO TOPO
     if "calculo" in st.session_state:
         c = st.session_state["calculo"]
-
-        col1, col2 = st.columns(2)
-        col1.metric("💰 Custo", f"R$ {c['custo_unitario']:.2f}")
-        col2.metric("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}")
-
-        col3, col4 = st.columns(2)
-        col3.metric("⚡ Energia", f"R$ {c['energia_unitaria']:.2f}")
-        col4.metric("📊 Multiplicador", f"{c['multiplicador']:.2f}x")
-        
-# -------------------------
-# 📦 PRODUÇÃO (DIREITA)
-# -------------------------
-with col_dir:
-    st.subheader("📦 Produção")
-
+    
+        col_top1, col_top2, col_top3, col_top4 = st.columns(4)
+    
+        col_top1.metric("💰 Preço", f"R$ {c['preco_venda']:.2f}")
+        col_top2.metric("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}")
+        col_top3.metric("📊 Margem", f"{c['margem']:.1f}%")
+        col_top4.metric("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}")
+    
+    st.divider()
+    
+    # 📊 LAYOUT EM DUAS COLUNAS
+    col_esq, col_dir = st.columns(2)
+    
+    # -------------------------
+    # 📊 UNITÁRIO (ESQUERDA)
+    # -------------------------
+    with col_esq:
+        st.subheader("📊 Unitário")
+    
+        if "calculo" in st.session_state:
+            c = st.session_state["calculo"]
+    
+            col1, col2 = st.columns(2)
+            col1.metric("💰 Custo", f"R$ {c['custo_unitario']:.2f}")
+            col2.metric("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}")
+    
+            col3, col4 = st.columns(2)
+            col3.metric("⚡ Energia", f"R$ {c['energia_unitaria']:.2f}")
+            col4.metric("📊 Multiplicador", f"{c['multiplicador']:.2f}x")
+            
+    # -------------------------
+    # 📦 PRODUÇÃO (DIREITA)
+    # -------------------------
+    with col_dir:
+        st.subheader("📦 Produção")
+    
+        if "calculo" in st.session_state:
+            c = st.session_state["calculo"]
+    
+            col5, col6, col7 = st.columns(3)
+    
+            col5.metric("📦 Peças", c["quantidade"])
+            col6.metric("🖨️ Impressões", c["numero_impressoes"])
+            col7.metric("⏱️ Tempo total", f"{c['tempo_total']:.1f}h")
+    
+            col8, col9, col10 = st.columns(3)
+    
+            col8.metric("💰 Faturamento", f"R$ {c['faturamento_total']:.2f}")
+            col9.metric("💸 Custo total", f"R$ {c['custo_total_lote']:.2f}")
+            col10.metric("📈 Lucro total", f"R$ {c['lucro_total']:.2f}")
+    st.divider()
+    
+    # 🔍 DETALHES (ESCONDIDOS)
+    with st.expander("🔍 Ver detalhes completos"):
+        if "calculo" in st.session_state:
+            c = st.session_state["calculo"]
+    
+            st.write(f"💰 Custo material total: R$ {c['custo_material_total']:.2f}")
+            st.write(f"⚙️ Custo máquina total: R$ {c['custo_maquina_total']:.2f}")
+            st.write(f"⚡ Custo energia total: R$ {c['custo_energia_total']:.2f}")
+    
+    # -------------------------
+    # STATUS DO PRODUTO
+    # -------------------------
     if "calculo" in st.session_state:
         c = st.session_state["calculo"]
-
-        col5, col6, col7 = st.columns(3)
-
-        col5.metric("📦 Peças", c["quantidade"])
-        col6.metric("🖨️ Impressões", c["numero_impressoes"])
-        col7.metric("⏱️ Tempo total", f"{c['tempo_total']:.1f}h")
-
-        col8, col9, col10 = st.columns(3)
-
-        col8.metric("💰 Faturamento", f"R$ {c['faturamento_total']:.2f}")
-        col9.metric("💸 Custo total", f"R$ {c['custo_total_lote']:.2f}")
-        col10.metric("📈 Lucro total", f"R$ {c['lucro_total']:.2f}")
-st.divider()
-
-# 🔍 DETALHES (ESCONDIDOS)
-with st.expander("🔍 Ver detalhes completos"):
-    if "calculo" in st.session_state:
-        c = st.session_state["calculo"]
-
-        st.write(f"💰 Custo material total: R$ {c['custo_material_total']:.2f}")
-        st.write(f"⚙️ Custo máquina total: R$ {c['custo_maquina_total']:.2f}")
-        st.write(f"⚡ Custo energia total: R$ {c['custo_energia_total']:.2f}")
-
-# -------------------------
-# STATUS DO PRODUTO
-# -------------------------
-if "calculo" in st.session_state:
-    c = st.session_state["calculo"]
-
-    if c["lucro_por_hora"] > 5:
-        st.success("🟢 Produto Excelente — alta rentabilidade")
-    elif c["lucro_por_hora"] > 2:
-        st.warning("🟡 Produto OK — pode melhorar")
-    else:
-        st.error("🔴 Produto Ruim — baixa rentabilidade")
+    
+        if c["lucro_por_hora"] > 5:
+            st.success("🟢 Produto Excelente — alta rentabilidade")
+        elif c["lucro_por_hora"] > 2:
+            st.warning("🟡 Produto OK — pode melhorar")
+        else:
+            st.error("🔴 Produto Ruim — baixa rentabilidade")
         
     # BOTÃO DE CÁLCULO
     calcular = st.button("💰 Calcular", use_container_width=True)
