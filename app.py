@@ -33,42 +33,29 @@ st.markdown("""
 # -------------------------
 def card(titulo, valor):
     return f"""
-    <div style="padding:6px;">
-        <div style="
-            background: linear-gradient(180deg, #111827, #0B1220);
-            padding: 18px 16px;
-            border-radius: 18px;
-            height: 100px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-            color: white;
+<div style="padding:6px;">
+  <div style="background:#111827;
+              padding:16px;
+              border-radius:16px;
+              height:100px;
+              display:flex;
+              flex-direction:column;
+              justify-content:center;
+              color:white;
+              box-shadow:0 8px 20px rgba(0,0,0,0.4);
+              border:1px solid rgba(255,255,255,0.08);">
 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.45);
-            border: 1px solid rgba(255,255,255,0.08);
-            transition: all 0.2s ease;
-        ">
-
-            <div style="
-                font-size: 12px;
-                color: rgba(255,255,255,0.7);
-                margin-bottom: 6px;
-            ">
-                {titulo}
-            </div>
-
-            <div style="
-                font-size: 24px;
-                font-weight: 700;
-                color: #FFFFFF;
-            ">
-                {valor}
-            </div>
-
-        </div>
+    <div style="font-size:12px; opacity:0.7;">
+      {titulo}
     </div>
-    """
+
+    <div style="font-size:24px; font-weight:700; margin-top:6px;">
+      {valor}
+    </div>
+
+  </div>
+</div>
+"""
 
 # -------------------------
 # MENU
