@@ -266,11 +266,6 @@ div[data-testid="column"] {
 
     # 📊 SEÇÃO UNITÁRIO E PRODUÇÃO
     col_esq, col_dir = st.columns(2)
-    
- import streamlit.components.v1 as components
-
-# 📊 SEÇÃO UNITÁRIO E PRODUÇÃO
-col_esq, col_dir = st.columns(2)
 
 with col_esq:
     st.subheader("📊 Unitário")
