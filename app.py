@@ -2,6 +2,15 @@ import streamlit as st
 import json
 import os
 import math
+    
+# -------------------------
+# CONFIG
+# -------------------------
+st.set_page_config(
+    page_title="Calculadora Maker",
+    page_icon="🧮",
+    layout="wide"
+)
 
 # -------------------------
 # FUNÇÃO DE CARD (UI)
@@ -41,15 +50,6 @@ def card(titulo, valor):
 
     </div>
     """
-    
-# -------------------------
-# CONFIG
-# -------------------------
-st.set_page_config(
-    page_title="Calculadora Maker",
-    page_icon="🧮",
-    layout="wide"
-)
 
 # -------------------------
 # MENU
