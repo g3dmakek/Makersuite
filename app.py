@@ -3,46 +3,20 @@ import json
 import os
 import math
 
-# -------------------------
-# FUNÇÃO DE CARD (UI)
-# -------------------------
 def card(titulo, valor):
     return f"""
-    <div style="
-        background-color: #1A1F2B;
-        padding: 18px;
-        border-radius: 12px;
-        border: 1px solid #2D3748;
-        height: 100px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        text-align: center;
-    ">
+<div style="background-color:#1A1F2B;padding:18px;border-radius:12px;border:1px solid #2D3748;height:100px;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;text-align:center;">
 
-        <div style="
-            position: absolute;
-            top: 8px;
-            left: 12px;
-            font-size: 12px;
-            color: #A0AEC0;
-        ">
-            {titulo}
-        </div>
-
-        <div style="
-            font-size: 22px;
-            font-weight: bold;
-            color: #00C2FF;
-            margin-top: 10px;
-        ">
-            {valor}
-        </div>
-
+    <div style="position:absolute;top:8px;left:12px;font-size:12px;color:#A0AEC0;">
+        {titulo}
     </div>
-    """
+
+    <div style="font-size:22px;font-weight:bold;color:#00C2FF;margin-top:10px;">
+        {valor}
+    </div>
+
+</div>
+"""
     
 # -------------------------
 # CONFIG
