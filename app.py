@@ -27,13 +27,194 @@ pagina = st.radio(
 # -------------------------
 if pagina == "🧮 Calculadora":
     st.title("🧮 Calculadora Maker")
-    
-    # 👉 COLE SUA CALCULADORA AQUI
+    st.markdown("### Sistema de Precificação para Makers")
+    st.caption("Calcule custo, preço e lucro das suas peças")
+
+    # -------------------------
+# BOTÃO DE CÁLCULO
+# -------------------------
+calcular = st.button("💰 Calcular", use_container_width=True)
+
+# -------------------------
+# EXECUÇÃO DO CÁLCULO
+# -------------------------
+if calcular:
+
+    import math
+
+    # CUSTOS
+    custo_material_total = (peso / 1000) * preco_kg
+    custo_material_unitario = custo_material_total / pecas_por_impressao
+
+    custo_maquina_total = tempo * custo_hora
+    custo_energia_total = tempo * custo_kwh * consumo_maquina
+
+    custo_maquina_unitario = custo_maquina_total / pecas_por_impressao
+    custo_energia_unitario = custo_energia_total / pecas_por_impressao
+
+    custo_total = custo_material_unitario + custo_maquina_unitario + custo_energia_unitario
+
+    # MARKUP
+    if tempo < 1:
+        multiplicador = 3.5
+    elif tempo < 3:
+        multiplicador = 3.0
+    elif tempo < 6:
+        multiplicador = 2.5
+    else:
+        multiplicador = 2.2
+
+    # PREÇO
+    preco_venda = custo_total * multiplicador
+    lucro = preco_venda - custo_total
+    margem_real = (lucro / preco_venda) * 100 if preco_venda > 0 else 0
+    lucro_por_hora = lucro / tempo if tempo > 0 else 0
+
+    # SIMULAÇÃO
+    numero_impressoes = math.ceil(quantidade / pecas_por_impressao)
+    tempo_total = numero_impressoes * tempo
+
+    custo_total_lote = (
+        custo_material_total * numero_impressoes +
+        custo_maquina_total * numero_impressoes +
+        custo_energia_total * numero_impressoes
+    )
+
+    faturamento_total = preco_venda * quantidade
+    lucro_total = faturamento_total - custo_total_lote
+
+    # SALVAR
+    st.session_state["calculo"] = {
+        "nome": nome,
+        "peso": peso,
+        "tempo": tempo,
+        "quantidade": quantidade,
+        "pecas_por_impressao": pecas_por_impressao,
+        "custo_unitario": custo_total,
+        "preco_venda": preco_venda,
+        "lucro_unitario": lucro,
+        "lucro_total": lucro_total,
+        "lucro_por_hora": lucro_por_hora,
+        "margem": margem_real,
+        "energia_unitaria": custo_energia_unitario,
+        "multiplicador": multiplicador,
+        "tempo_total": tempo_total,
+        "faturamento_total": faturamento_total,
+        "numero_impressoes": numero_impressoes,
+        "custo_total_lote": custo_total_lote,
+        "custo_material_total": custo_material_total,
+        "custo_maquina_total": custo_maquina_total,
+        "custo_energia_total": custo_energia_total,
+        # 🔥 KANBAN
+        "status": "Pedidos"
+    }
+
 
 elif pagina == "📋 Produção":
     st.title("📋 Kanban de Produção")
     
-    # 👉 COLE O KANBAN AQUI
+    import streamlit as st
+import json
+import os
+
+st.set_page_config(page_title="Produção", layout="wide")
+
+st.title("📋 Controle de Produção")
+
+# -------------------------
+# CARREGAR DADOS
+# -------------------------
+def carregar_dados():
+    if not os.path.exists("dados.json"):
+        return {"produtos": []}
+    with open("dados.json", "r") as f:
+        return json.load(f)
+
+def salvar_dados(dados):
+    with open("dados.json", "w") as f:
+        json.dump(dados, f, indent=4)
+
+dados = carregar_dados()
+
+# -------------------------
+# STATUS FLOW
+# -------------------------
+def avancar(status):
+    fluxo = ["Pedidos", "Produção", "Finalização", "Pronto", "Entregue"]
+    idx = fluxo.index(status)
+    return fluxo[min(idx + 1, len(fluxo)-1)]
+
+def voltar(status):
+    fluxo = ["Pedidos", "Produção", "Finalização", "Pronto", "Entregue"]
+    idx = fluxo.index(status)
+    return fluxo[max(idx - 1, 0)]
+
+# -------------------------
+# COLUNAS (KANBAN)
+# -------------------------
+col1, col2, col3, col4, col5 = st.columns(5)
+
+colunas = {
+    "Pedidos": col1,
+    "Produção": col2,
+    "Finalização": col3,
+    "Pronto": col4,
+    "Entregue": col5
+}
+
+# -------------------------
+# CARDS
+# -------------------------
+for i, p in enumerate(dados["produtos"]):
+
+    status = p.get("status", "Pedidos")
+
+    with colunas[status]:
+
+        with st.container(border=True):
+            st.markdown(f"### {p.get('nome', 'Sem nome')}")
+
+            st.write(f"💰 R$ {p.get('preco_venda', 0):.2f}")
+
+            # STATUS
+            st.caption(f"📌 {status}")
+
+            col_a, col_b = st.columns(2)
+
+            with col_a:
+                if st.button("⬅️", key=f"back_{i}"):
+                    dados["produtos"][i]["status"] = voltar(status)
+                    salvar_dados(dados)
+                    st.rerun()
+
+            with col_b:
+                if st.button("➡️", key=f"next_{i}"):
+                    dados["produtos"][i]["status"] = avancar(status)
+                    salvar_dados(dados)
+                    st.rerun()
+
+# -------------------------
+# RESUMO
+# -------------------------
+st.divider()
+
+st.subheader("📊 Resumo")
+
+total = len(dados["produtos"])
+
+pedidos = len([p for p in dados["produtos"] if p.get("status") == "Pedidos"])
+producao = len([p for p in dados["produtos"] if p.get("status") == "Produção"])
+finalizado = len([p for p in dados["produtos"] if p.get("status") == "Finalização"])
+pronto = len([p for p in dados["produtos"] if p.get("status") == "Pronto"])
+entregue = len([p for p in dados["produtos"] if p.get("status") == "Entregue"])
+
+col1, col2, col3, col4, col5 = st.columns(5)
+
+col1.metric("📦 Pedidos", pedidos)
+col2.metric("🏭 Produção", producao)
+col3.metric("🔧 Finalização", finalizado)
+col4.metric("✅ Pronto", pronto)
+col5.metric("🚚 Entregue", entregue)
     
 # -------------------------
 # STYLE DA PÁGINA (PROFISSIONAL)
@@ -88,13 +269,6 @@ div[data-testid="stVerticalBlock"] > div {
 
 </style>
 """, unsafe_allow_html=True)
-
-# -------------------------
-# TÍTULO
-# -------------------------
-st.title("🧮 MakerSuite")
-st.markdown("### Sistema de Precificação para Makers")
-st.caption("Calcule custo, preço e lucro das suas peças")
 
 # -------------------------
 # FUNÇÕES DE DADOS
@@ -246,84 +420,6 @@ with col4:
 
 st.caption("💡 Ex: 100 peças com capacidade de 20 → 5 impressões")
 
-# -------------------------
-# BOTÃO DE CÁLCULO
-# -------------------------
-calcular = st.button("💰 Calcular", use_container_width=True)
-
-# -------------------------
-# EXECUÇÃO DO CÁLCULO
-# -------------------------
-if calcular:
-
-    import math
-
-    # CUSTOS
-    custo_material_total = (peso / 1000) * preco_kg
-    custo_material_unitario = custo_material_total / pecas_por_impressao
-
-    custo_maquina_total = tempo * custo_hora
-    custo_energia_total = tempo * custo_kwh * consumo_maquina
-
-    custo_maquina_unitario = custo_maquina_total / pecas_por_impressao
-    custo_energia_unitario = custo_energia_total / pecas_por_impressao
-
-    custo_total = custo_material_unitario + custo_maquina_unitario + custo_energia_unitario
-
-    # MARKUP
-    if tempo < 1:
-        multiplicador = 3.5
-    elif tempo < 3:
-        multiplicador = 3.0
-    elif tempo < 6:
-        multiplicador = 2.5
-    else:
-        multiplicador = 2.2
-
-    # PREÇO
-    preco_venda = custo_total * multiplicador
-    lucro = preco_venda - custo_total
-    margem_real = (lucro / preco_venda) * 100 if preco_venda > 0 else 0
-    lucro_por_hora = lucro / tempo if tempo > 0 else 0
-
-    # SIMULAÇÃO
-    numero_impressoes = math.ceil(quantidade / pecas_por_impressao)
-    tempo_total = numero_impressoes * tempo
-
-    custo_total_lote = (
-        custo_material_total * numero_impressoes +
-        custo_maquina_total * numero_impressoes +
-        custo_energia_total * numero_impressoes
-    )
-
-    faturamento_total = preco_venda * quantidade
-    lucro_total = faturamento_total - custo_total_lote
-
-    # SALVAR
-    st.session_state["calculo"] = {
-        "nome": nome,
-        "peso": peso,
-        "tempo": tempo,
-        "quantidade": quantidade,
-        "pecas_por_impressao": pecas_por_impressao,
-        "custo_unitario": custo_total,
-        "preco_venda": preco_venda,
-        "lucro_unitario": lucro,
-        "lucro_total": lucro_total,
-        "lucro_por_hora": lucro_por_hora,
-        "margem": margem_real,
-        "energia_unitaria": custo_energia_unitario,
-        "multiplicador": multiplicador,
-        "tempo_total": tempo_total,
-        "faturamento_total": faturamento_total,
-        "numero_impressoes": numero_impressoes,
-        "custo_total_lote": custo_total_lote,
-        "custo_material_total": custo_material_total,
-        "custo_maquina_total": custo_maquina_total,
-        "custo_energia_total": custo_energia_total,
-        # 🔥 KANBAN
-        "status": "Pedidos"
-    }
 
 # -------------------------
 # DASHBOARD PRINCIPAL (NOVA UI)
