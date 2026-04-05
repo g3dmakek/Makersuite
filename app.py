@@ -263,71 +263,70 @@ div[data-testid="column"] {
             components.html(card("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}"), height=120)
     
         st.divider()
+
+    # 📊 SEÇÃO UNITÁRIO E PRODUÇÃO
+    col_esq, col_dir = st.columns(2)
     
-       import streamlit.components.v1 as components
-
-# 📊 SEÇÃO UNITÁRIO E PRODUÇÃO
-col_esq, col_dir = st.columns(2)
-
-with col_esq:
-    st.subheader("📊 Unitário")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        components.html(
-            card("💰 Custo", f"R$ {(c['preco_venda'] - c['lucro_unitario']):.2f}"),
-            height=120
-        )
-
-    with col2:
-        components.html(
-            card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"),
-            height=120
-        )
-
-with col_dir:
-    st.subheader("📦 Produção")
-
-    col3, col4, col5 = st.columns(3)
-
-    with col3:
-        components.html(
-            card("📦 Peças", c["quantidade"]),
-            height=120
-        )
-
-    with col4:
-        components.html(
-            card("🖨️ Impressões", c["numero_impressoes"]),
-            height=120
-        )
-
-    with col5:
-        components.html(
-            card("⏱️ Tempo", f"{c['tempo_total']:.1f}h"),
-            height=120
-        )
-
-    col6, col7, col8 = st.columns(3)
-
-    with col6:
-        components.html(
-            card("💰 Faturamento", f"R$ {c['faturamento_total']:.2f}"),
-            height=120
-        )
-
-    with col7:
-        components.html(
-            card("💸 Custo total", f"R$ {c['custo_total_lote']:.2f}"),
-            height=120
-        )
-
-    with col8:
-        components.html(
-            card("📈 Lucro total", f"R$ {c['lucro_total']:.2f}"),
-            height=120
-        )
+        with col_esq:
+            st.subheader("📊 Unitário")
+        
+            col1, col2 = st.columns(2)
+        
+            with col1:
+                components.html(
+                    card("💰 Custo", f"R$ {(c['preco_venda'] - c['lucro_unitario']):.2f}"),
+                    height=120
+                )
+        
+            with col2:
+                components.html(
+                    card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"),
+                    height=120
+                )
+        
+        with col_dir:
+            st.subheader("📦 Produção")
+        
+            col3, col4, col5 = st.columns(3)
+        
+            with col3:
+                components.html(
+                    card("📦 Peças", c["quantidade"]),
+                    height=120
+                )
+        
+            with col4:
+                components.html(
+                    card("🖨️ Impressões", c["numero_impressoes"]),
+                    height=120
+                )
+        
+            with col5:
+                components.html(
+                    card("⏱️ Tempo", f"{c['tempo_total']:.1f}h"),
+                    height=120
+                )
+        
+            col6, col7, col8 = st.columns(3)
+        
+            with col6:
+                components.html(
+                    card("💰 Faturamento", f"R$ {c['faturamento_total']:.2f}"),
+                    height=120
+                )
+        
+            with col7:
+                components.html(
+                    card("💸 Custo total", f"R$ {c['custo_total_lote']:.2f}"),
+                    height=120
+                )
+        
+            with col8:
+                components.html(
+                    card("📈 Lucro total", f"R$ {c['lucro_total']:.2f}"),
+                    height=120
+                )
+                
         st.divider()
     
         # 🔍 DETALHES
