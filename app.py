@@ -107,13 +107,12 @@ st.sidebar.info(f"💰 Custo: R$ {custo_hora:.2f}/h")
 # -------------------------
 if pagina == "🧮 Calculadora":
 
-    st.title("🧮 Calculadora")
+    st.title("🧮 Calculadora Maker")
 
     col1, col2 = st.columns(2)
 
     with col1:
         nome = st.text_input("Nome do produto")
-
         peso = st.number_input("Peso (g)", value=50.0)
         tempo = st.number_input("Tempo (h)", value=2.0)
 
@@ -121,8 +120,11 @@ if pagina == "🧮 Calculadora":
         quantidade = st.number_input("Quantidade", value=10)
         pecas_por_impressao = st.number_input("Peças por impressão", value=1)
 
-    calcular = st.button("💰 Calcular")
+    calcular = st.button("💰 Calcular", use_container_width=True)
 
+    # -------------------------
+    # RESULTADO DO CÁLCULO
+    # -------------------------
     if calcular:
 
         custo_material_total = (peso / 1000) * preco_kg
@@ -131,12 +133,12 @@ if pagina == "🧮 Calculadora":
         custo_maquina_total = tempo * custo_hora
         custo_energia_total = tempo * custo_kwh * consumo_maquina
 
-        custo_total = (
-            custo_material_unitario +
-            custo_maquina_total / pecas_por_impressao +
-            custo_energia_total / pecas_por_impressao
-        )
+        custo_maquina_unitario = custo_maquina_total / pecas_por_impressao
+        custo_energia_unitario = custo_energia_total / pecas_por_impressao
 
+        custo_total = custo_material_unitario + custo_maquina_unitario + custo_energia_unitario
+
+        # MARKUP
         if tempo < 1:
             multiplicador = 3.5
         elif tempo < 3:
@@ -152,24 +154,94 @@ if pagina == "🧮 Calculadora":
         lucro_hora = lucro / tempo if tempo > 0 else 0
 
         numero_impressoes = math.ceil(quantidade / pecas_por_impressao)
+        tempo_total = numero_impressoes * tempo
 
+        custo_total_lote = (
+            custo_material_total * numero_impressoes +
+            custo_maquina_total * numero_impressoes +
+            custo_energia_total * numero_impressoes
+        )
+
+        faturamento_total = preco_venda * quantidade
+        lucro_total = faturamento_total - custo_total_lote
+
+        # SALVAR
         st.session_state["calculo"] = {
             "nome": nome,
             "peso": peso,
             "tempo": tempo,
             "quantidade": quantidade,
             "pecas_por_impressao": pecas_por_impressao,
+
             "preco_venda": preco_venda,
             "lucro_unitario": lucro,
             "lucro_por_hora": lucro_hora,
             "margem": margem,
+
             "numero_impressoes": numero_impressoes,
+            "tempo_total": tempo_total,
+
+            "faturamento_total": faturamento_total,
+            "custo_total_lote": custo_total_lote,
+            "lucro_total": lucro_total,
+
+            "custo_material_total": custo_material_total,
+            "custo_maquina_total": custo_maquina_total,
+            "custo_energia_total": custo_energia_total,
+
             "status": "Pedidos"
         }
 
+    # -------------------------
+    # DASHBOARD (SE JÁ EXISTIR RESULTADO)
+    # -------------------------
     if "calculo" in st.session_state:
-        st.success("Cálculo realizado!")
 
+        c = st.session_state["calculo"]
+
+        st.divider()
+
+        col_top1, col_top2, col_top3, col_top4 = st.columns(4)
+
+        col_top1.metric("💰 Preço", f"R$ {c['preco_venda']:.2f}")
+        col_top2.metric("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}")
+        col_top3.metric("📊 Margem", f"{c['margem']:.1f}%")
+        col_top4.metric("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}")
+
+        st.divider()
+
+        col_esq, col_dir = st.columns(2)
+
+        with col_esq:
+            st.subheader("📊 Unitário")
+
+            col1, col2 = st.columns(2)
+            col1.metric("💰 Custo", f"R$ {(c['preco_venda'] - c['lucro_unitario']):.2f}")
+            col2.metric("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}")
+
+        with col_dir:
+            st.subheader("📦 Produção")
+
+            col3, col4, col5 = st.columns(3)
+            col3.metric("📦 Peças", c["quantidade"])
+            col4.metric("🖨️ Impressões", c["numero_impressoes"])
+            col5.metric("⏱️ Tempo", f"{c['tempo_total']:.1f}h")
+
+            col6, col7, col8 = st.columns(3)
+            col6.metric("💰 Faturamento", f"R$ {c['faturamento_total']:.2f}")
+            col7.metric("💸 Custo", f"R$ {c['custo_total_lote']:.2f}")
+            col8.metric("📈 Lucro", f"R$ {c['lucro_total']:.2f}")
+
+        st.divider()
+
+        # STATUS
+        if c["lucro_por_hora"] > 5:
+            st.success("🟢 Produto Excelente")
+        elif c["lucro_por_hora"] > 2:
+            st.warning("🟡 Produto OK")
+        else:
+            st.error("🔴 Produto Ruim")
+            
 # -------------------------
 # PÁGINA: PRODUÇÃO
 # -------------------------
