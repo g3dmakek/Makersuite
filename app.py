@@ -6,11 +6,10 @@ import os
 # CONFIG DA PÁGINA (PRIMEIRO SEMPRE)
 # -------------------------
 st.set_page_config(
-    page_title="MakerSuite",
+    page_title="Calculadora Maker",
     page_icon="🧮",
     layout="wide"
 )
-
 # -------------------------
 # STYLE DA PÁGINA (PROFISSIONAL)
 # -------------------------
