@@ -2,16 +2,35 @@ import streamlit as st
 import json
 import os
 import math
-import streamlit.components.v1 as components
 
+# -------------------------
+# CONFIG
+# -------------------------
+st.set_page_config(
+    page_title="Calculadora Maker",
+    page_icon="🧮",
+    layout="wide"
+)
+
+# -------------------------
+# ESTILO GLOBAL (IMPORTANTE)
+# -------------------------
 st.markdown("""
 <style>
+.block-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
 [data-testid="column"] {
-    background: transparent !important;
+    padding: 0 8px;
 }
 </style>
 """, unsafe_allow_html=True)
 
+# -------------------------
+# CARD
+# -------------------------
 def card(titulo, valor):
     return f"""
     <div style="padding:6px;">
@@ -29,10 +48,7 @@ def card(titulo, valor):
             box-shadow: 0 10px 25px rgba(0,0,0,0.45);
             border: 1px solid rgba(255,255,255,0.08);
             transition: all 0.2s ease;
-        "
-        onmouseover="this.style.transform='translateY(-3px)'"
-        onmouseout="this.style.transform='translateY(0)'"
-        >
+        ">
 
             <div style="
                 font-size: 12px;
@@ -53,15 +69,6 @@ def card(titulo, valor):
         </div>
     </div>
     """
-    
-# -------------------------
-# CONFIG
-# -------------------------
-st.set_page_config(
-    page_title="Calculadora Maker",
-    page_icon="🧮",
-    layout="wide"
-)
 
 # -------------------------
 # MENU
@@ -73,7 +80,7 @@ pagina = st.radio(
 )
 
 # -------------------------
-# CARREGAMENTO DE DADOS
+# DADOS
 # -------------------------
 def carregar_dados():
     if not os.path.exists("dados.json"):
@@ -88,7 +95,7 @@ def salvar_dados(dados):
 dados = carregar_dados()
 
 # -------------------------
-# SIDEBAR (CONFIG)
+# SIDEBAR
 # -------------------------
 st.sidebar.header("⚙️ Configurações")
 
@@ -126,7 +133,6 @@ impressoras = {
 }
 
 modelo = st.sidebar.selectbox("Modelo", list(impressoras.keys()))
-
 dados_impressora = impressoras[modelo]
 
 valor_maquina = st.sidebar.number_input(
@@ -153,9 +159,8 @@ else:
 
 st.sidebar.info(f"💰 Custo: R$ {custo_hora:.2f}/h")
 
-
-    # -------------------------
-# PÁGINA: CALCULADORA
+# -------------------------
+# CALCULADORA
 # -------------------------
 if pagina == "🧮 Calculadora":
 
@@ -164,19 +169,16 @@ if pagina == "🧮 Calculadora":
     col1, col2 = st.columns(2)
 
     with col1:
-        nome = st.text_input("Nome do produto", key="nome_produto")
-        peso = st.number_input("Peso (g)", value=50.0, key="peso_produto")
-        tempo = st.number_input("Tempo (h)", value=2.0, key="tempo_produto")
+        nome = st.text_input("Nome do produto")
+        peso = st.number_input("Peso (g)", value=50.0)
+        tempo = st.number_input("Tempo (h)", value=2.0)
 
     with col2:
-        quantidade = st.number_input("Quantidade", value=10, key="quantidade_produto")
-        pecas_por_impressao = st.number_input("Peças por impressão", value=1, key="pecas_produto")
+        quantidade = st.number_input("Quantidade", value=10)
+        pecas_por_impressao = st.number_input("Peças por impressão", value=1)
 
     calcular = st.button("💰 Calcular", use_container_width=True)
 
-    # -------------------------
-    # RESULTADO DO CÁLCULO
-    # -------------------------
     if calcular:
 
         custo_material_total = (peso / 1000) * preco_kg
@@ -190,15 +192,7 @@ if pagina == "🧮 Calculadora":
 
         custo_total = custo_material_unitario + custo_maquina_unitario + custo_energia_unitario
 
-        # MARKUP
-        if tempo < 1:
-            multiplicador = 3.5
-        elif tempo < 3:
-            multiplicador = 3.0
-        elif tempo < 6:
-            multiplicador = 2.5
-        else:
-            multiplicador = 2.2
+        multiplicador = 3 if tempo < 3 else 2.5
 
         preco_venda = custo_total * multiplicador
         lucro = preco_venda - custo_total
@@ -208,86 +202,50 @@ if pagina == "🧮 Calculadora":
         numero_impressoes = math.ceil(quantidade / pecas_por_impressao)
         tempo_total = numero_impressoes * tempo
 
-        custo_total_lote = (
-            custo_material_total * numero_impressoes +
-            custo_maquina_total * numero_impressoes +
-            custo_energia_total * numero_impressoes
-        )
-
         faturamento_total = preco_venda * quantidade
-        lucro_total = faturamento_total - custo_total_lote
+        lucro_total = faturamento_total - custo_total
 
-        # SALVAR NO STATE
         st.session_state["calculo"] = {
-            "nome": nome,
-            "peso": peso,
-            "tempo": tempo,
-            "quantidade": quantidade,
-            "pecas_por_impressao": pecas_por_impressao,
-
             "preco_venda": preco_venda,
             "lucro_unitario": lucro,
             "lucro_por_hora": lucro_hora,
             "margem": margem,
-
+            "quantidade": quantidade,
             "numero_impressoes": numero_impressoes,
             "tempo_total": tempo_total,
-
             "faturamento_total": faturamento_total,
-            "custo_total_lote": custo_total_lote,
-            "lucro_total": lucro_total,
-
-            "custo_material_total": custo_material_total,
-            "custo_maquina_total": custo_maquina_total,
-            "custo_energia_total": custo_energia_total,
-
-            "status": "Pedidos"
+            "lucro_total": lucro_total
         }
-        
-    # -------------------------
-    # DASHBOARD
-    # -------------------------
+
     if "calculo" in st.session_state:
 
         c = st.session_state["calculo"]
 
         st.divider()
 
-        col_top1, col_top2, col_top3, col_top4 = st.columns(4)
+        col1, col2, col3, col4 = st.columns(4)
 
-        with col_top1:
-            components.html(card("💰 Preço", f"R$ {c['preco_venda']:.2f}"), height=120)
-
-        with col_top2:
-            components.html(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), height=120)
-
-        with col_top3:
-            components.html(card("📊 Margem", f"{c['margem']:.1f}%"), height=120)
-
-        with col_top4:
-            components.html(card("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}"), height=120)
+        with col1:
+            st.markdown(card("💰 Preço", f"R$ {c['preco_venda']:.2f}"), unsafe_allow_html=True)
+        with col2:
+            st.markdown(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), unsafe_allow_html=True)
+        with col3:
+            st.markdown(card("📊 Margem", f"{c['margem']:.1f}%"), unsafe_allow_html=True)
+        with col4:
+            st.markdown(card("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}"), unsafe_allow_html=True)
 
         st.divider()
 
-        # UNITÁRIO E PRODUÇÃO (AGORA DENTRO DO IF)
         col_esq, col_dir = st.columns(2)
 
         with col_esq:
             st.subheader("📊 Unitário")
-
             col1, col2 = st.columns(2)
 
             with col1:
-                components.html(
-                    card("💰 Custo", f"R$ {(c['preco_venda'] - c['lucro_unitario']):.2f}"),
-                    height=120
-                )
-
+                st.markdown(card("💰 Custo", f"R$ {(c['preco_venda'] - c['lucro_unitario']):.2f}"), unsafe_allow_html=True)
             with col2:
-                components.html(
-                    card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"),
-                    height=120
-                )
+                st.markdown(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), unsafe_allow_html=True)
 
         with col_dir:
             st.subheader("📦 Produção")
@@ -295,46 +253,10 @@ if pagina == "🧮 Calculadora":
             col3, col4, col5 = st.columns(3)
 
             with col3:
-                components.html(card("📦 Peças", c["quantidade"]), height=120)
-
+                st.markdown(card("📦 Peças", c["quantidade"]), unsafe_allow_html=True)
             with col4:
-                components.html(card("🖨️ Impressões", c["numero_impressoes"]), height=120)
-
+                st.markdown(card("🖨️ Impressões", c["numero_impressoes"]), unsafe_allow_html=True)
             with col5:
-                components.html(card("⏱️ Tempo", f"{c['tempo_total']:.1f}h"), height=120)
-
-            col6, col7, col8 = st.columns(3)
-
-            with col6:
-                components.html(card("💰 Faturamento", f"R$ {c['faturamento_total']:.2f}"), height=120)
-
-            with col7:
-                components.html(card("💸 Custo total", f"R$ {c['custo_total_lote']:.2f}"), height=120)
-
-            with col8:
-                components.html(card("📈 Lucro total", f"R$ {c['lucro_total']:.2f}"), height=120)
+                st.markdown(card("⏱️ Tempo", f"{c['tempo_total']:.1f}h"), unsafe_allow_html=True)
 
         st.divider()
-
-        with st.expander("🔍 Ver detalhes completos"):
-            st.write(f"💰 Custo material total: R$ {c['custo_material_total']:.2f}")
-            st.write(f"⚙️ Custo máquina total: R$ {c['custo_maquina_total']:.2f}")
-            st.write(f"⚡ Custo energia total: R$ {c['custo_energia_total']:.2f}")
-
-        if c["lucro_por_hora"] > 5:
-            st.success("🟢 Produto Excelente")
-        elif c["lucro_por_hora"] > 2:
-            st.warning("🟡 Produto OK")
-        else:
-            st.error("🔴 Produto Ruim")
-            
-# -------------------------
-# BOTÃO SALVAR
-# -------------------------
-st.divider()
-
-if "calculo" in st.session_state:
-    if st.button("💾 Salvar produto"):
-        dados["produtos"].append(st.session_state["calculo"])
-        salvar_dados(dados)
-        st.success("Salvo com sucesso!")
