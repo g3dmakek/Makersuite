@@ -15,26 +15,25 @@ import streamlit as st
 
 st.set_page_config(layout="wide")
 
-# -------------------------
 # MENU
-# -------------------------
-tab1, tab2 = st.tabs(["🧮 Calculadora", "📋 Produção"])
+pagina = st.radio(
+    "Menu",
+    ["🧮 Calculadora", "📋 Produção"],
+    horizontal=True
+)
 
 # -------------------------
-# ABA 1
+# ROTEAMENTO
 # -------------------------
-with tab1:
+if pagina == "🧮 Calculadora":
     st.title("🧮 Calculadora Maker")
+    
+    # 👉 COLE SUA CALCULADORA AQUI
 
-    st.write("Aqui entra toda sua calculadora")
-
-# -------------------------
-# ABA 2
-# -------------------------
-with tab2:
+elif pagina == "📋 Produção":
     st.title("📋 Kanban de Produção")
-
-    st.write("Aqui entra o kanban")
+    
+    # 👉 COLE O KANBAN AQUI
     
 # -------------------------
 # STYLE DA PÁGINA (PROFISSIONAL)
