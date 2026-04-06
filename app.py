@@ -14,51 +14,6 @@ st.set_page_config(
 )
 
 # -------------------------
-# ESTILO GLOBAL
-# -------------------------
-st.markdown("""
-<style>
-.block-container {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-}
-
-[data-testid="column"] {
-    padding: 0 8px;
-}
-</style>
-""", unsafe_allow_html=True)
-
-# -------------------------
-# CARD (VERSÃO FINAL)
-# -------------------------
-def card(titulo, valor):
-    return f"""
-    <div style="padding:10px;">
-        <div style="
-            background: linear-gradient(180deg, #111827, #0B1220);
-            padding:16px;
-            border-radius:16px;
-            height:100px;
-            display:flex;
-            flex-direction:column;
-            justify-content:center;
-            color:white;
-            box-shadow:0 10px 25px rgba(0,0,0,0.45);
-            border:1px solid rgba(255,255,255,0.08);
-        ">
-            <div style="font-size:12px; opacity:0.7;">
-                {titulo}
-            </div>
-
-            <div style="font-size:24px; font-weight:700; margin-top:6px;">
-                {valor}
-            </div>
-        </div>
-    </div>
-    """
-
-# -------------------------
 # MENU
 # -------------------------
 pagina = st.radio(
