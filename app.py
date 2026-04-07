@@ -102,111 +102,83 @@ else:
 
 st.sidebar.info(f"💰 Custo: R$ {custo_hora:.2f}/h")
 
-# -------------------------
-# CALCULADORA
-# -------------------------
-if pagina == "🧮 Calculadora":
+with col1:
+    nome = st.text_input("Nome do produto", key="nome")
+    peso = st.number_input("Peso (g)", value=50.0, key="peso")
+    tempo = st.number_input("Tempo (h)", value=2.0, key="tempo")
 
-    st.title("🧮 Calculadora Maker")
+with col2:
+    quantidade = st.number_input("Quantidade", value=10, key="quantidade")
+    pecas_por_impressao = st.number_input("Peças por impressão", value=1, key="pecas")
 
-    col1, col2 = st.columns(2)
+calcular = st.button("💰 Calcular", use_container_width=True)
 
-    with col1:
-        nome = st.text_input("Nome do produto")
-        peso = st.number_input("Peso (g)", value=50.0)
-        tempo = st.number_input("Tempo (h)", value=2.0)
+if calcular:
 
-    with col2:
-        quantidade = st.number_input("Quantidade", value=10)
-        pecas_por_impressao = st.number_input("Peças por impressão", value=1)
+    # -------------------------
+    # CUSTOS
+    # -------------------------
+    custo_material_total = (peso / 1000) * preco_kg
+    custo_material_unitario = custo_material_total / pecas_por_impressao
 
-    calcular = st.button("💰 Calcular", use_container_width=True)
+    custo_maquina_total = tempo * custo_hora
+    custo_energia_total = tempo * custo_kwh * consumo_maquina
 
-    if calcular:
+    custo_maquina_unitario = custo_maquina_total / pecas_por_impressao
+    custo_energia_unitario = custo_energia_total / pecas_por_impressao
 
-        custo_material_total = (peso / 1000) * preco_kg
-        custo_material_unitario = custo_material_total / pecas_por_impressao
+    custo_total_unitario = (
+        custo_material_unitario +
+        custo_maquina_unitario +
+        custo_energia_unitario
+    )
 
-        custo_maquina_total = tempo * custo_hora
-        custo_energia_total = tempo * custo_kwh * consumo_maquina
+    # -------------------------
+    # MARKUP
+    # -------------------------
+    multiplicador = 3 if tempo < 3 else 2.5
 
-        custo_maquina_unitario = custo_maquina_total / pecas_por_impressao
-        custo_energia_unitario = custo_energia_total / pecas_por_impressao
+    # -------------------------
+    # PREÇO
+    # -------------------------
+    preco_venda = custo_total_unitario * multiplicador
+    lucro = preco_venda - custo_total_unitario
+    margem = (lucro / preco_venda) * 100 if preco_venda > 0 else 0
+    lucro_hora = lucro / tempo if tempo > 0 else 0
 
-        custo_total = custo_material_unitario + custo_maquina_unitario + custo_energia_unitario
+    # -------------------------
+    # PRODUÇÃO
+    # -------------------------
+    numero_impressoes = math.ceil(quantidade / pecas_por_impressao)
+    tempo_total = numero_impressoes * tempo
 
-        multiplicador = 3 if tempo < 3 else 2.5
+    custo_total_lote = (
+        (custo_material_total + custo_maquina_total + custo_energia_total)
+        * numero_impressoes
+    )
 
-        preco_venda = custo_total * multiplicador
-        lucro = preco_venda - custo_total
-        margem = (lucro / preco_venda) * 100 if preco_venda > 0 else 0
-        lucro_hora = lucro / tempo if tempo > 0 else 0
+    faturamento_total = preco_venda * quantidade
+    lucro_total = faturamento_total - custo_total_lote
 
-        numero_impressoes = math.ceil(quantidade / pecas_por_impressao)
-        tempo_total = numero_impressoes * tempo
+    # -------------------------
+    # SALVAR
+    # -------------------------
+    st.session_state["calculo"] = {
+        "nome": nome,
+        "preco_venda": preco_venda,
+        "lucro_unitario": lucro,
+        "lucro_por_hora": lucro_hora,
+        "margem": margem,
 
-        faturamento_total = preco_venda * quantidade
-        lucro_total = faturamento_total - custo_total
+        "quantidade": quantidade,
+        "numero_impressoes": numero_impressoes,
+        "tempo_total": tempo_total,
 
-        st.session_state["calculo"] = {
-            "preco_venda": preco_venda,
-            "lucro_unitario": lucro,
-            "lucro_por_hora": lucro_hora,
-            "margem": margem,
-            "quantidade": quantidade,
-            "numero_impressoes": numero_impressoes,
-            "tempo_total": tempo_total,
-            "faturamento_total": faturamento_total,
-            "lucro_total": lucro_total
-        }
+        "faturamento_total": faturamento_total,
+        "custo_total_lote": custo_total_lote,
+        "lucro_total": lucro_total,
 
-    if "calculo" in st.session_state:
-
-        c = st.session_state["calculo"]
-
-        st.divider()
-
-        col1, col2, col3, col4 = st.columns(4)
-
-        with col1:
-            components.html(card("💰 Preço", f"R$ {c['preco_venda']:.2f}"), height=160)
-
-        with col2:
-            components.html(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), height=160)
-
-        with col3:
-            components.html(card("📊 Margem", f"{c['margem']:.1f}%"), height=160)
-
-        with col4:
-            components.html(card("⚡ Lucro/h", f"R$ {c['lucro_por_hora']:.2f}"), height=160)
-
-        st.divider()
-
-        col_esq, col_dir = st.columns(2)
-
-        with col_esq:
-            st.subheader("📊 Unitário")
-
-            col1, col2 = st.columns(2)
-
-            with col1:
-                components.html(card("💰 Custo", f"R$ {(c['preco_venda'] - c['lucro_unitario']):.2f}"), height=160)
-
-            with col2:
-                components.html(card("📈 Lucro", f"R$ {c['lucro_unitario']:.2f}"), height=160)
-
-        with col_dir:
-            st.subheader("📦 Produção")
-
-            col3, col4, col5 = st.columns(3)
-
-            with col3:
-                components.html(card("📦 Peças", c["quantidade"]), height=160)
-
-            with col4:
-                components.html(card("🖨️ Impressões", c["numero_impressoes"]), height=160)
-
-            with col5:
-                components.html(card("⏱️ Tempo", f"{c['tempo_total']:.1f}h"), height=160)
-
-        st.divider()
+        "custo_material_total": custo_material_total,
+        "custo_maquina_total": custo_maquina_total,
+        "custo_energia_total": custo_energia_total
+    }
