@@ -369,11 +369,10 @@ if "calculo" in st.session_state:
             col5, col6, col7 = st.columns(3)
             col5.metric("📦 Peças", c["quantidade"])
             col6.metric("🖨️ Impressões", c["numero_impressoes"])
-            col7.metric("📆 Peças/dia", f"{pecas_dia:.1f}")
     
             col8, col9 = st.columns(2)
             col8.metric("💸 Custo total", f"R$ {c['custo_total_lote']:.2f}")
-            col9.metric("📈 Lucro total", f"R$ {c['lucro_total']:.2f}")
+            col9.metric("📆 Peças/dia", f"{pecas_dia:.1f}")
     
     st.divider()
     
@@ -385,21 +384,6 @@ if "calculo" in st.session_state:
             st.write(f"💰 Custo material total: R$ {c['custo_material_total']:.2f}")
             st.write(f"⚙️ Custo máquina total: R$ {c['custo_maquina_total']:.2f}")
             st.write(f"⚡ Custo energia total: R$ {c['custo_energia_total']:.2f}")
-
-# -------------------------
-# STATUS DO PRODUTO
-# -------------------------
-if "calculo" in st.session_state:    
-    c = st.session_state["calculo"]
-
-    if c["lucro_por_hora"] >= 20:
-        st.success("🚀 Produto Excelente — alta escala e rentabilidade")
-    elif c["lucro_por_hora"] >= 10:
-        st.success("🟢 Produto Bom — saudável para produção")
-    elif c["lucro_por_hora"] >= 5:
-        st.warning("🟡 Produto OK — margem apertada")
-    else:
-        st.error("🔴 Produto Ruim — não compensa produzir")
 
 # -------------------------
 # BOTÃO DE SALVAR (FORA DO CÁLCULO)
