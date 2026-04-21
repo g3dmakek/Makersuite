@@ -371,7 +371,7 @@ with col_esq:
         st.caption(f"Multiplicador: {c['multiplicador']:.2f}x")
 
                 # 🔍 DETALHES (ESCONDIDOS)
-        with st.expander("🔍 Ver detalhes completos"):
+        with st.expander("🔍 Ver detalhes dos custos"):
             if "calculo" in st.session_state:
                 c = st.session_state["calculo"]
         
