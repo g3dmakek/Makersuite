@@ -245,15 +245,25 @@ if calcular:
 
     custo_total = custo_material_unitario + custo_maquina_unitario + custo_energia_unitario
 
-    # MARKUP
-    if tempo < 1:
-        multiplicador = 3.5
-    elif tempo < 3:
-        multiplicador = 3.0
-    elif tempo < 6:
-        multiplicador = 2.5
+    # MARGEM ALVO
+    margem_desejada = st.sidebar.slider(
+    "Margem de lucro (%)",
+    min_value=10,
+    max_value=90,
+    value=70
+    ) / 100
+
+    # PREÇO BASEADO EM MARGEM
+    if margem_desejada < 1:
+        preco_venda = custo_total / (1 - margem_desejada)
     else:
-        multiplicador = 2.2
+        preco_venda = custo_total
+    
+    lucro = preco_venda - custo_total
+    margem_real = (lucro / preco_venda) * 100 if preco_venda > 0 else 0
+    
+    # (opcional)
+    multiplicador = preco_venda / custo_total if custo_total > 0 else 0
 
     # PREÇO
     preco_venda = custo_total * multiplicador
