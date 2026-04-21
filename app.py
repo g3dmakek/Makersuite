@@ -366,7 +366,7 @@ if "calculo" in st.session_state:
             # 🔥 NOVO: capacidade produtiva
             pecas_dia = 24 / c["tempo_total"] if c["tempo_total"] > 0 else 0
     
-            col5, col6, col7 = st.columns(3)
+            col5, col6 = st.columns(3)
             col5.metric("📦 Peças", c["quantidade"])
             col6.metric("🖨️ Impressões", c["numero_impressoes"])
     
