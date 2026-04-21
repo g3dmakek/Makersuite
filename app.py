@@ -393,13 +393,13 @@ if "calculo" in st.session_state:
     c = st.session_state["calculo"]
 
     if c["lucro_por_hora"] >= 20:
-    st.success("🚀 Produto Excelente — alta escala e rentabilidade")
+        st.success("🚀 Produto Excelente — alta escala e rentabilidade")
     elif c["lucro_por_hora"] >= 10:
-    st.success("🟢 Produto Bom — saudável para produção")
+        st.success("🟢 Produto Bom — saudável para produção")
     elif c["lucro_por_hora"] >= 5:
-    st.warning("🟡 Produto OK — margem apertada")
+        st.warning("🟡 Produto OK — margem apertada")
     else:
-    st.error("🔴 Produto Ruim — não compensa produzir")
+        st.error("🔴 Produto Ruim — não compensa produzir")
 
 # -------------------------
 # BOTÃO DE SALVAR (FORA DO CÁLCULO)
