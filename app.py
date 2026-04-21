@@ -350,42 +350,60 @@ if "calculo" in st.session_state:
     # 📊 LAYOUT EM DUAS COLUNAS
     col_esq, col_dir = st.columns(2)
     
-    # -------------------------
-    # 📊 DETALHES (ESQUERDA)
-    # -------------------------
-    with col_esq:
-        st.subheader("📊 Custos & Parâmetros")
-    
-        if "calculo" in st.session_state:
-            c = st.session_state["calculo"]
-    
-            col1, col2 = st.columns(2)
-            col1.metric("💰 Custo unitário", f"R$ {c['custo_unitario']:.2f}")
-            col2.metric("⚡ Energia", f"R$ {c['energia_unitaria']:.2f}")
-    
-            col3, col4 = st.columns(2)
-            col3.metric("⏱️ Tempo (h)", f"{c['tempo_total']:.1f}")
-            col4.metric("📊 Multiplicador", f"{c['multiplicador']:.2f}x")
-    
-    # -------------------------
-    # 📦 PRODUÇÃO (DIREITA)
-    # -------------------------
-    with col_dir:
-        st.subheader("📦 Produção")
-    
-        if "calculo" in st.session_state:
-            c = st.session_state["calculo"]
-    
-            # 🔥 NOVO: capacidade produtiva
-            pecas_dia = 24 / c["tempo_total"] if c["tempo_total"] > 0 else 0
-    
-            col5, col6 = st.columns(2)
-            col5.metric("📦 Peças", c["quantidade"])
-            col6.metric("🖨️ Impressões", c["numero_impressoes"])
-    
-            col8, col9 = st.columns(2)
-            col8.metric("💸 Custo total", f"R$ {c['custo_total_lote']:.2f}")
-            col9.metric("📆 Peças/dia", f"{pecas_dia:.1f}")
+   # -------------------------
+# 📊 POR PEÇA (ESQUERDA)
+# -------------------------
+with col_esq:
+    st.subheader("📊 Por Peça")
+
+    if "calculo" in st.session_state:
+        c = st.session_state["calculo"]
+
+        col1, col2 = st.columns(2)
+        col1.metric("💰 Custo unitário", f"R$ {c['custo_unitario']:.2f}")
+        col2.metric("⚡ Energia", f"R$ {c['energia_unitaria']:.2f}")
+
+        col3, col4 = st.columns(2)
+        col3.metric("💲 Preço unitário", f"R$ {c['preco_venda']:.2f}")
+        col4.metric("📈 Lucro unitário", f"R$ {c['lucro_unitario']:.2f}")
+
+        # (opcional - menos importante visualmente)
+        st.caption(f"Multiplicador: {c['multiplicador']:.2f}x")
+
+
+# -------------------------
+# 📦 PRODUÇÃO (FORNADA)
+# -------------------------
+with col_dir:
+    st.subheader("📦 Produção (Fornada)")
+
+    if "calculo" in st.session_state:
+        c = st.session_state["calculo"]
+
+        # 🔥 Capacidade produtiva REAL
+        pecas_dia = (24 / c["tempo"]) * c["pecas_por_impressao"] if c["tempo"] > 0 else 0
+
+        lucro_por_impressao = c["lucro_total"] / c["numero_impressoes"] if c["numero_impressoes"] > 0 else 0
+
+        # 📦 Volume
+        col5, col6, col7 = st.columns(3)
+        col5.metric("📦 Peças", c["quantidade"])
+        col6.metric("🖨️ Impressões", c["numero_impressoes"])
+        col7.metric("⏱️ Tempo total", f"{c['tempo_total']:.1f}h")
+
+        # 💰 Financeiro (AGORA COMPLETO)
+        col8, col9, col10 = st.columns(3)
+        col8.metric("💰 Faturamento", f"R$ {c['faturamento_total']:.2f}")
+        col9.metric("💸 Custo total", f"R$ {c['custo_total_lote']:.2f}")
+        col10.metric("📈 Lucro total", f"R$ {c['lucro_total']:.2f}")
+
+        # 🚀 Produtividade (NOVO BLOCO)
+        col11, col12 = st.columns(2)
+        col11.metric("📆 Peças/dia", f"{pecas_dia:.1f}")
+        col12.metric("🖨️ Lucro/Impressão", f"R$ {lucro_por_impressao:.2f}")
+
+        # 🧠 Feedback automático
+        st.caption(f"🔄 Isso gera {c['numero_impressoes']} impressões para atender o pedido")
     
     st.divider()
     
