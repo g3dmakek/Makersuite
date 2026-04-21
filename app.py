@@ -96,7 +96,7 @@ margem_desejada = st.sidebar.slider(
 "Margem de lucro (%)",
 min_value=10,
 max_value=90,
-value=70
+value=60
 ) / 100
 
 preco_kg = st.sidebar.number_input("Preço do filamento (R$/kg)", value=100.0)
