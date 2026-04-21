@@ -99,7 +99,7 @@ max_value=90,
 value=60
 ) / 100
 
-preco_kg = st.sidebar.number_input("Preço do filamento (R$/kg)", value=100.0)
+preco_kg = st.sidebar.number_input("Preço do filamento (R$/kg)", value=115.0)
 
 distribuidoras = {
     "Neoenergia Cosern (RN)": 0.92,
