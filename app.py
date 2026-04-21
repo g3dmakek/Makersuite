@@ -401,9 +401,6 @@ with col_dir:
         col11, col12 = st.columns(2)
         col11.metric("📆 Peças/dia", f"{pecas_dia:.1f}")
         col12.metric("🖨️ Lucro/Impressão", f"R$ {lucro_por_impressao:.2f}")
-
-        # 🧠 Feedback automático
-        st.caption(f"🔄 Isso gera {c['numero_impressoes']} impressões para atender o pedido")
     
     st.divider()
     
