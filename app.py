@@ -241,72 +241,85 @@ if calcular:
 
     import math
 
-    # CUSTOS
+    # -------------------------
+    # CUSTOS BASE (1 IMPRESSÃO)
+    # -------------------------
     custo_material_total = (peso / 1000) * preco_kg
-    custo_material_unitario = custo_material_total / pecas_por_impressao
-
     custo_maquina_total = tempo * custo_hora
     custo_energia_total = tempo * custo_kwh * consumo_maquina
 
+    # custo por peça
+    custo_material_unitario = custo_material_total / pecas_por_impressao
     custo_maquina_unitario = custo_maquina_total / pecas_por_impressao
     custo_energia_unitario = custo_energia_total / pecas_por_impressao
 
-    custo_total = custo_material_unitario + custo_maquina_unitario + custo_energia_unitario
+    custo_unitario = (
+        custo_material_unitario +
+        custo_maquina_unitario +
+        custo_energia_unitario
+    )
 
-        # PREÇO BASEADO EM MARGEM
-    preco_venda = custo_total / (1 - margem_desejada)
-    
-    lucro = preco_venda - custo_total
-    margem_real = (lucro / preco_venda) * 100 if preco_venda > 0 else 0
-    
-    # (opcional - agora só informativo)
-    multiplicador = preco_venda / custo_total if custo_total > 0 else 0
+    # -------------------------
+    # PREÇO (BASEADO EM MARGEM)
+    # -------------------------
+    preco_venda = custo_unitario / (1 - margem_desejada)
 
-    # PREÇO
-    preco_venda = custo_total * multiplicador
-    lucro = preco_venda - custo_total
-    margem_real = (lucro / preco_venda) * 100 if preco_venda > 0 else 0
-    lucro_por_hora = lucro / tempo if tempo > 0 else 0
+    lucro_unitario = preco_venda - custo_unitario
+    margem_real = (lucro_unitario / preco_venda) * 100 if preco_venda > 0 else 0
 
-    # SIMULAÇÃO
+    multiplicador = preco_venda / custo_unitario if custo_unitario > 0 else 0
+
+    # -------------------------
+    # SIMULAÇÃO DE PRODUÇÃO
+    # -------------------------
     numero_impressoes = math.ceil(quantidade / pecas_por_impressao)
     tempo_total = numero_impressoes * tempo
 
-    custo_total_lote = (
-        custo_material_total * numero_impressoes +
-        custo_maquina_total * numero_impressoes +
-        custo_energia_total * numero_impressoes
+    custo_total_lote = numero_impressoes * (
+        custo_material_total +
+        custo_maquina_total +
+        custo_energia_total
     )
 
     faturamento_total = preco_venda * quantidade
     lucro_total = faturamento_total - custo_total_lote
 
+    # 🔥 CORREÇÃO PRINCIPAL
+    lucro_por_hora = lucro_total / tempo_total if tempo_total > 0 else 0
+
+    # -------------------------
     # SALVAR
+    # -------------------------
     st.session_state["calculo"] = {
         "nome": nome,
         "peso": peso,
         "tempo": tempo,
         "quantidade": quantidade,
         "pecas_por_impressao": pecas_por_impressao,
-        "custo_unitario": custo_total,
+
+        "custo_unitario": custo_unitario,
         "preco_venda": preco_venda,
-        "lucro_unitario": lucro,
+
+        "lucro_unitario": lucro_unitario,
         "lucro_total": lucro_total,
         "lucro_por_hora": lucro_por_hora,
+
         "margem": margem_real,
-        "energia_unitaria": custo_energia_unitario,
         "multiplicador": multiplicador,
+
+        "energia_unitaria": custo_energia_unitario,
+
         "tempo_total": tempo_total,
-        "faturamento_total": faturamento_total,
         "numero_impressoes": numero_impressoes,
+
+        "faturamento_total": faturamento_total,
         "custo_total_lote": custo_total_lote,
+
         "custo_material_total": custo_material_total,
         "custo_maquina_total": custo_maquina_total,
         "custo_energia_total": custo_energia_total,
-        # 🔥 KANBAN
-        "status": "Pedidos"
     }
-
+    
 # -------------------------
 # DASHBOARD PRINCIPAL (NOVA UI)
 # -------------------------
