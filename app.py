@@ -402,16 +402,14 @@ with col_dir:
         col11.metric("📆 Peças/dia", f"{pecas_dia:.1f}")
         col12.metric("🖨️ Lucro/Impressão", f"R$ {lucro_por_impressao:.2f}")
     
-    st.divider()
-    
-    # 🔍 DETALHES (ESCONDIDOS)
-    with st.expander("🔍 Ver detalhes completos"):
-        if "calculo" in st.session_state:
-            c = st.session_state["calculo"]
-    
-            st.write(f"💰 Custo material total: R$ {c['custo_material_total']:.2f}")
-            st.write(f"⚙️ Custo máquina total: R$ {c['custo_maquina_total']:.2f}")
-            st.write(f"⚡ Custo energia total: R$ {c['custo_energia_total']:.2f}")
+        # 🔍 DETALHES (ESCONDIDOS)
+        with st.expander("🔍 Ver detalhes completos"):
+            if "calculo" in st.session_state:
+                c = st.session_state["calculo"]
+        
+                st.write(f"💰 Custo material total: R$ {c['custo_material_total']:.2f}")
+                st.write(f"⚙️ Custo máquina total: R$ {c['custo_maquina_total']:.2f}")
+                st.write(f"⚡ Custo energia total: R$ {c['custo_energia_total']:.2f}")
 
 # -------------------------
 # BOTÃO DE SALVAR (FORA DO CÁLCULO)
