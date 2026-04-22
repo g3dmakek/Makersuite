@@ -595,23 +595,51 @@ st.divider()
 if "calculo" in st.session_state:
     if st.button("💾 Salvar produto"):
 
-        # 🔐 pega usuário da sessão do Streamlit (CORRETO)
         user = st.session_state.get("user")
 
         if user:
-            user_id = user.id
+            c = st.session_state["calculo"]
 
-            supabase.table("produtos").insert({
-                "nome": st.session_state["calculo"]["nome"],
-                "data": str(st.session_state["calculo"]),
-                "user_id": user_id
-            }).execute()
+            try:
+                supabase.table("produtos").insert({
+                    "user_id": user.id,
 
-            st.success("Produto salvo com sucesso!")
+                    "nome": c["nome"],
+                    "peso": c["peso"],
+                    "tempo": c["tempo"],
+                    "quantidade": c["quantidade"],
+                    "pecas_por_impressao": c["pecas_por_impressao"],
+
+                    "custo_unitario": c["custo_unitario"],
+                    "preco_venda": c["preco_venda"],
+                    "lucro_unitario": c["lucro_unitario"],
+                    "lucro_total": c["lucro_total"],
+                    "lucro_por_hora": c["lucro_por_hora"],
+
+                    "margem": c["margem"],
+                    "multiplicador": c["multiplicador"],
+
+                    "energia_unitaria": c["energia_unitaria"],
+
+                    "tempo_total": c["tempo_total"],
+                    "numero_impressoes": c["numero_impressoes"],
+
+                    "faturamento_total": c["faturamento_total"],
+                    "custo_total_lote": c["custo_total_lote"],
+
+                    "custo_material_total": c["custo_material_total"],
+                    "custo_maquina_total": c["custo_maquina_total"],
+                    "custo_energia_total": c["custo_energia_total"],
+                }).execute()
+
+                st.success("Produto salvo com sucesso!")
+
+            except Exception as e:
+                st.error(f"Erro ao salvar: {e}")
 
         else:
             st.error("Usuário não autenticado. Faça login novamente.")
-
+            
 # -------------------------
 # LISTAGEM
 # -------------------------
