@@ -11,6 +11,22 @@ SUPABASE_KEY = "sb_publishable_ISGY11gncdHD2WRhFnmREg_EGdcWQZv"
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+# -------------------------
+# LOGIN / LOGOUT
+# -------------------------
+if "user" not in st.session_state:
+    st.session_state.user = None
+
+def login(email, senha):
+    res = supabase.auth.sign_in_with_password({
+        "email": email,
+        "password": senha
+    })
+    return res
+
+def logout():
+    supabase.auth.sign_out()
+    st.session_state.user = None
 
 # -------------------------
 # CONFIG DA PÁGINA (PRIMEIRO SEMPRE)
@@ -20,6 +36,7 @@ st.set_page_config(
     page_icon="🧮",
     layout="wide"
 )
+
 # -------------------------
 # STYLE DA PÁGINA (PROFISSIONAL)
 # -------------------------
