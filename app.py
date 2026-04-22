@@ -365,14 +365,22 @@ if "calculo" in st.session_state:
     # 📊 LAYOUT EM DUAS COLUNAS
     col_esq, col_dir = st.columns(2)
     
-   # -------------------------
-# 📊 POR PEÇA (ESQUERDA)
 # -------------------------
-with col_esq:
-    st.subheader("📊 Por Peça")
+# 📊 DASHBOARD
+# -------------------------
 
-    if "calculo" in st.session_state:
-        c = st.session_state["calculo"]
+if "calculo" in st.session_state:
+
+    c = st.session_state["calculo"]
+
+    # 📊 LAYOUT EM DUAS COLUNAS
+    col_esq, col_dir = st.columns(2)
+
+    # -------------------------
+    # 📊 POR PEÇA (ESQUERDA)
+    # -------------------------
+    with col_esq:
+        st.subheader("📊 Por Peça")
 
         col1, col2 = st.columns(2)
         col1.metric("💰 Custo unitário", f"R$ {c['custo_unitario']:.2f}")
@@ -382,45 +390,32 @@ with col_esq:
         col3.metric("💲 Preço unitário", f"R$ {c['preco_venda']:.2f}")
         col4.metric("📈 Lucro unitário", f"R$ {c['lucro_unitario']:.2f}")
 
-        # (opcional - menos importante visualmente)
         st.caption(f"Multiplicador: {c['multiplicador']:.2f}x")
 
-                # 🔍 DETALHES (ESCONDIDOS)
         with st.expander("🔍 Ver detalhes dos custos"):
-            if "calculo" in st.session_state:
-                c = st.session_state["calculo"]
-        
-                st.write(f"💰 Custo material total: R$ {c['custo_material_total']:.2f}")
-                st.write(f"⚙️ Custo máquina total: R$ {c['custo_maquina_total']:.2f}")
-                st.write(f"⚡ Custo energia total: R$ {c['custo_energia_total']:.2f}")
+            st.write(f"💰 Custo material total: R$ {c['custo_material_total']:.2f}")
+            st.write(f"⚙️ Custo máquina total: R$ {c['custo_maquina_total']:.2f}")
+            st.write(f"⚡ Custo energia total: R$ {c['custo_energia_total']:.2f}")
 
-# -------------------------
-# 📦 PRODUÇÃO (FORNADA)
-# -------------------------
-with col_dir:
-    st.subheader("📦 Produção (Fornada)")
+    # -------------------------
+    # 📦 PRODUÇÃO (FORNADA)
+    # -------------------------
+    with col_dir:
+        st.subheader("📦 Produção (Fornada)")
 
-    if "calculo" in st.session_state:
-        c = st.session_state["calculo"]
-
-        # 🔥 Capacidade produtiva REAL
         pecas_dia = (24 / c["tempo"]) * c["pecas_por_impressao"] if c["tempo"] > 0 else 0
-
         lucro_por_impressao = c["lucro_total"] / c["numero_impressoes"] if c["numero_impressoes"] > 0 else 0
 
-        # 📦 Volume
         col5, col6, col7 = st.columns(3)
         col5.metric("📦 Peças", c["quantidade"])
         col6.metric("🖨️ Impressões", c["numero_impressoes"])
         col7.metric("⏱️ Tempo total", f"{c['tempo_total']:.1f}h")
 
-        # 💰 Financeiro (AGORA COMPLETO)
         col8, col9, col10 = st.columns(3)
         col8.metric("💰 Faturamento", f"R$ {c['faturamento_total']:.2f}")
         col9.metric("💸 Custo total", f"R$ {c['custo_total_lote']:.2f}")
         col10.metric("📈 Lucro total", f"R$ {c['lucro_total']:.2f}")
 
-        # 🚀 Produtividade (NOVO BLOCO)
         col11, col12 = st.columns(2)
         col11.metric("📆 Peças/dia", f"{pecas_dia:.1f}")
         col12.metric("🖨️ Lucro/Impressão", f"R$ {lucro_por_impressao:.2f}")
