@@ -428,12 +428,23 @@ st.divider()
 
 if "calculo" in st.session_state:
     if st.button("💾 Salvar produto"):
-        supabase.table("produtos").insert({
-            "nome": st.session_state["calculo"]["nome"],
-            "data": st.session_state["calculo"]
-        }).execute()
 
-        st.success("Produto salvo com sucesso!")
+        # 🔐 pega usuário logado
+        user = supabase.auth.get_user()
+
+        if user and user.user:
+            user_id = user.user.id
+
+            supabase.table("produtos").insert({
+                "nome": st.session_state["calculo"]["nome"],
+                "data": st.session_state["calculo"],
+                "user_id": user_id
+            }).execute()
+
+            st.success("Produto salvo com sucesso!")
+
+        else:
+            st.error("Usuário não autenticado. Faça login novamente.")
 
 # -------------------------
 # LISTAGEM
