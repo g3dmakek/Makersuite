@@ -150,6 +150,19 @@ if st.session_state.show_login and st.session_state.user is None:
                 st.error("Erro ao criar conta")
 
     st.stop()
+
+# -------------------------
+# ESPAÇAMENTO PARA NÃO FICAR SOB HEADER
+# -------------------------
+
+st.markdown("""
+<style>
+/* empurra todo o conteúdo pra baixo da header */
+.block-container {
+    padding-top: 5rem !important;
+}
+</style>
+""", unsafe_allow_html=True)
     
 # -------------------------
 # BOTÃO LOGIN
