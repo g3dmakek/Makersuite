@@ -29,33 +29,41 @@ if "show_menu" not in st.session_state:
 
 
 # -------------------------
-# RESTAURAR SESSÃO (PRO)
+# RESTAURAR SESSÃO (VERSÃO ESTÁVEL)
 # -------------------------
 
 def load_session():
     try:
         res = supabase.auth.get_session()
 
-        if res and res.session:
-            st.session_state.session = res.session
-            st.session_state.user = res.session.user
+        # 🔥 tenta os dois formatos possíveis
+        session = None
 
-            # 🔥 garante que o client está autenticado
-            supabase.auth.set_session(
-                res.session.access_token,
-                res.session.refresh_token
-            )
+        if hasattr(res, "session"):
+            session = res.session
+        elif hasattr(res, "user"):
+            session = res
 
+        if session and session.user:
+            st.session_state.user = session.user
+            st.session_state.session = session
+
+            # 🔥 reativa sessão no client
+            if hasattr(session, "access_token"):
+                supabase.auth.set_session(
+                    session.access_token,
+                    session.refresh_token
+                )
         else:
             st.session_state.user = None
             st.session_state.session = None
 
-    except Exception as e:
+    except Exception:
         st.session_state.user = None
         st.session_state.session = None
 
 
-# 🔥 EXECUTA SEMPRE AO INICIAR
+# executa sempre
 load_session()
 
 # -------------------------
