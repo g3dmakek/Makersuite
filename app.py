@@ -230,7 +230,7 @@ col3, col4 = st.columns(2)
 
 with col3:
     quantidade = st.number_input(
-        "Quantidade total",
+        "Quantidade de Peças",
         min_value=1,
         value=10
     )
