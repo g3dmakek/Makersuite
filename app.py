@@ -260,12 +260,21 @@ def salvar_dados(dados):
     with open("dados.json", "w") as f:
         json.dump(dados, f, indent=4)
 
-# 🔥 AGORA VEM DO SUPABASE
-response = supabase.table("produtos").select("*").execute()
+# -------------------------
+# CARREGAR PRODUTOS DO BANCO (NOVO PADRÃO)
+# -------------------------
 
-dados = {
-    "produtos": [p["data"] for p in response.data]
-}
+user = st.session_state.get("user")
+
+if user:
+    response = supabase.table("produtos") \
+        .select("*") \
+        .eq("user_id", user.id) \
+        .execute()
+
+    produtos = response.data
+else:
+    produtos = []
 
 # -------------------------
 # SIDEBAR (CONFIGURAÇÕES)
