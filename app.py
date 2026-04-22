@@ -595,15 +595,15 @@ st.divider()
 if "calculo" in st.session_state:
     if st.button("💾 Salvar produto"):
 
-        # 🔐 pega usuário logado
-        user = supabase.auth.get_user()
+        # 🔐 pega usuário da sessão do Streamlit (CORRETO)
+        user = st.session_state.get("user")
 
-        if user and user.user:
-            user_id = user.user.id
+        if user:
+            user_id = user.id
 
             supabase.table("produtos").insert({
                 "nome": st.session_state["calculo"]["nome"],
-                "data": st.session_state["calculo"],
+                "data": str(st.session_state["calculo"]),
                 "user_id": user_id
             }).execute()
 
