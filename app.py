@@ -24,34 +24,67 @@ def login(email, senha):
     })
     return res
 
+def signup(email, senha):
+    res = supabase.auth.sign_up({
+        "email": email,
+        "password": senha
+    })
+    return res
+
 def logout():
     supabase.auth.sign_out()
     st.session_state.user = None
 
+
 # -------------------------
-# 🔐 TELA DE LOGIN (BLOCO PRINCIPAL)
+# 🔐 TELA DE LOGIN / CADASTRO
 # -------------------------
 if st.session_state.user is None:
 
-    st.title("🔐 Login")
+    st.title("🔐 Login / Cadastro")
 
-    email = st.text_input("Email")
-    senha = st.text_input("Senha", type="password")
+    tab1, tab2 = st.tabs(["Entrar", "Criar conta"])
 
-    if st.button("Entrar"):
-        try:
-            res = login(email, senha)
+    # -------------------------
+    # LOGIN
+    # -------------------------
+    with tab1:
+        email = st.text_input("Email", key="login_email")
+        senha = st.text_input("Senha", type="password", key="login_senha")
 
-            st.session_state.user = res.user
+        if st.button("Entrar"):
+            try:
+                res = login(email, senha)
 
-            st.success("Login realizado com sucesso!")
-            st.rerun()
+                st.session_state.user = res.user
 
-        except Exception as e:
-            st.error("Erro no login. Verifique seus dados.")
+                st.success("Login realizado com sucesso!")
+                st.rerun()
+
+            except Exception:
+                st.error("Erro no login. Verifique seus dados.")
+
+    # -------------------------
+    # CADASTRO
+    # -------------------------
+    with tab2:
+        new_email = st.text_input("Email", key="signup_email")
+        new_senha = st.text_input("Senha", type="password", key="signup_senha")
+
+        if st.button("Criar conta"):
+            try:
+                supabase.auth.sign_up({
+                    "email": new_email,
+                    "password": new_senha
+                })
+
+                st.success("Conta criada! Agora faça login.")
+
+            except Exception:
+                st.error("Erro ao criar conta. Tente novamente.")
 
     st.stop()
-
+    
 # -------------------------
 # CONFIG DA PÁGINA (PRIMEIRO SEMPRE)
 # -------------------------
