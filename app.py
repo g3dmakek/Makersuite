@@ -187,13 +187,19 @@ with col2:
     user = st.session_state.get("user")
 
     if user:
-        # 🔥 pega email do usuário
-        nome_user = user.email.split("@")[0]  # ex: joao@gmail → joao
+        # 🔥 proteção contra user sem email (evita crash)
+        email = getattr(user, "email", None)
 
-        if st.button(f"👤 {nome_user}"):
+        if email:
+            nome_user = email.split("@")[0].capitalize()
+        else:
+            nome_user = "Usuário"
+
+        if st.button(f"👤 {nome_user}", use_container_width=True):
             st.session_state.show_menu = not st.session_state.get("show_menu", False)
+
     else:
-        if st.button("🔐 Login"):
+        if st.button("🔐 Login", use_container_width=True):
             st.session_state.show_login = True
     
 # -------------------------
