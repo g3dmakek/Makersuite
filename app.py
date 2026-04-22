@@ -47,7 +47,7 @@ def logout():
 # -------------------------
 # 🔐 BOTÃO TOPO DIREITO (LOGIN / USER)
 # -------------------------
-col1, col2 = st.columns([7, 1])
+col1, col2 = st.columns([8, 1])
 
 with col2:
     if st.session_state.user:
