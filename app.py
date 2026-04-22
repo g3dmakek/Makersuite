@@ -139,41 +139,39 @@ st.markdown("""
 <style>
 
 /* =========================
-   REMOVE ELEMENTOS NATIVOS
+   REMOVE UI SUPERIOR SEM QUEBRAR LAYOUT
 ========================= */
 
-/* Remove toolbar superior (Share / GitHub etc) */
+/* Toolbar superior */
 [data-testid="stToolbar"] {
     display: none !important;
 }
 
-/* Remove menu hambúrguer */
+/* Menu hambúrguer */
 #MainMenu {
     visibility: hidden;
 }
 
-/* Remove apenas branding do Streamlit */
+/* Branding Streamlit */
 footer {
     visibility: hidden;
 }
 
-/* =========================
-   NÃO QUEBRAR HEADER / SIDEBAR
-========================= */
-
-/* NÃO ocultar header inteiro (isso quebra sidebar)
-   Apenas estiliza se quiser */
+/* NÃO quebrar header (importante para sidebar) */
 header {
+    height: 0px;
     background: transparent !important;
 }
 
-/* Sidebar continua intacta */
+/* Garantir sidebar visível */
 section[data-testid="stSidebar"] {
-    background-color: #111827;
+    min-width: 280px;
+    visibility: visible !important;
+    display: block !important;
 }
 
 /* =========================
-   LAYOUT GERAL
+   LAYOUT
 ========================= */
 
 .block-container {
@@ -185,37 +183,6 @@ section[data-testid="stSidebar"] {
 
 .main {
     max-width: 100%;
-}
-
-/* =========================
-   CARDS
-========================= */
-
-div[data-testid="stMetric"] {
-    background-color: #1A1F2B;
-    border: 1px solid #2D3748;
-    padding: 14px;
-    border-radius: 12px;
-    text-align: center;
-}
-
-div[data-testid="stMetric"] > div {
-    color: #00C2FF;
-    font-size: 20px;
-    font-weight: bold;
-}
-
-div[data-testid="stMetric"] label {
-    color: #A0AEC0;
-    font-size: 12px;
-}
-
-div[data-testid="stVerticalBlock"] > div {
-    gap: 0.6rem;
-}
-
-[data-testid="column"] {
-    padding: 0.2rem;
 }
 
 </style>
