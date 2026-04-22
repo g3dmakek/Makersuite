@@ -139,39 +139,44 @@ st.markdown("""
 <style>
 
 /* =========================
+   REMOVE UI NATIVA STREAMLIT (SEGURO)
+========================= */
+
+/* Remove toolbar superior (Share / GitHub / etc) */
+[data-testid="stToolbar"] {
+    display: none !important;
+}
+
+/* Remove menu hambúrguer */
+#MainMenu {
+    visibility: hidden;
+}
+
+/* REMOVE HEADER SEM QUEBRAR SIDEBAR */
+[data-testid="stHeader"] {
+    display: none !important;
+}
+
+/* Remove footer "Made with Streamlit" */
+footer {
+    visibility: hidden;
+}
+
+/* =========================
    LAYOUT GERAL
 ========================= */
 
 /* Reduz margem lateral e topo */
 .block-container {
-    padding-top: 2rem;
+    padding-top: 1.5rem;
     padding-left: 2rem;
     padding-right: 2rem;
     max-width: 100%;
 }
 
-/* Remove limite de largura central */
+/* Garante largura total */
 .main {
     max-width: 100%;
-}
-
-/* =========================
-   REMOVE ÍCONES / UI NATIVA STREAMLIT
-========================= */
-
-/* Toolbar superior (Share / GitHub / Deploy) */
-[data-testid="stToolbar"] {
-    display: none !important;
-}
-
-/* Menu hambúrguer (canto superior direito) */
-#MainMenu {
-    visibility: hidden;
-}
-
-/* Footer "Made with Streamlit" */
-footer {
-    visibility: hidden;
 }
 
 /* =========================
@@ -186,25 +191,22 @@ div[data-testid="stMetric"] {
     text-align: center;
 }
 
-/* Valor grande */
 div[data-testid="stMetric"] > div {
     color: #00C2FF;
     font-size: 20px;
     font-weight: bold;
 }
 
-/* Label menor */
 div[data-testid="stMetric"] label {
     color: #A0AEC0;
     font-size: 12px;
 }
 
-/* Espaçamento */
+/* Espaçamento consistente */
 div[data-testid="stVerticalBlock"] > div {
     gap: 0.6rem;
 }
 
-/* Colunas */
 [data-testid="column"] {
     padding: 0.2rem;
 }
