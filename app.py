@@ -132,48 +132,13 @@ st.set_page_config(
     layout="wide"
 )
 
-# ------------------------- 
-# STYLE DA PÁGINA (PROFISSIONAL) 
+# -------------------------
+# STYLE DA PÁGINA (PROFISSIONAL)
 # -------------------------
 st.markdown("""
 <style>
 
-/* =========================
-   REMOVE UI SUPERIOR SEM QUEBRAR LAYOUT
-========================= */
-
-/* Toolbar superior */
-[data-testid="stToolbar"] {
-    display: none !important;
-}
-
-/* Menu hambúrguer */
-#MainMenu {
-    visibility: hidden;
-}
-
-/* Branding Streamlit */
-footer {
-    visibility: hidden;
-}
-
-/* NÃO quebrar header (importante para sidebar) */
-header {
-    height: 0px;
-    background: transparent !important;
-}
-
-/* Garantir sidebar visível */
-section[data-testid="stSidebar"] {
-    min-width: 280px;
-    visibility: visible !important;
-    display: block !important;
-}
-
-/* =========================
-   LAYOUT
-========================= */
-
+/* Reduz margem lateral e topo */
 .block-container {
     padding-top: 2rem;
     padding-left: 2rem;
@@ -181,8 +146,41 @@ section[data-testid="stSidebar"] {
     max-width: 100%;
 }
 
+/* Remove limite de largura central */
 .main {
     max-width: 100%;
+}
+
+/* Cards de métricas */
+div[data-testid="stMetric"] {
+    background-color: #1A1F2B;
+    border: 1px solid #2D3748;
+    padding: 14px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+/* Valor grande */
+div[data-testid="stMetric"] > div {
+    color: #00C2FF;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Label menor */
+div[data-testid="stMetric"] label {
+    color: #A0AEC0;
+    font-size: 12px;
+}
+
+/* Reduz espaço entre blocos */
+div[data-testid="stVerticalBlock"] > div {
+    gap: 0.6rem;
+}
+
+/* Ajusta colunas para não “quebrar” */
+[data-testid="column"] {
+    padding: 0.2rem;
 }
 
 </style>
