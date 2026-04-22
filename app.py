@@ -654,12 +654,12 @@ if "calculo" in st.session_state:
 # -------------------------
 st.subheader("📦 Produtos salvos")
 
-if len(dados["produtos"]) == 0:
+if len(produtos) == 0:
     st.info("Nenhum produto salvo ainda")
 else:
     selecionados = []
 
-    for i, p in enumerate(dados["produtos"]):
+    for i, p in enumerate(produtos):
         col1, col2 = st.columns([1, 5])
 
         # CHECKBOX (lado esquerdo)
@@ -681,7 +681,7 @@ else:
     if selecionados:
         if st.button("🗑️ Excluir selecionados"):
             for i in sorted(selecionados, reverse=True):
-                dados["produtos"].pop(i)
+                produtos.pop(i)
 
             salvar_dados(dados)
             st.success("Produtos excluídos!")
@@ -694,11 +694,11 @@ st.divider()
 
 st.subheader("🏆 Ranking de Produtos (Mais lucrativos)")
 
-if len(dados["produtos"]) == 0:
+if len(produtos) == 0:
     st.info("Nenhum produto para analisar")
 else:
     produtos_ordenados = sorted(
-        dados["produtos"],
+        produtos,
         key=lambda x: x.get("lucro_total", 0),
         reverse=True
     )
