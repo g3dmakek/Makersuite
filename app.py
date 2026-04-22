@@ -108,6 +108,61 @@ def logout():
     st.session_state.user = None
     st.session_state.session = None
     st.rerun()
+
+# -------------------------
+# LOGIN UI
+# -------------------------
+if st.session_state.show_login and st.session_state.user is None:
+
+    st.markdown("### 🔐 Login")
+
+    tab1, tab2 = st.tabs(["Entrar", "Criar conta"])
+
+    with tab1:
+        email = st.text_input("Email", key="login_email")
+        senha = st.text_input("Senha", type="password", key="login_senha")
+
+        colA, colB = st.columns(2)
+
+        with colA:
+            if st.button("Entrar"):
+                if login(email, senha):
+                    st.session_state.show_login = False
+                    st.success("Login realizado!")
+                    st.rerun()
+                else:
+                    st.error("Email ou senha inválidos")
+
+        with colB:
+            if st.button("Fechar"):
+                st.session_state.show_login = False
+                st.rerun()
+
+
+    with tab2:
+        new_email = st.text_input("Email", key="signup_email")
+        new_senha = st.text_input("Senha", type="password", key="signup_senha")
+
+        if st.button("Criar conta"):
+            if signup(new_email, new_senha):
+                st.success("Conta criada! Faça login agora.")
+            else:
+                st.error("Erro ao criar conta")
+
+    st.stop()
+    
+# -------------------------
+# BOTÃO LOGIN
+# -------------------------
+col1, col2 = st.columns([8, 1])
+
+with col2:
+    if st.session_state.user:
+        if st.button("👤"):
+            st.session_state.show_menu = not st.session_state.show_menu
+    else:
+        if st.button("🔐 Login"):
+            st.session_state.show_login = True
     
 # -------------------------
 # CONFIG DA PÁGINA (PRIMEIRO SEMPRE)
