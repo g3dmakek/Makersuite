@@ -34,23 +34,29 @@ if "show_menu" not in st.session_state:
 
 def load_session():
     try:
-        session = supabase.auth.get_session()
+        res = supabase.auth.get_session()
 
-        if session and session.user:
-            st.session_state.user = session.user
-            st.session_state.session = session
+        if res and res.session:
+            st.session_state.session = res.session
+            st.session_state.user = res.session.user
 
+            # 🔥 garante que o client está autenticado
             supabase.auth.set_session(
-                session.access_token,
-                session.refresh_token
+                res.session.access_token,
+                res.session.refresh_token
             )
 
-    except:
-        pass
+        else:
+            st.session_state.user = None
+            st.session_state.session = None
+
+    except Exception as e:
+        st.session_state.user = None
+        st.session_state.session = None
 
 
+# 🔥 EXECUTA SEMPRE AO INICIAR
 load_session()
-
 
 # -------------------------
 # LOGIN (CORRIGIDO)
