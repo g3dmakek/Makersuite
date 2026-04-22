@@ -91,7 +91,8 @@ def salvar_dados(dados):
     with open("dados.json", "w") as f:
         json.dump(dados, f, indent=4)
 
-dados = carregar_dados()
+response = supabase.table("produtos").select("*").execute()
+produtos = response.data
 
 # -------------------------
 # SIDEBAR (CONFIGURAÇÕES)
