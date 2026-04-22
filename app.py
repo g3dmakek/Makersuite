@@ -147,6 +147,16 @@ st.markdown("""
     display: none !important;
 }
 
+/* Remove menu hambúrguer */
+#MainMenu {
+    visibility: hidden;
+}
+
+/* Remove header superior */
+header {
+    visibility: hidden;
+}
+
 /* Remove footer "Made with Streamlit" */
 footer {
     visibility: hidden;
@@ -206,6 +216,7 @@ div[data-testid="stVerticalBlock"] > div {
 
 </style>
 """, unsafe_allow_html=True)
+
 # -------------------------
 # TÍTULO
 # -------------------------
