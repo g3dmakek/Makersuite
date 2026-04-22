@@ -12,19 +12,25 @@ st.set_page_config(
 )
 
 # -------------------------
-# STYLE DA PÁGINA
+# STYLE DA PÁGINA (PROFISSIONAL)
 # -------------------------
 st.markdown("""
 <style>
+
+/* Reduz margem lateral e topo */
 .block-container {
     padding-top: 2rem;
     padding-left: 2rem;
     padding-right: 2rem;
     max-width: 100%;
 }
+
+/* Remove limite de largura central */
 .main {
     max-width: 100%;
 }
+
+/* Cards de métricas */
 div[data-testid="stMetric"] {
     background-color: #1A1F2B;
     border: 1px solid #2D3748;
@@ -32,15 +38,30 @@ div[data-testid="stMetric"] {
     border-radius: 12px;
     text-align: center;
 }
+
+/* Valor grande */
 div[data-testid="stMetric"] > div {
     color: #00C2FF;
     font-size: 20px;
     font-weight: bold;
 }
+
+/* Label menor */
 div[data-testid="stMetric"] label {
     color: #A0AEC0;
     font-size: 12px;
 }
+
+/* Reduz espaço entre blocos */
+div[data-testid="stVerticalBlock"] > div {
+    gap: 0.6rem;
+}
+
+/* Ajusta colunas para não “quebrar” */
+[data-testid="column"] {
+    padding: 0.2rem;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -48,9 +69,11 @@ div[data-testid="stMetric"] label {
 # TÍTULO
 # -------------------------
 st.title("🧮 MakerSuite")
+st.markdown("### Sistema de Precificação para Makers")
+st.caption("Calcule custo, preço e lucro das suas peças")
 
 # -------------------------
-# FUNÇÕES
+# FUNÇÕES DE DADOS
 # -------------------------
 def carregar_dados():
     if not os.path.exists("dados.json"):
@@ -65,15 +88,107 @@ def salvar_dados(dados):
 dados = carregar_dados()
 
 # -------------------------
-# SIDEBAR
+# SIDEBAR (CONFIGURAÇÕES)
 # -------------------------
 st.sidebar.header("⚙️ Configurações")
 
-margem_desejada = st.sidebar.slider("Margem (%)", 10, 90, 60) / 100
-preco_kg = st.sidebar.number_input("Preço filamento", value=115.0)
-custo_kwh = 0.92
-consumo_maquina = 0.12
-custo_hora = 2.0
+# MARGEM ALVO
+margem_desejada = st.sidebar.slider(
+"Margem de lucro (%)",
+min_value=10,
+max_value=90,
+value=60
+) / 100
+
+preco_kg = st.sidebar.number_input("Preço do filamento (R$/kg)", value=115.0)
+
+distribuidoras = {
+    "Neoenergia Cosern (RN)": 0.92,
+    "Enel SP": 0.95,
+    "Enel RJ": 1.05,
+    "Cemig (MG)": 0.85,
+    "CPFL (SP)": 0.90,
+    "Equatorial (MA/PA)": 0.88,
+    "Outra": None
+}
+
+distribuidora = st.sidebar.selectbox("Distribuidora de energia", list(distribuidoras.keys()))
+
+if distribuidoras[distribuidora] is not None:
+    custo_kwh = distribuidoras[distribuidora]
+    st.sidebar.info(f"Tarifa média: R$ {custo_kwh}/kWh")
+else:
+    custo_kwh = st.sidebar.number_input("Custo energia (R$/kWh)", value=0.80)
+
+# -------------------------
+# IMPRESSORA (CORRIGIDO)
+# -------------------------
+st.sidebar.subheader("🖨️ Impressora")
+
+impressoras = {
+    "Bambu Lab A1": {"valor": 3500, "vida_util": 4000, "consumo": 0.12},
+    "Bambu Lab P1P": {"valor": 6000, "vida_util": 5000, "consumo": 0.15},
+    "Bambu Lab X1 Carbon": {"valor": 9000, "vida_util": 6000, "consumo": 0.20},
+    "Ender 3 V3 KE": {"valor": 2500, "vida_util": 3000, "consumo": 0.12},
+    "Ender 3": {"valor": 1500, "vida_util": 2500, "consumo": 0.10},
+    "Prusa MK3": {"valor": 5000, "vida_util": 5000, "consumo": 0.13},
+    "Outro": {"valor": None, "vida_util": None, "consumo": None}
+}
+
+modelo = st.sidebar.selectbox(
+    "Selecione sua impressora",
+    list(impressoras.keys()),
+    key="modelo_impressora"
+)
+
+dados_impressora = impressoras[modelo]
+
+# 🔥 DETECTA MUDANÇA DE MODELO
+if "modelo_anterior" not in st.session_state:
+    st.session_state.modelo_anterior = modelo
+
+if modelo != st.session_state.modelo_anterior:
+    st.session_state["valor_maquina_input"] = dados_impressora["valor"] or 3000.0
+    st.session_state["vida_util_input"] = dados_impressora["vida_util"] or 3000
+    st.session_state["consumo_input"] = dados_impressora["consumo"] or 0.12
+
+    st.session_state.modelo_anterior = modelo
+
+# VALOR
+valor_maquina = st.sidebar.number_input(
+    "Valor da impressora (R$)",
+    value=float(dados_impressora["valor"]) if dados_impressora["valor"] else 3000.0,
+    key="valor_maquina_input"
+)
+
+# VIDA ÚTIL
+vida_util = st.sidebar.number_input(
+    "Vida útil estimada (horas)",
+    value=int(dados_impressora["vida_util"]) if dados_impressora["vida_util"] else 3000,
+    key="vida_util_input"
+)
+
+# MANUTENÇÃO
+manutencao_hora = st.sidebar.number_input(
+    "Manutenção (R$/h)",
+    value=1.0,
+    key="manutencao_input"
+)
+
+# CONSUMO
+consumo_maquina = st.sidebar.number_input(
+    "Consumo da impressora (kW)",
+    value=float(dados_impressora["consumo"]) if dados_impressora["consumo"] else 0.12,
+    key="consumo_input"
+)
+
+# CUSTO HORA
+if vida_util > 0:
+    custo_hora = (valor_maquina / vida_util) + manutencao_hora
+else:
+    custo_hora = manutencao_hora
+
+st.sidebar.info(f"💰 Custo real: R$ {custo_hora:.2f}/h")
 
 # -------------------------
 # INPUTS
@@ -81,126 +196,22 @@ custo_hora = 2.0
 col1, col2 = st.columns(2)
 
 with col1:
-    nome = st.text_input("Nome")
+    nome = st.text_input("Nome do produto")
 
 with col2:
-    peso = st.number_input("Peso (g)", 50.0)
-    tempo = st.number_input("Tempo (h)", 2.0)
+    peso = st.number_input("Peso (g)", value=50.0)
 
-quantidade = st.number_input("Quantidade", 1, 10)
-pecas_por_impressao = st.number_input("Peças por impressão", 1, 1)
-
-calcular = st.button("Calcular")
+tempo = st.number_input("Tempo (h)", value=2.0)
 
 # -------------------------
-# CÁLCULO
+# BOTÃO
 # -------------------------
+calcular = st.button("💰 Calcular")
+
 if calcular:
-    import math
+    custo = (peso/1000)*preco_kg
+    preco = custo/(1-margem_desejada)
+    lucro = preco - custo
 
-    custo_material = (peso/1000)*preco_kg
-    custo_maquina = tempo*custo_hora
-    custo_energia = tempo*custo_kwh*consumo_maquina
-
-    custo_unitario = (custo_material + custo_maquina + custo_energia)/pecas_por_impressao
-    preco = custo_unitario/(1-margem_desejada)
-
-    lucro_unit = preco - custo_unitario
-
-    impressoes = math.ceil(quantidade/pecas_por_impressao)
-    tempo_total = impressoes*tempo
-
-    custo_total = impressoes*(custo_material+custo_maquina+custo_energia)
-    faturamento = preco*quantidade
-    lucro_total = faturamento - custo_total
-
-    lucro_hora = lucro_total/tempo_total if tempo_total>0 else 0
-
-    st.session_state["calculo"] = {
-        "nome": nome,
-        "custo_unitario": custo_unitario,
-        "preco": preco,
-        "lucro_unit": lucro_unit,
-        "lucro_total": lucro_total,
-        "lucro_hora": lucro_hora,
-        "energia_unitaria": custo_energia/pecas_por_impressao,
-        "quantidade": quantidade,
-        "tempo_total": tempo_total,
-        "impressoes": impressoes,
-        "faturamento": faturamento,
-        "custo_total": custo_total
-    }
-
-# -------------------------
-# DASHBOARD
-# -------------------------
-if "calculo" in st.session_state:
-    c = st.session_state["calculo"]
-
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Preço", f"R$ {c['preco']:.2f}")
-    col2.metric("Lucro", f"R$ {c['lucro_unit']:.2f}")
-    col3.metric("Lucro/h", f"R$ {c['lucro_hora']:.2f}")
-
-    col_esq, col_dir = st.columns(2)
-
-    with col_esq:
-        st.metric("Custo", f"R$ {c['custo_unitario']:.2f}")
-        st.metric("Energia", f"R$ {c.get('energia_unitaria', 0):.2f}")
-
-    with col_dir:
-        st.metric("Lucro total", f"R$ {c['lucro_total']:.2f}")
-        st.metric("Qtd", c["quantidade"])
-
-# -------------------------
-# SALVAR
-# -------------------------
-st.divider()
-
-if "calculo" in st.session_state:
-    if st.button("Salvar"):
-        dados["produtos"].append(st.session_state["calculo"])
-        salvar_dados(dados)
-        st.success("Salvo!")
-
-# -------------------------
-# LISTAGEM
-# -------------------------
-st.subheader("Produtos")
-
-if len(dados["produtos"]) == 0:
-    st.info("Nenhum")
-else:
-    selecionados = []
-
-    for i, p in enumerate(dados["produtos"]):
-        col1, col2 = st.columns([1,5])
-
-        with col1:
-            if st.checkbox("", key=f"c{i}"):
-                selecionados.append(i)
-
-        with col2:
-            with st.expander(p["nome"]):
-                st.write(p)
-
-    if selecionados:
-        if st.button("Excluir"):
-            for i in sorted(selecionados, reverse=True):
-                dados["produtos"].pop(i)
-            salvar_dados(dados)
-            st.rerun()
-
-# -------------------------
-# RANKING
-# -------------------------
-st.divider()
-st.subheader("Ranking")
-
-if dados["produtos"]:
-    ranking = sorted(dados["produtos"], key=lambda x: x.get("lucro_total",0), reverse=True)
-
-    for i, p in enumerate(ranking[:5],1):
-        st.write(f"{i}º - {p['nome']}")
-        st.write(f"Lucro: R$ {p.get('lucro_total',0):.2f}")
-        st.write("---")
+    st.write("Preço:", preco)
+    st.write("Lucro:", lucro)
