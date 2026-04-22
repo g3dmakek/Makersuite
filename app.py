@@ -1,12 +1,15 @@
 import streamlit as st
 import json
 import os
-from supabase import create_client
+from supabase import create_client, Client
 
+# -------------------------
+# CONEXÃO SUPABASE
+# -------------------------
 SUPABASE_URL = "https://zrpojfuajjckyfetvnpt.supabase.co"
 SUPABASE_KEY = "sb_publishable_ISGY11gncdHD2WRhFnmREg_EGdcWQZv"
 
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 
 # -------------------------
