@@ -147,11 +147,6 @@ st.markdown("""
     display: none !important;
 }
 
-/* Remove header superior */
-header {
-    visibility: hidden;
-}
-
 /* Remove footer "Made with Streamlit" */
 footer {
     visibility: hidden;
