@@ -139,10 +139,10 @@ st.markdown("""
 <style>
 
 /* =========================
-   REMOVE UI NATIVA STREAMLIT (SEGURO)
+   REMOVE UI NATIVA STREAMLIT (SEM QUEBRAR LAYOUT)
 ========================= */
 
-/* Remove toolbar superior (Share / GitHub / etc) */
+/* Remove toolbar superior (GitHub / Share / etc) */
 [data-testid="stToolbar"] {
     display: none !important;
 }
@@ -152,21 +152,22 @@ st.markdown("""
     visibility: hidden;
 }
 
-/* REMOVE HEADER SEM QUEBRAR SIDEBAR */
+/* NÃO REMOVA O HEADER INTEIRO (isso quebra sidebar)
+   apenas esconde o fundo/estilo */
 [data-testid="stHeader"] {
-    display: none !important;
+    background: transparent !important;
+    height: 0px !important;
 }
 
-/* Remove footer "Made with Streamlit" */
+/* Remove footer */
 footer {
     visibility: hidden;
 }
 
 /* =========================
-   LAYOUT GERAL
+   LAYOUT
 ========================= */
 
-/* Reduz margem lateral e topo */
 .block-container {
     padding-top: 1.5rem;
     padding-left: 2rem;
@@ -174,13 +175,12 @@ footer {
     max-width: 100%;
 }
 
-/* Garante largura total */
 .main {
     max-width: 100%;
 }
 
 /* =========================
-   CARDS DE MÉTRICAS
+   MÉTRICAS
 ========================= */
 
 div[data-testid="stMetric"] {
@@ -202,7 +202,7 @@ div[data-testid="stMetric"] label {
     font-size: 12px;
 }
 
-/* Espaçamento consistente */
+/* spacing */
 div[data-testid="stVerticalBlock"] > div {
     gap: 0.6rem;
 }
