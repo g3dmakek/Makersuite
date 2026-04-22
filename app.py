@@ -12,7 +12,7 @@ SUPABASE_KEY = "sb_publishable_ISGY11gncdHD2WRhFnmREg_EGdcWQZv"
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # -------------------------
-# SESSION STATE PADRÃO (NÃO SUBSTITUI NADA)
+# SESSION STATE (ÚNICO E LIMPO)
 # -------------------------
 
 if "user" not in st.session_state:
@@ -21,8 +21,15 @@ if "user" not in st.session_state:
 if "session" not in st.session_state:
     st.session_state.session = None
 
+if "show_login" not in st.session_state:
+    st.session_state.show_login = False
+
+if "show_menu" not in st.session_state:
+    st.session_state.show_menu = False
+
+
 # -------------------------
-# RESTAURAR SESSÃO SUPABASE (IMPORTANTE)
+# RESTAURAR SESSÃO (PRO)
 # -------------------------
 
 def load_session():
@@ -32,25 +39,23 @@ def load_session():
         if session and session.user:
             st.session_state.user = session.user
             st.session_state.session = session
+
+            supabase.auth.set_session(
+                session.access_token,
+                session.refresh_token
+            )
+
     except:
         pass
 
 
-# 🔥 executa sempre no início do app
 load_session()
-    
+
+
 # -------------------------
-# LOGIN / LOGOUT (VERSÃO ESTÁVEL)
+# LOGIN (CORRIGIDO)
 # -------------------------
 
-if "user" not in st.session_state:
-    st.session_state.user = None
-
-if "show_login" not in st.session_state:
-    st.session_state.show_login = False
-
-
-# 🔥 LOGIN
 def login(email, senha):
     try:
         res = supabase.auth.sign_in_with_password({
@@ -58,21 +63,28 @@ def login(email, senha):
             "password": senha
         })
 
-        # Supabase retorna sessão dentro de session
         if res.session:
             st.session_state.user = res.user
-            st.success("Login realizado com sucesso!")
+            st.session_state.session = res.session
+
+            supabase.auth.set_session(
+                res.session.access_token,
+                res.session.refresh_token
+            )
+
             return True
-        else:
-            st.error("Falha no login.")
-            return False
+
+        return False
 
     except Exception as e:
-        st.error(f"Erro no login: {str(e)}")
+        st.error(f"Erro no login: {e}")
         return False
 
 
-# 🔥 SIGNUP
+# -------------------------
+# SIGNUP
+# -------------------------
+
 def signup(email, senha):
     try:
         res = supabase.auth.sign_up({
@@ -80,104 +92,22 @@ def signup(email, senha):
             "password": senha
         })
 
-        if res.user:
-            st.success("Conta criada com sucesso!")
-            return True
-        else:
-            st.error("Erro ao criar conta.")
-            return False
+        return bool(res.user)
 
     except Exception as e:
-        st.error(f"Erro no cadastro: {str(e)}")
+        st.error(f"Erro no cadastro: {e}")
         return False
 
 
-# 🔥 LOGOUT
+# -------------------------
+# LOGOUT
+# -------------------------
+
 def logout():
     supabase.auth.sign_out()
     st.session_state.user = None
+    st.session_state.session = None
     st.rerun()
-
-st.markdown("<div style='height: 35px;'></div>", unsafe_allow_html=True)
-
-# -------------------------
-# 🔐 BOTÃO TOPO DIREITO (LOGIN / USER)
-# -------------------------
-col1, col2 = st.columns([8, 1])
-
-with col2:
-    if st.session_state.user:
-        if st.button("👤"):
-            st.session_state.show_menu = not st.session_state.get("show_menu", False)
-    else:
-        if st.button("🔐 Login"):
-            st.session_state.show_login = True
-
-
-# -------------------------
-# 👤 MENU DO USUÁRIO (LOGOUT)
-# -------------------------
-if st.session_state.user and st.session_state.get("show_menu"):
-    st.sidebar.write(f"👤 {st.session_state.user.email}")
-
-    if st.sidebar.button("Sair"):
-        logout()
-
-
-# -------------------------
-# 🔐 MODAL DE LOGIN / CADASTRO
-# -------------------------
-if st.session_state.show_login and st.session_state.user is None:
-
-    st.markdown("### 🔐 Login")
-
-    tab1, tab2 = st.tabs(["Entrar", "Criar conta"])
-
-    # -------------------------
-    # LOGIN
-    # -------------------------
-    with tab1:
-        email = st.text_input("Email", key="login_email")
-        senha = st.text_input("Senha", type="password", key="login_senha")
-
-        colA, colB = st.columns(2)
-
-        with colA:
-            if st.button("Entrar"):
-                try:
-                    res = login(email, senha)
-
-                    st.session_state.user = res.user
-                    st.session_state.show_login = False
-
-                    st.success("Login realizado!")
-                    st.rerun()
-
-                except:
-                    st.error("Erro no login")
-
-        with colB:
-            if st.button("Fechar"):
-                st.session_state.show_login = False
-                st.rerun()
-
-
-    # -------------------------
-    # CADASTRO
-    # -------------------------
-    with tab2:
-        new_email = st.text_input("Email", key="signup_email")
-        new_senha = st.text_input("Senha", type="password", key="signup_senha")
-
-        if st.button("Criar conta"):
-            try:
-                signup(new_email, new_senha)
-                st.success("Conta criada! Faça login agora.")
-
-            except:
-                st.error("Erro ao criar conta")
-
-    st.stop()
     
 # -------------------------
 # CONFIG DA PÁGINA (PRIMEIRO SEMPRE)
