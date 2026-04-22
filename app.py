@@ -131,7 +131,7 @@ if st.session_state.show_login and st.session_state.user is None:
         colA, colB = st.columns(2)
 
     if st.button("Entrar"):
-    if login(email, senha):
+        if login(email, senha):
         st.session_state.show_login = False
         st.success("Login realizado!")
 
