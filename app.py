@@ -147,11 +147,6 @@ st.markdown("""
     display: none !important;
 }
 
-/* Remove menu hambúrguer */
-#MainMenu {
-    visibility: hidden;
-}
-
 /* Remove header superior */
 header {
     visibility: hidden;
