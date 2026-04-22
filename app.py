@@ -1,6 +1,13 @@
 import streamlit as st
 import json
 import os
+from supabase import create_client
+
+SUPABASE_URL = "https://zrpojfuajjckyfetvnpt.supabase.co"
+SUPABASE_KEY = "sb_publishable_ISGY11gncdHD2WRhFnmREg_EGdcWQZv"
+
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+
 
 # -------------------------
 # CONFIG DA PÁGINA (PRIMEIRO SEMPRE)
@@ -418,8 +425,11 @@ st.divider()
 
 if "calculo" in st.session_state:
     if st.button("💾 Salvar produto"):
-        dados["produtos"].append(st.session_state["calculo"])
-        salvar_dados(dados)
+        supabase.table("produtos").insert({
+            "nome": st.session_state["calculo"]["nome"],
+            "data": st.session_state["calculo"]
+        }).execute()
+
         st.success("Produto salvo com sucesso!")
 
 # -------------------------
