@@ -139,29 +139,32 @@ st.markdown("""
 <style>
 
 /* =========================
-   REMOVE UI NATIVA STREAMLIT (SEM QUEBRAR LAYOUT)
+   REMOVE SÓ ELEMENTOS EXTERNOS
 ========================= */
 
-/* Remove toolbar superior (GitHub / Share / etc) */
+/* Toolbar superior (GitHub / Share / Deploy) */
 [data-testid="stToolbar"] {
     display: none !important;
 }
 
-/* Remove menu hambúrguer */
+/* Menu hambúrguer */
 #MainMenu {
     visibility: hidden;
 }
 
-/* NÃO REMOVA O HEADER INTEIRO (isso quebra sidebar)
-   apenas esconde o fundo/estilo */
-[data-testid="stHeader"] {
-    background: transparent !important;
-    height: 0px !important;
-}
-
-/* Remove footer */
+/* Footer */
 footer {
     visibility: hidden;
+}
+
+/* =========================
+   NÃO QUEBRAR HEADER (IMPORTANTE)
+========================= */
+
+/* NÃO esconder header, só reduzir impacto visual */
+[data-testid="stHeader"] {
+    background: transparent !important;
+    border-bottom: none !important;
 }
 
 /* =========================
@@ -169,7 +172,7 @@ footer {
 ========================= */
 
 .block-container {
-    padding-top: 1.5rem;
+    padding-top: 1.2rem;
     padding-left: 2rem;
     padding-right: 2rem;
     max-width: 100%;
@@ -202,7 +205,6 @@ div[data-testid="stMetric"] label {
     font-size: 12px;
 }
 
-/* spacing */
 div[data-testid="stVerticalBlock"] > div {
     gap: 0.6rem;
 }
