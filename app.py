@@ -20,6 +20,24 @@ if "user" not in st.session_state:
 
 if "session" not in st.session_state:
     st.session_state.session = None
+
+# -------------------------
+# RESTAURAR SESSÃO SUPABASE (IMPORTANTE)
+# -------------------------
+
+def load_session():
+    try:
+        session = supabase.auth.get_session()
+
+        if session and session.user:
+            st.session_state.user = session.user
+            st.session_state.session = session
+    except:
+        pass
+
+
+# 🔥 executa sempre no início do app
+load_session()
     
 # -------------------------
 # LOGIN / LOGOUT (VERSÃO ESTÁVEL)
