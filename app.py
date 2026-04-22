@@ -15,6 +15,7 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 # -------------------------
 # LOGIN / LOGOUT
 # -------------------------
+
 if "user" not in st.session_state:
     st.session_state.user = None
 
@@ -22,11 +23,24 @@ if "show_login" not in st.session_state:
     st.session_state.show_login = False
 
 
+# 🔥 SINCRONIZA SESSÃO COM SUPABASE (IMPORTANTE)
+def sync_user():
+    user_response = supabase.auth.get_user()
+
+    if user_response and user_response.user:
+        st.session_state.user = user_response.user
+    else:
+        st.session_state.user = None
+
+
 def login(email, senha):
     res = supabase.auth.sign_in_with_password({
         "email": email,
         "password": senha
     })
+
+    # 🔥 atualiza sessão após login
+    sync_user()
     return res
 
 
@@ -35,6 +49,7 @@ def signup(email, senha):
         "email": email,
         "password": senha
     })
+
     return res
 
 
@@ -42,6 +57,10 @@ def logout():
     supabase.auth.sign_out()
     st.session_state.user = None
     st.rerun()
+
+
+# 🔥 SEMPRE GARANTE QUE O USUÁRIO ESTÁ SINCRONIZADO AO ABRIR O APP
+sync_user()
 
 st.markdown("<div style='height: 35px;'></div>", unsafe_allow_html=True)
 
