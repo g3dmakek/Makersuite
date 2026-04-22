@@ -11,11 +11,16 @@ SUPABASE_KEY = "sb_publishable_ISGY11gncdHD2WRhFnmREg_EGdcWQZv"
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+
 # -------------------------
 # LOGIN / LOGOUT
 # -------------------------
 if "user" not in st.session_state:
     st.session_state.user = None
+
+if "show_login" not in st.session_state:
+    st.session_state.show_login = False
+
 
 def login(email, senha):
     res = supabase.auth.sign_in_with_password({
@@ -24,6 +29,7 @@ def login(email, senha):
     })
     return res
 
+
 def signup(email, senha):
     res = supabase.auth.sign_up({
         "email": email,
@@ -31,17 +37,43 @@ def signup(email, senha):
     })
     return res
 
+
 def logout():
     supabase.auth.sign_out()
     st.session_state.user = None
+    st.rerun()
 
 
 # -------------------------
-# 🔐 TELA DE LOGIN / CADASTRO
+# 🔐 BOTÃO TOPO DIREITO (LOGIN / USER)
 # -------------------------
-if st.session_state.user is None:
+col1, col2 = st.columns([8, 1])
 
-    st.title("🔐 Login / Cadastro")
+with col2:
+    if st.session_state.user:
+        if st.button("👤"):
+            st.session_state.show_menu = not st.session_state.get("show_menu", False)
+    else:
+        if st.button("🔐 Login"):
+            st.session_state.show_login = True
+
+
+# -------------------------
+# 👤 MENU DO USUÁRIO (LOGOUT)
+# -------------------------
+if st.session_state.user and st.session_state.get("show_menu"):
+    st.sidebar.write(f"👤 {st.session_state.user.email}")
+
+    if st.sidebar.button("Sair"):
+        logout()
+
+
+# -------------------------
+# 🔐 MODAL DE LOGIN / CADASTRO
+# -------------------------
+if st.session_state.show_login and st.session_state.user is None:
+
+    st.markdown("### 🔐 Login")
 
     tab1, tab2 = st.tabs(["Entrar", "Criar conta"])
 
@@ -52,17 +84,27 @@ if st.session_state.user is None:
         email = st.text_input("Email", key="login_email")
         senha = st.text_input("Senha", type="password", key="login_senha")
 
-        if st.button("Entrar"):
-            try:
-                res = login(email, senha)
+        colA, colB = st.columns(2)
 
-                st.session_state.user = res.user
+        with colA:
+            if st.button("Entrar"):
+                try:
+                    res = login(email, senha)
 
-                st.success("Login realizado com sucesso!")
+                    st.session_state.user = res.user
+                    st.session_state.show_login = False
+
+                    st.success("Login realizado!")
+                    st.rerun()
+
+                except:
+                    st.error("Erro no login")
+
+        with colB:
+            if st.button("Fechar"):
+                st.session_state.show_login = False
                 st.rerun()
 
-            except Exception:
-                st.error("Erro no login. Verifique seus dados.")
 
     # -------------------------
     # CADASTRO
@@ -73,15 +115,11 @@ if st.session_state.user is None:
 
         if st.button("Criar conta"):
             try:
-                supabase.auth.sign_up({
-                    "email": new_email,
-                    "password": new_senha
-                })
+                signup(new_email, new_senha)
+                st.success("Conta criada! Faça login agora.")
 
-                st.success("Conta criada! Agora faça login.")
-
-            except Exception:
-                st.error("Erro ao criar conta. Tente novamente.")
+            except:
+                st.error("Erro ao criar conta")
 
     st.stop()
     
