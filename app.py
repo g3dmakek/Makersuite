@@ -13,7 +13,7 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 
 # -------------------------
-# LOGIN / LOGOUT
+# LOGIN / LOGOUT (VERSÃO ESTÁVEL)
 # -------------------------
 
 if "user" not in st.session_state:
@@ -23,44 +23,53 @@ if "show_login" not in st.session_state:
     st.session_state.show_login = False
 
 
-# 🔥 SINCRONIZA SESSÃO COM SUPABASE (IMPORTANTE)
-def sync_user():
-    user_response = supabase.auth.get_user()
-
-    if user_response and user_response.user:
-        st.session_state.user = user_response.user
-    else:
-        st.session_state.user = None
-
-
+# 🔥 LOGIN
 def login(email, senha):
-    res = supabase.auth.sign_in_with_password({
-        "email": email,
-        "password": senha
-    })
+    try:
+        res = supabase.auth.sign_in_with_password({
+            "email": email,
+            "password": senha
+        })
 
-    # 🔥 atualiza sessão após login
-    sync_user()
-    return res
+        # Supabase retorna sessão dentro de session
+        if res.session:
+            st.session_state.user = res.user
+            st.success("Login realizado com sucesso!")
+            return True
+        else:
+            st.error("Falha no login.")
+            return False
+
+    except Exception as e:
+        st.error(f"Erro no login: {str(e)}")
+        return False
 
 
+# 🔥 SIGNUP
 def signup(email, senha):
-    res = supabase.auth.sign_up({
-        "email": email,
-        "password": senha
-    })
+    try:
+        res = supabase.auth.sign_up({
+            "email": email,
+            "password": senha
+        })
 
-    return res
+        if res.user:
+            st.success("Conta criada com sucesso!")
+            return True
+        else:
+            st.error("Erro ao criar conta.")
+            return False
+
+    except Exception as e:
+        st.error(f"Erro no cadastro: {str(e)}")
+        return False
 
 
+# 🔥 LOGOUT
 def logout():
     supabase.auth.sign_out()
     st.session_state.user = None
     st.rerun()
-
-
-# 🔥 SEMPRE GARANTE QUE O USUÁRIO ESTÁ SINCRONIZADO AO ABRIR O APP
-sync_user()
 
 st.markdown("<div style='height: 35px;'></div>", unsafe_allow_html=True)
 
