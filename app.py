@@ -138,54 +138,20 @@ st.set_page_config(
 st.markdown("""
 <style>
 
-/* =========================
-   REMOVE SÓ ELEMENTOS EXTERNOS
-========================= */
-
-/* Toolbar superior (GitHub / Share / Deploy) */
-[data-testid="stToolbar"] {
-    display: none !important;
-}
-
-/* Menu hambúrguer */
-#MainMenu {
-    visibility: hidden;
-}
-
-/* Footer */
-footer {
-    visibility: hidden;
-}
-
-/* =========================
-   NÃO QUEBRAR HEADER (IMPORTANTE)
-========================= */
-
-/* NÃO esconder header, só reduzir impacto visual */
-[data-testid="stHeader"] {
-    background: transparent !important;
-    border-bottom: none !important;
-}
-
-/* =========================
-   LAYOUT
-========================= */
-
+/* Reduz margem lateral e topo */
 .block-container {
-    padding-top: 1.2rem;
+    padding-top: 2rem;
     padding-left: 2rem;
     padding-right: 2rem;
     max-width: 100%;
 }
 
+/* Remove limite de largura central */
 .main {
     max-width: 100%;
 }
 
-/* =========================
-   MÉTRICAS
-========================= */
-
+/* Cards de métricas */
 div[data-testid="stMetric"] {
     background-color: #1A1F2B;
     border: 1px solid #2D3748;
@@ -194,21 +160,25 @@ div[data-testid="stMetric"] {
     text-align: center;
 }
 
+/* Valor grande */
 div[data-testid="stMetric"] > div {
     color: #00C2FF;
     font-size: 20px;
     font-weight: bold;
 }
 
+/* Label menor */
 div[data-testid="stMetric"] label {
     color: #A0AEC0;
     font-size: 12px;
 }
 
+/* Reduz espaço entre blocos */
 div[data-testid="stVerticalBlock"] > div {
     gap: 0.6rem;
 }
 
+/* Ajusta colunas para não “quebrar” */
 [data-testid="column"] {
     padding: 0.2rem;
 }
