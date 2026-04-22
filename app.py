@@ -138,6 +138,34 @@ st.set_page_config(
 st.markdown("""
 <style>
 
+/* =========================
+   REMOVE UI NATIVA STREAMLIT
+========================= */
+
+/* Remove toolbar superior (Share / Star / GitHub etc) */
+[data-testid="stToolbar"] {
+    display: none !important;
+}
+
+/* Remove menu hambúrguer */
+#MainMenu {
+    visibility: hidden;
+}
+
+/* Remove header superior */
+header {
+    visibility: hidden;
+}
+
+/* Remove footer "Made with Streamlit" */
+footer {
+    visibility: hidden;
+}
+
+/* =========================
+   LAYOUT GERAL
+========================= */
+
 /* Reduz margem lateral e topo */
 .block-container {
     padding-top: 2rem;
@@ -151,7 +179,10 @@ st.markdown("""
     max-width: 100%;
 }
 
-/* Cards de métricas */
+/* =========================
+   CARDS DE MÉTRICAS
+========================= */
+
 div[data-testid="stMetric"] {
     background-color: #1A1F2B;
     border: 1px solid #2D3748;
@@ -178,14 +209,13 @@ div[data-testid="stVerticalBlock"] > div {
     gap: 0.6rem;
 }
 
-/* Ajusta colunas para não “quebrar” */
+/* Ajusta colunas */
 [data-testid="column"] {
     padding: 0.2rem;
 }
 
 </style>
 """, unsafe_allow_html=True)
-
 # -------------------------
 # TÍTULO
 # -------------------------
