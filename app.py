@@ -11,7 +11,16 @@ SUPABASE_KEY = "sb_publishable_ISGY11gncdHD2WRhFnmREg_EGdcWQZv"
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+# -------------------------
+# SESSION STATE PADRÃO (NÃO SUBSTITUI NADA)
+# -------------------------
 
+if "user" not in st.session_state:
+    st.session_state.user = None
+
+if "session" not in st.session_state:
+    st.session_state.session = None
+    
 # -------------------------
 # LOGIN / LOGOUT (VERSÃO ESTÁVEL)
 # -------------------------
