@@ -132,17 +132,17 @@ st.set_page_config(
     layout="wide"
 )
 
-# -------------------------
-# STYLE DA PÁGINA (PROFISSIONAL)
+# ------------------------- 
+# STYLE DA PÁGINA (PROFISSIONAL) 
 # -------------------------
 st.markdown("""
 <style>
 
 /* =========================
-   REMOVE UI NATIVA STREAMLIT
+   REMOVE ELEMENTOS NATIVOS
 ========================= */
 
-/* Remove toolbar superior (Share / Star / GitHub etc) */
+/* Remove toolbar superior (Share / GitHub etc) */
 [data-testid="stToolbar"] {
     display: none !important;
 }
@@ -152,21 +152,30 @@ st.markdown("""
     visibility: hidden;
 }
 
-/* Remove header superior */
-header {
+/* Remove apenas branding do Streamlit */
+footer {
     visibility: hidden;
 }
 
-/* Remove footer "Made with Streamlit" */
-footer {
-    visibility: hidden;
+/* =========================
+   NÃO QUEBRAR HEADER / SIDEBAR
+========================= */
+
+/* NÃO ocultar header inteiro (isso quebra sidebar)
+   Apenas estiliza se quiser */
+header {
+    background: transparent !important;
+}
+
+/* Sidebar continua intacta */
+section[data-testid="stSidebar"] {
+    background-color: #111827;
 }
 
 /* =========================
    LAYOUT GERAL
 ========================= */
 
-/* Reduz margem lateral e topo */
 .block-container {
     padding-top: 2rem;
     padding-left: 2rem;
@@ -174,13 +183,12 @@ footer {
     max-width: 100%;
 }
 
-/* Remove limite de largura central */
 .main {
     max-width: 100%;
 }
 
 /* =========================
-   CARDS DE MÉTRICAS
+   CARDS
 ========================= */
 
 div[data-testid="stMetric"] {
@@ -191,25 +199,21 @@ div[data-testid="stMetric"] {
     text-align: center;
 }
 
-/* Valor grande */
 div[data-testid="stMetric"] > div {
     color: #00C2FF;
     font-size: 20px;
     font-weight: bold;
 }
 
-/* Label menor */
 div[data-testid="stMetric"] label {
     color: #A0AEC0;
     font-size: 12px;
 }
 
-/* Reduz espaço entre blocos */
 div[data-testid="stVerticalBlock"] > div {
     gap: 0.6rem;
 }
 
-/* Ajusta colunas */
 [data-testid="column"] {
     padding: 0.2rem;
 }
