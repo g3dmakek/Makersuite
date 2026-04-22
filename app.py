@@ -43,6 +43,7 @@ def logout():
     st.session_state.user = None
     st.rerun()
 
+st.markdown("<div style='height: 35px;'></div>", unsafe_allow_html=True)
 
 # -------------------------
 # 🔐 BOTÃO TOPO DIREITO (LOGIN / USER)
