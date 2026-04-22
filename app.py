@@ -29,6 +29,30 @@ def logout():
     st.session_state.user = None
 
 # -------------------------
+# 🔐 TELA DE LOGIN (BLOCO PRINCIPAL)
+# -------------------------
+if st.session_state.user is None:
+
+    st.title("🔐 Login")
+
+    email = st.text_input("Email")
+    senha = st.text_input("Senha", type="password")
+
+    if st.button("Entrar"):
+        try:
+            res = login(email, senha)
+
+            st.session_state.user = res.user
+
+            st.success("Login realizado com sucesso!")
+            st.rerun()
+
+        except Exception as e:
+            st.error("Erro no login. Verifique seus dados.")
+
+    st.stop()
+
+# -------------------------
 # CONFIG DA PÁGINA (PRIMEIRO SEMPRE)
 # -------------------------
 st.set_page_config(
