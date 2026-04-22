@@ -138,6 +138,10 @@ st.set_page_config(
 st.markdown("""
 <style>
 
+/* =========================
+   LAYOUT GERAL
+========================= */
+
 /* Reduz margem lateral e topo */
 .block-container {
     padding-top: 2rem;
@@ -151,7 +155,29 @@ st.markdown("""
     max-width: 100%;
 }
 
-/* Cards de métricas */
+/* =========================
+   REMOVE ÍCONES / UI NATIVA STREAMLIT
+========================= */
+
+/* Toolbar superior (Share / GitHub / Deploy) */
+[data-testid="stToolbar"] {
+    display: none !important;
+}
+
+/* Menu hambúrguer (canto superior direito) */
+#MainMenu {
+    visibility: hidden;
+}
+
+/* Footer "Made with Streamlit" */
+footer {
+    visibility: hidden;
+}
+
+/* =========================
+   CARDS DE MÉTRICAS
+========================= */
+
 div[data-testid="stMetric"] {
     background-color: #1A1F2B;
     border: 1px solid #2D3748;
@@ -173,12 +199,12 @@ div[data-testid="stMetric"] label {
     font-size: 12px;
 }
 
-/* Reduz espaço entre blocos */
+/* Espaçamento */
 div[data-testid="stVerticalBlock"] > div {
     gap: 0.6rem;
 }
 
-/* Ajusta colunas para não “quebrar” */
+/* Colunas */
 [data-testid="column"] {
     padding: 0.2rem;
 }
