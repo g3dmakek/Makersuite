@@ -130,20 +130,18 @@ if st.session_state.show_login and st.session_state.user is None:
 
         colA, colB = st.columns(2)
 
-        with colA:
-            if st.button("Entrar"):
-                if login(email, senha):
-                    st.session_state.show_login = False
-                    st.success("Login realizado!")
-                    st.rerun()
-                else:
-                    st.error("Email ou senha inválidos")
+    if st.button("Entrar"):
+    if login(email, senha):
+        st.session_state.show_login = False
+        st.success("Login realizado!")
+
+        # 🔥 pequena pausa garante renderização correta
+        st.session_state.logged_now = True
 
         with colB:
             if st.button("Fechar"):
                 st.session_state.show_login = False
                 st.rerun()
-
 
     with tab2:
         new_email = st.text_input("Email", key="signup_email")
