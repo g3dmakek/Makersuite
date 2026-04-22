@@ -167,12 +167,17 @@ st.markdown("""
 # -------------------------
 # BOTÃO LOGIN
 # -------------------------
-col1, col2 = st.columns([8, 1])
+col1, col2 = st.columns([7, 2])
 
 with col2:
-    if st.session_state.user:
-        if st.button("👤"):
-            st.session_state.show_menu = not st.session_state.show_menu
+    user = st.session_state.get("user")
+
+    if user:
+        # 🔥 pega email do usuário
+        nome_user = user.email.split("@")[0]  # ex: joao@gmail → joao
+
+        if st.button(f"👤 {nome_user}"):
+            st.session_state.show_menu = not st.session_state.get("show_menu", False)
     else:
         if st.button("🔐 Login"):
             st.session_state.show_login = True
