@@ -132,11 +132,11 @@ if st.session_state.show_login and st.session_state.user is None:
 
     if st.button("Entrar"):
         if login(email, senha):
-        st.session_state.show_login = False
-        st.success("Login realizado!")
+            st.session_state.show_login = False
+            st.success("Login realizado!")
 
-        # 🔥 pequena pausa garante renderização correta
-        st.session_state.logged_now = True
+            # 🔥 pequena pausa garante renderização correta
+            st.session_state.logged_now = True
 
         with colB:
             if st.button("Fechar"):
