@@ -273,8 +273,8 @@ st.caption("Calcule custo, preço e lucro das suas peças")
 if st.button("📲 Testar Telegram"):
     import requests
 
-    token = "SEU_TOKEN"
-    chat_id = "SEU_CHAT_ID"
+    token = "8742024229:AAHgXkal4aE9gnJmzkBeJZ0yqkDGcPVRWVk"
+    chat_id = "8047086065"
 
     msg = "🚀 Teste de notificação funcionando!"
 
