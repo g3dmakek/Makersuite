@@ -133,26 +133,32 @@ if st.session_state.show_login and st.session_state.user is None:
 
     tab1, tab2 = st.tabs(["Entrar", "Criar conta"])
 
- with tab1:
-    email = st.text_input("Email", key="login_email")
-    senha = st.text_input("Senha", type="password", key="login_senha")
+    # -------------------------
+    # TAB LOGIN
+    # -------------------------
+    with tab1:
+        email = st.text_input("Email", key="login_email")
+        senha = st.text_input("Senha", type="password", key="login_senha")
 
-    colA, colB = st.columns(2)
+        colA, colB = st.columns(2)
 
-    with colA:
-        if st.button("Entrar"):
-            if login(email, senha):
+        with colA:
+            if st.button("Entrar"):
+                if login(email, senha):
+                    st.session_state.show_login = False
+                    st.success("Login realizado!")
+                    st.rerun()
+                else:
+                    st.error("Email ou senha inválidos")
+
+        with colB:
+            if st.button("Fechar"):
                 st.session_state.show_login = False
-                st.success("Login realizado!")
                 st.rerun()
-            else:
-                st.error("Email ou senha inválidos")
 
-    with colB:
-        if st.button("Fechar"):
-            st.session_state.show_login = False
-            st.rerun()
-
+    # -------------------------
+    # TAB CADASTRO
+    # -------------------------
     with tab2:
         new_email = st.text_input("Email", key="signup_email")
         new_senha = st.text_input("Senha", type="password", key="signup_senha")
@@ -164,7 +170,7 @@ if st.session_state.show_login and st.session_state.user is None:
                 st.error("Erro ao criar conta")
 
     st.stop()
-
+    
 # -------------------------
 # ESPAÇAMENTO PARA NÃO FICAR SOB HEADER
 # -------------------------
