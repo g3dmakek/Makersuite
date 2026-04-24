@@ -294,24 +294,54 @@ if orcamento_id:
         st.error("Orçamento não encontrado")
         st.stop()
 
+    # 👤 NOME DO CLIENTE
+    cliente_nome = orc.data.get("cliente", "Cliente")
+
+    st.subheader(f"👤 {cliente_nome}")
+
+    st.divider()
+
     # 🔍 busca itens
     itens = supabase.table("orcamento_itens") \
         .select("*") \
         .eq("orcamento_id", orcamento_id) \
         .execute()
 
-    total = 0
+    if not itens.data:
+        st.warning("Nenhum item no orçamento")
+        st.stop()
 
-    for item in itens.data:
-        subtotal = item["preco"] * item["quantidade"]
-        total += subtotal
+    # -------------------------
+    # SELEÇÃO DE ITENS
+    # -------------------------
+    selecionados_cliente = []
 
-        st.write(f"**{item['nome']}**")
-        st.write(f"{item['quantidade']}x - R$ {item['preco']:.2f}")
-        st.write(f"Subtotal: R$ {subtotal:.2f}")
+    for i, item in enumerate(itens.data):
+
+        col1, col2 = st.columns([1, 5])
+
+        with col1:
+            if st.checkbox("", key=f"cliente_item_{i}", value=True):
+                selecionados_cliente.append(item)
+
+        with col2:
+            subtotal = item["preco"] * item["quantidade"]
+
+            st.write(f"**{item['nome']}**")
+            st.write(f"{item['quantidade']}x - R$ {item['preco']:.2f}")
+            st.write(f"Subtotal: R$ {subtotal:.2f}")
+
         st.divider()
 
-    st.subheader(f"💰 Total: R$ {total:.2f}")
+    # -------------------------
+    # TOTAL DINÂMICO
+    # -------------------------
+    total = sum(
+        item["preco"] * item["quantidade"]
+        for item in selecionados_cliente
+    )
+
+    st.subheader(f"💰 Total selecionado: R$ {total:.2f}")
 
     # -------------------------
     # BOTÃO DE APROVAÇÃO
@@ -330,39 +360,47 @@ if orcamento_id:
                     .execute()
 
                 # -------------------------
-                # 🔔 NOTIFICAÇÃO TELEGRAM
-                # -------------------------
-                import requests
+# 🔔 NOTIFICAÇÃO TELEGRAM (VERSÃO PRO)
+# -------------------------
+import requests
 
-                token = "8742024229:AAHgXkal4aE9gnJmzkBeJZ0yqkDGcPVRWVk"
-                chat_id = "8047086065"
+token = "8742024229:AAHgXkal4aE9gnJmzkBeJZ0yqkDGcPVRWVk"
+chat_id = "8047086065"
 
-                msg = f"""
-🚀 NOVO ORÇAMENTO APROVADO!
+# 🔥 monta lista de itens selecionados
+itens_msg = ""
 
-🆔 ID: {orcamento_id}
-💰 Total: R$ {total:.2f}
-📦 Itens: {len(itens.data)}
+for item in selecionados_cliente:
+    itens_msg += f"\n• {item['nome']} ({item['quantidade']}x)"
+
+# 🔥 nome do cliente
+cliente_nome = orc.data.get("cliente", "Não informado")
+
+# 🔥 link do orçamento (ajuste domínio depois)
+link = f"https://SEU_APP.streamlit.app/?orcamento={orcamento_id}"
+
+msg = f"""
+🚀 *NOVO PEDIDO APROVADO!*
+
+👤 *Cliente:* {cliente_nome}
+💰 *Total:* R$ {total:.2f}
+
+📦 *Itens selecionados:*{itens_msg}
+
+🔗 Ver orçamento:
+{link}
 """
 
-                url = f"https://api.telegram.org/bot{token}/sendMessage"
+url = f"https://api.telegram.org/bot{token}/sendMessage"
 
-                requests.post(url, json={
-                    "chat_id": chat_id,
-                    "text": msg
-                })
+requests.post(url, json={
+    "chat_id": chat_id,
+    "text": msg,
+    "parse_mode": "Markdown"
+})
 
-                st.success("Orçamento aprovado com sucesso!")
-                st.rerun()
-
-            except Exception as e:
-                st.error("Erro ao aprovar orçamento:")
-                st.write(e)
-
-    else:
-        st.success(f"Status do orçamento: {orc.data['status']}")
-
-    st.stop()
+st.success("Orçamento aprovado com sucesso!")
+st.rerun()
     
 # -------------------------
 # FUNÇÕES DE DADOS
@@ -827,21 +865,29 @@ if selecionados:
 # GERAR ORÇAMENTO
 # -------------------------
 if selecionados:
+
+    # 🔥 campo do cliente (fica sempre visível)
+    cliente = st.text_input("👤 Nome do cliente / empresa")
+
     if st.button("📄 Gerar orçamento"):
 
         user = st.session_state.get("user")
 
         if not user:
             st.error("Você precisa estar logado")
-        else:
 
+        elif not cliente.strip():
+            st.error("Informe o nome do cliente antes de gerar o orçamento")
+
+        else:
             try:
                 # -------------------------
-                # CRIA ORÇAMENTO (SEM ID MANUAL)
+                # CRIA ORÇAMENTO (COM CLIENTE)
                 # -------------------------
                 res = supabase.table("orcamentos").insert({
                     "user_id": user.id,
-                    "status": "pendente"
+                    "status": "pendente",
+                    "cliente": cliente.strip()
                 }).execute()
 
                 # 🔥 pega ID real do banco
@@ -856,7 +902,6 @@ if selecionados:
                 st.write("DETALHE:", getattr(e, "args", None))
                 st.write("RAW:", e)
                 st.stop()
-
             # -------------------------
             # INSERE ITENS
             # -------------------------
