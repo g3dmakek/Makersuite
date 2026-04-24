@@ -313,16 +313,16 @@ if orcamento_id:
 
     st.subheader(f"💰 Total: R$ {total:.2f}")
 
-   # -------------------------
+# -------------------------
 # BOTÃO DE APROVAÇÃO
 # -------------------------
-st.divider()
+    st.divider()
 
-if orc.data["status"] == "pendente":
+    if orc.data["status"] == "pendente":
 
-    if st.button("✅ Aprovar orçamento", use_container_width=True):
+        if st.button("✅ Aprovar orçamento", use_container_width=True):
 
-        try:
+            try:
             # 🔥 atualiza status no banco
             supabase.table("orcamentos") \
                 .update({"status": "aprovado"}) \
