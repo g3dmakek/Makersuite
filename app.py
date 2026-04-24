@@ -368,7 +368,6 @@ if orcamento_id:
                 requests.post(url, json={
                     "chat_id": chat_id,
                     "text": msg,
-                    "parse_mode": "Markdown"
                 })
 
                 st.success("Orçamento aprovado com sucesso!")
