@@ -759,13 +759,23 @@ for i in selecionados:
             "orcamento_id": orcamento_id,
             "produto_id": p["id"],
             "nome": p["nome"],
-            "preco": float(p["preco_venda"]),  # 🔥 garante tipo correto
-            "quantidade": int(p["quantidade"])  # 🔥 garante tipo correto
+            "preco": float(p["preco_venda"]),
+            "quantidade": int(p["quantidade"])
         }).execute()
 
     except Exception as e:
         st.error("Erro ao criar item do orçamento:")
-        st.write("DET
+        st.write("DETALHE:", getattr(e, "args", None))
+        st.write("RAW:", e)
+        st.stop()
+
+# -------------------------
+# LINK FINAL (FORA DO LOOP)
+# -------------------------
+link = f"?orcamento={orcamento_id}"
+
+st.success("Orçamento criado com sucesso!")
+st.code(link)
         
 # -------------------------
 # RANKING
