@@ -732,7 +732,6 @@ if selecionados:
 # -------------------------
 # GERAR ORÇAMENTO
 # -------------------------
-
 if selecionados:
     if st.button("📄 Gerar orçamento"):
 
@@ -741,26 +740,34 @@ if selecionados:
         if not user:
             st.error("Você precisa estar logado")
         else:
-            import uuid
 
-            orcamento_id = str(uuid.uuid4())
+            try:
+                # -------------------------
+                # CRIA ORÇAMENTO (SEM ID MANUAL)
+                # -------------------------
+                res = supabase.table("orcamentos").insert({
+                    "user_id": user.id,
+                    "status": "pendente"
+                }).execute()
+
+                # 🔥 pega ID real do banco
+                if not res.data:
+                    st.error("Erro: orçamento não retornou dados")
+                    st.stop()
+
+                orcamento_id = res.data[0]["id"]
+
+            except Exception as e:
+                st.error("Erro ao criar orçamento:")
+                st.write("DETALHE:", getattr(e, "args", None))
+                st.write("RAW:", e)
+                st.stop()
 
             # -------------------------
-            # CRIA ORÇAMENTO
-            # -------------------------
-            supabase.table("orcamentos").insert({
-                "id": orcamento_id,
-                "user_id": user.id,
-                "status": "pendente"
-            }).execute()
-
-            # -------------------------
-            # INSERE ITENS (TEM QUE ESTAR AQUI DENTRO)
+            # INSERE ITENS
             # -------------------------
             for i in selecionados:
                 p = produtos[i]
-
-                st.write("DEBUG PRODUTO:", p)
 
                 try:
                     supabase.table("orcamento_itens").insert({
@@ -773,6 +780,7 @@ if selecionados:
 
                 except Exception as e:
                     st.error("Erro ao criar item do orçamento:")
+                    st.write("PRODUTO:", p)
                     st.write("DETALHE:", getattr(e, "args", None))
                     st.write("RAW:", e)
                     st.stop()
