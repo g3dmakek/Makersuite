@@ -680,7 +680,7 @@ st.subheader("📦 Produtos salvos")
 selecionados = []  # 🔥 DEFINE ANTES DE TUDO
 
 if len(produtos) == 0:
-    st.info("Nenhum produto salvo ainda")
+    st.info("Faça login para salvar seus produtos!")
 else:
 
     for i, p in enumerate(produtos):
@@ -793,7 +793,7 @@ st.divider()
 st.subheader("🏆 Ranking de Produtos (Mais lucrativos)")
 
 if len(produtos) == 0:
-    st.info("Nenhum produto para analisar")
+    st.info("Faça login para ver os seus produtos mais lucrativos!")
 else:
     produtos_ordenados = sorted(
         produtos,
