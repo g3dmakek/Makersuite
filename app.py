@@ -271,6 +271,51 @@ st.markdown("### Sistema de Precificação para Makers")
 st.caption("Calcule custo, preço e lucro das suas peças")
 
 # -------------------------
+# CAPTURA ORÇAMENTO DA URL
+# -------------------------
+params = st.query_params
+orcamento_id = params.get("orcamento")
+
+# -------------------------
+# TELA DO CLIENTE (ORÇAMENTO)
+# -------------------------
+if orcamento_id:
+
+    st.title("📄 Orçamento")
+
+    # 🔍 busca orçamento
+    orc = supabase.table("orcamentos") \
+        .select("*") \
+        .eq("id", orcamento_id) \
+        .single() \
+        .execute()
+
+    if not orc.data:
+        st.error("Orçamento não encontrado")
+        st.stop()
+
+    # 🔍 busca itens
+    itens = supabase.table("orcamento_itens") \
+        .select("*") \
+        .eq("orcamento_id", orcamento_id) \
+        .execute()
+
+    total = 0
+
+    for item in itens.data:
+        subtotal = item["preco"] * item["quantidade"]
+        total += subtotal
+
+        st.write(f"**{item['nome']}**")
+        st.write(f"{item['quantidade']}x - R$ {item['preco']:.2f}")
+        st.write(f"Subtotal: R$ {subtotal:.2f}")
+        st.divider()
+
+    st.subheader(f"💰 Total: R$ {total:.2f}")
+
+    st.stop()
+    
+# -------------------------
 # FUNÇÕES DE DADOS
 # -------------------------
 def carregar_dados():
