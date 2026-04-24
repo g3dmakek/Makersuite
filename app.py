@@ -366,8 +366,8 @@ if orc.data["status"] == "pendente":
             # -------------------------
             import requests
 
-            token = "SEU_TOKEN"
-            chat_id = "SEU_CHAT_ID"
+            token = "8742024229:AAHgXkal4aE9gnJmzkBeJZ0yqkDGcPVRWVk"
+            chat_id = "8047086065"
 
             # 🔥 monta lista de itens selecionados
             itens_msg = ""
