@@ -343,43 +343,44 @@ if orcamento_id:
 
     st.subheader(f"💰 Total selecionado: R$ {total:.2f}")
 
-    # -------------------------
-    # BOTÃO DE APROVAÇÃO
-    # -------------------------
-    st.divider()
-
-    if orc.data["status"] == "pendente":
-
-        if st.button("✅ Aprovar orçamento", use_container_width=True):
-
-            try:
-                # 🔥 atualiza status no banco
-                supabase.table("orcamentos") \
-                    .update({"status": "aprovado"}) \
-                    .eq("id", orcamento_id) \
-                    .execute()
-
-                # -------------------------
-# 🔔 NOTIFICAÇÃO TELEGRAM (VERSÃO PRO)
+   # -------------------------
+# BOTÃO DE APROVAÇÃO
 # -------------------------
-import requests
+st.divider()
 
-token = "8742024229:AAHgXkal4aE9gnJmzkBeJZ0yqkDGcPVRWVk"
-chat_id = "8047086065"
+if orc.data["status"] == "pendente":
 
-# 🔥 monta lista de itens selecionados
-itens_msg = ""
+    if st.button("✅ Aprovar orçamento", use_container_width=True):
 
-for item in selecionados_cliente:
-    itens_msg += f"\n• {item['nome']} ({item['quantidade']}x)"
+        try:
+            # -------------------------
+            # 🔥 ATUALIZA STATUS
+            # -------------------------
+            supabase.table("orcamentos") \
+                .update({"status": "aprovado"}) \
+                .eq("id", orcamento_id) \
+                .execute()
 
-# 🔥 nome do cliente
-cliente_nome = orc.data.get("cliente", "Não informado")
+            # -------------------------
+            # 🔔 NOTIFICAÇÃO TELEGRAM
+            # -------------------------
+            import requests
 
-# 🔥 link do orçamento (ajuste domínio depois)
-link = f"https://SEU_APP.streamlit.app/?orcamento={orcamento_id}"
+            token = "SEU_TOKEN"
+            chat_id = "SEU_CHAT_ID"
 
-msg = f"""
+            # 🔥 monta lista de itens selecionados
+            itens_msg = ""
+            for item in selecionados_cliente:
+                itens_msg += f"\n• {item['nome']} ({item['quantidade']}x)"
+
+            # 🔥 nome do cliente
+            cliente_nome = orc.data.get("cliente", "Não informado")
+
+            # 🔥 link do orçamento
+            link = f"https://SEU_APP.streamlit.app/?orcamento={orcamento_id}"
+
+            msg = f"""
 🚀 *NOVO PEDIDO APROVADO!*
 
 👤 *Cliente:* {cliente_nome}
@@ -391,16 +392,23 @@ msg = f"""
 {link}
 """
 
-url = f"https://api.telegram.org/bot{token}/sendMessage"
+            url = f"https://api.telegram.org/bot{token}/sendMessage"
 
-requests.post(url, json={
-    "chat_id": chat_id,
-    "text": msg,
-    "parse_mode": "Markdown"
-})
+            requests.post(url, json={
+                "chat_id": chat_id,
+                "text": msg,
+                "parse_mode": "Markdown"
+            })
 
-st.success("Orçamento aprovado com sucesso!")
-st.rerun()
+            st.success("Orçamento aprovado com sucesso!")
+            st.rerun()
+
+        except Exception as e:
+            st.error("Erro ao aprovar orçamento:")
+            st.write(e)
+
+else:
+    st.success(f"Status do orçamento: {orc.data['status']}")
     
 # -------------------------
 # FUNÇÕES DE DADOS
