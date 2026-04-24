@@ -313,9 +313,9 @@ if orcamento_id:
 
     st.subheader(f"💰 Total: R$ {total:.2f}")
 
-# -------------------------
-# BOTÃO DE APROVAÇÃO
-# -------------------------
+    # -------------------------
+    # BOTÃO DE APROVAÇÃO
+    # -------------------------
     st.divider()
 
     if orc.data["status"] == "pendente":
@@ -323,21 +323,21 @@ if orcamento_id:
         if st.button("✅ Aprovar orçamento", use_container_width=True):
 
             try:
-            # 🔥 atualiza status no banco
-            supabase.table("orcamentos") \
-                .update({"status": "aprovado"}) \
-                .eq("id", orcamento_id) \
-                .execute()
+                # 🔥 atualiza status no banco
+                supabase.table("orcamentos") \
+                    .update({"status": "aprovado"}) \
+                    .eq("id", orcamento_id) \
+                    .execute()
 
-            # -------------------------
-            # 🔔 NOTIFICAÇÃO TELEGRAM
-            # -------------------------
-            import requests
+                # -------------------------
+                # 🔔 NOTIFICAÇÃO TELEGRAM
+                # -------------------------
+                import requests
 
-            token = "SEU_TOKEN"
-            chat_id = "SEU_CHAT_ID"
+                token = "SEU_TOKEN"
+                chat_id = "SEU_CHAT_ID"
 
-            msg = f"""
+                msg = f"""
 🚀 NOVO ORÇAMENTO APROVADO!
 
 🆔 ID: {orcamento_id}
@@ -345,24 +345,24 @@ if orcamento_id:
 📦 Itens: {len(itens.data)}
 """
 
-            url = f"https://api.telegram.org/bot{token}/sendMessage"
+                url = f"https://api.telegram.org/bot{token}/sendMessage"
 
-            requests.post(url, json={
-                "chat_id": chat_id,
-                "text": msg
-            })
+                requests.post(url, json={
+                    "chat_id": chat_id,
+                    "text": msg
+                })
 
-            st.success("Orçamento aprovado com sucesso!")
-            st.rerun()
+                st.success("Orçamento aprovado com sucesso!")
+                st.rerun()
 
-        except Exception as e:
-            st.error("Erro ao aprovar orçamento:")
-            st.write(e)
+            except Exception as e:
+                st.error("Erro ao aprovar orçamento:")
+                st.write(e)
 
-else:
-    st.success(f"Status do orçamento: {orc.data['status']}")
+    else:
+        st.success(f"Status do orçamento: {orc.data['status']}")
 
-st.stop()
+    st.stop()
     
 # -------------------------
 # FUNÇÕES DE DADOS
