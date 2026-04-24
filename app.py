@@ -270,6 +270,23 @@ st.title("🧮 MakerSuite")
 st.markdown("### Sistema de Precificação para Makers")
 st.caption("Calcule custo, preço e lucro das suas peças")
 
+if st.button("📲 Testar Telegram"):
+    import requests
+
+    token = "SEU_TOKEN"
+    chat_id = "SEU_CHAT_ID"
+
+    msg = "🚀 Teste de notificação funcionando!"
+
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+
+    requests.post(url, json={
+        "chat_id": chat_id,
+        "text": msg
+    })
+
+    st.success("Mensagem enviada!")
+    
 # -------------------------
 # CAPTURA ORÇAMENTO DA URL
 # -------------------------
