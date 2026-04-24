@@ -729,7 +729,10 @@ if selecionados:
             # adiciona itens
             for i in selecionados:
                 p = produtos[i]
-
+                
+                 # 🔍 DEBUG AQUI
+                st.write("DEBUG PRODUTO:", p)
+                
                 supabase.table("orcamento_itens").insert({
                     "orcamento_id": orcamento_id,
                     "produto_id": p["id"],
