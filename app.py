@@ -727,55 +727,45 @@ if selecionados:
 
             orcamento_id = str(uuid.uuid4())
 
-            try:
-                # -------------------------
-                # CRIA ORÇAMENTO
-                # -------------------------
-                res_orc = supabase.table("orcamentos").insert({
-                    "id": orcamento_id,
-                    "user_id": user.id,
-                    "status": "pendente"
-                }).execute()
+            # -------------------------
+            # CRIA ORÇAMENTO
+            # -------------------------
+            supabase.table("orcamentos").insert({
+                "id": orcamento_id,
+                "user_id": user.id,
+                "status": "pendente"
+            }).execute()
 
-                # 🔍 DEBUG
-                st.write("ORÇAMENTO CRIADO:", res_orc)
+            # -------------------------
+            # INSERE ITENS (TEM QUE ESTAR AQUI DENTRO)
+            # -------------------------
+            for i in selecionados:
+                p = produtos[i]
 
-            except Exception as e:
-                st.error("Erro ao criar orçamento:")
-                st.write(e)
-                st.stop()
+                st.write("DEBUG PRODUTO:", p)
 
-# -------------------------
-# INSERE ITENS
-# -------------------------
-for i in selecionados:
-    p = produtos[i]
+                try:
+                    supabase.table("orcamento_itens").insert({
+                        "orcamento_id": orcamento_id,
+                        "produto_id": p["id"],
+                        "nome": p["nome"],
+                        "preco": float(p["preco_venda"]),
+                        "quantidade": int(p["quantidade"])
+                    }).execute()
 
-    # 🔍 DEBUG
-    st.write("DEBUG PRODUTO:", p)
+                except Exception as e:
+                    st.error("Erro ao criar item do orçamento:")
+                    st.write("DETALHE:", getattr(e, "args", None))
+                    st.write("RAW:", e)
+                    st.stop()
 
-    try:
-        supabase.table("orcamento_itens").insert({
-            "orcamento_id": orcamento_id,
-            "produto_id": p["id"],
-            "nome": p["nome"],
-            "preco": float(p["preco_venda"]),
-            "quantidade": int(p["quantidade"])
-        }).execute()
+            # -------------------------
+            # LINK FINAL
+            # -------------------------
+            link = f"?orcamento={orcamento_id}"
 
-    except Exception as e:
-        st.error("Erro ao criar item do orçamento:")
-        st.write("DETALHE:", getattr(e, "args", None))
-        st.write("RAW:", e)
-        st.stop()
-
-# -------------------------
-# LINK FINAL (FORA DO LOOP)
-# -------------------------
-link = f"?orcamento={orcamento_id}"
-
-st.success("Orçamento criado com sucesso!")
-st.code(link)
+            st.success("Orçamento criado com sucesso!")
+            st.code(link)
         
 # -------------------------
 # RANKING
