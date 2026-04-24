@@ -677,10 +677,11 @@ if "calculo" in st.session_state:
 # -------------------------
 st.subheader("📦 Produtos salvos")
 
+selecionados = []  # 🔥 DEFINE ANTES DE TUDO
+
 if len(produtos) == 0:
     st.info("Nenhum produto salvo ainda")
 else:
-    selecionados = []
 
     for i, p in enumerate(produtos):
         col1, col2 = st.columns([1, 5])
@@ -701,15 +702,32 @@ else:
                 st.write(f"Lucro total: R$ {p['lucro_total']:.2f}")
                 st.write(f"Lucro/hora: R$ {p.get('lucro_por_hora', 0):.2f}")
 
-    # BOTÃO DE EXCLUSÃO EM MASSA
-    if selecionados:
-        if st.button("🗑️ Excluir selecionados"):
-            for i in sorted(selecionados, reverse=True):
-                produtos.pop(i)
+   # BOTÃO DE EXCLUSÃO EM MASSA (SUPABASE)
+if selecionados:
+    if st.button("🗑️ Excluir selecionados"):
 
-            salvar_dados(dados)
-            st.success("Produtos excluídos!")
-            st.rerun()
+        user = st.session_state.get("user")
+
+        if not user:
+            st.error("Você precisa estar logado")
+        else:
+            try:
+                for i in selecionados:
+                    p = produtos[i]
+
+                    supabase.table("produtos") \
+                        .delete() \
+                        .eq("id", p["id"]) \
+                        .eq("user_id", user.id) \
+                        .execute()
+
+                st.success("Produtos excluídos com sucesso!")
+                st.rerun()
+
+            except Exception as e:
+                st.error("Erro ao excluir produtos:")
+                st.write("DETALHE:", getattr(e, "args", None))
+                st.write("RAW:", e)
 
 # -------------------------
 # GERAR ORÇAMENTO
