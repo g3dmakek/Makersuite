@@ -300,31 +300,32 @@ if orcamento_id:
         .eq("orcamento_id", orcamento_id) \
         .execute()
 
-   total = 0
+    total = 0
     selecionados_cliente = []
-    
+
     for i, item in enumerate(itens.data):
-    
+
         col1, col2 = st.columns([1, 5])
-    
+
         with col1:
             marcado = st.checkbox("", key=f"cliente_item_{i}", value=True)
-    
+
         with col2:
             subtotal = item["preco"] * item["quantidade"]
-    
+
             st.write(f"**{item['nome']}**")
             st.write(f"{item['quantidade']}x - R$ {item['preco']:.2f}")
             st.write(f"Subtotal: R$ {subtotal:.2f}")
-    
-        # 🔥 AGORA SIM: só soma se estiver marcado
+
+        # 🔥 soma só os selecionados
         if marcado:
             total += subtotal
             selecionados_cliente.append(item)
-    
+
         st.divider()
-    
-        st.subheader(f"💰 Total: R$ {total:.2f}")
+
+    # 🔥 TOTAL FORA DO LOOP (CORRETO)
+    st.subheader(f"💰 Total selecionado: R$ {total:.2f}")
 
     # -------------------------
     # BOTÃO DE APROVAÇÃO 
