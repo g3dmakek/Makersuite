@@ -4,6 +4,15 @@ import os
 from supabase import create_client, Client
 
 # -------------------------
+# CONFIG DA PÁGINA (PRIMEIRO SEMPRE)
+# -------------------------
+st.set_page_config(
+    page_title="Calculadora Maker",
+    page_icon="🧮",
+    layout="wide"
+)
+
+# -------------------------
 # CONEXÃO SUPABASE
 # -------------------------
 SUPABASE_URL = "https://zrpojfuajjckyfetvnpt.supabase.co"
@@ -124,24 +133,25 @@ if st.session_state.show_login and st.session_state.user is None:
 
     tab1, tab2 = st.tabs(["Entrar", "Criar conta"])
 
-    with tab1:
-        email = st.text_input("Email", key="login_email")
-        senha = st.text_input("Senha", type="password", key="login_senha")
+ with tab1:
+    email = st.text_input("Email", key="login_email")
+    senha = st.text_input("Senha", type="password", key="login_senha")
 
-        colA, colB = st.columns(2)
+    colA, colB = st.columns(2)
 
-    if st.button("Entrar"):
-        if login(email, senha):
-            st.session_state.show_login = False
-            st.success("Login realizado!")
-
-            # 🔥 pequena pausa garante renderização correta
-            st.session_state.logged_now = True
-
-        with colB:
-            if st.button("Fechar"):
+    with colA:
+        if st.button("Entrar"):
+            if login(email, senha):
                 st.session_state.show_login = False
+                st.success("Login realizado!")
                 st.rerun()
+            else:
+                st.error("Email ou senha inválidos")
+
+    with colB:
+        if st.button("Fechar"):
+            st.session_state.show_login = False
+            st.rerun()
 
     with tab2:
         new_email = st.text_input("Email", key="signup_email")
@@ -192,14 +202,6 @@ with col2:
         if st.button("🔐 Login", use_container_width=True):
             st.session_state.show_login = True
     
-# -------------------------
-# CONFIG DA PÁGINA (PRIMEIRO SEMPRE)
-# -------------------------
-st.set_page_config(
-    page_title="Calculadora Maker",
-    page_icon="🧮",
-    layout="wide"
-)
 
 # -------------------------
 # STYLE DA PÁGINA (PROFISSIONAL)
@@ -755,9 +757,10 @@ if selecionados:
                         "quantidade": int(p["quantidade"]) # 🔥 garante tipo correto
                     }).execute()
 
-                except Exception as e:
-                    st.error("Erro ao salvar item:")
-                    st.write(e)
+               except Exception as e:
+                    st.error("Erro ao criar orçamento:")
+                    st.write("DETALHE:", getattr(e, "args", None))
+                    st.write("RAW:", e)
                     st.stop()
 
             # -------------------------
