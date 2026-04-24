@@ -719,34 +719,54 @@ if selecionados:
 
             orcamento_id = str(uuid.uuid4())
 
-            # cria orçamento
-            supabase.table("orcamentos").insert({
-                "id": orcamento_id,
-                "user_id": user.id,
-                "status": "pendente"
-            }).execute()
-
-            # adiciona itens
-            for i in selecionados:
-                p = produtos[i]
-                
-                 # 🔍 DEBUG AQUI
-                st.write("DEBUG PRODUTO:", p)
-                
-                supabase.table("orcamento_itens").insert({
-                    "orcamento_id": orcamento_id,
-                    "produto_id": p["id"],
-                    "nome": p["nome"],
-                    "preco": p["preco_venda"],
-                    "quantidade": p["quantidade"]
+            try:
+                # -------------------------
+                # CRIA ORÇAMENTO
+                # -------------------------
+                res_orc = supabase.table("orcamentos").insert({
+                    "id": orcamento_id,
+                    "user_id": user.id,
+                    "status": "pendente"
                 }).execute()
 
-            # gera link
+                # 🔍 DEBUG
+                st.write("ORÇAMENTO CRIADO:", res_orc)
+
+            except Exception as e:
+                st.error("Erro ao criar orçamento:")
+                st.write(e)
+                st.stop()
+
+            # -------------------------
+            # INSERE ITENS
+            # -------------------------
+            for i in selecionados:
+                p = produtos[i]
+
+                # 🔍 DEBUG
+                st.write("DEBUG PRODUTO:", p)
+
+                try:
+                    supabase.table("orcamento_itens").insert({
+                        "orcamento_id": orcamento_id,
+                        "produto_id": p["id"],
+                        "nome": p["nome"],
+                        "preco": float(p["preco_venda"]),  # 🔥 garante tipo correto
+                        "quantidade": int(p["quantidade"]) # 🔥 garante tipo correto
+                    }).execute()
+
+                except Exception as e:
+                    st.error("Erro ao salvar item:")
+                    st.write(e)
+                    st.stop()
+
+            # -------------------------
+            # LINK FINAL
+            # -------------------------
             link = f"?orcamento={orcamento_id}"
 
-            st.success("Orçamento criado!")
+            st.success("Orçamento criado com sucesso!")
             st.code(link)
-
         
 # -------------------------
 # RANKING
