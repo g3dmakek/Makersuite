@@ -269,23 +269,6 @@ div[data-testid="stVerticalBlock"] > div {
 st.title("🧮 MakerSuite")
 st.markdown("### Sistema de Precificação para Makers")
 st.caption("Calcule custo, preço e lucro das suas peças")
-
-if st.button("📲 Testar Telegram"):
-    import requests
-
-    token = "8742024229:AAHgXkal4aE9gnJmzkBeJZ0yqkDGcPVRWVk"
-    chat_id = "8047086065"
-
-    msg = "🚀 Teste de notificação funcionando!"
-
-    url = f"https://api.telegram.org/bot{token}/sendMessage"
-
-    requests.post(url, json={
-        "chat_id": chat_id,
-        "text": msg
-    })
-
-    st.success("Mensagem enviada!")
     
 # -------------------------
 # CAPTURA ORÇAMENTO DA URL
@@ -330,33 +313,56 @@ if orcamento_id:
 
     st.subheader(f"💰 Total: R$ {total:.2f}")
 
-    # -------------------------
-    # BOTÃO DE APROVAÇÃO
-    # -------------------------
-    st.divider()
+   # -------------------------
+# BOTÃO DE APROVAÇÃO
+# -------------------------
+st.divider()
 
-    if orc.data["status"] == "pendente":
+if orc.data["status"] == "pendente":
 
-        if st.button("✅ Aprovar orçamento", use_container_width=True):
+    if st.button("✅ Aprovar orçamento", use_container_width=True):
 
-            try:
-                supabase.table("orcamentos") \
-                    .update({"status": "aprovado"}) \
-                    .eq("id", orcamento_id) \
-                    .execute()
+        try:
+            # 🔥 atualiza status no banco
+            supabase.table("orcamentos") \
+                .update({"status": "aprovado"}) \
+                .eq("id", orcamento_id) \
+                .execute()
 
-                st.success("Orçamento aprovado com sucesso!")
+            # -------------------------
+            # 🔔 NOTIFICAÇÃO TELEGRAM
+            # -------------------------
+            import requests
 
-                st.rerun()
+            token = "SEU_TOKEN"
+            chat_id = "SEU_CHAT_ID"
 
-            except Exception as e:
-                st.error("Erro ao aprovar orçamento:")
-                st.write(e)
+            msg = f"""
+🚀 NOVO ORÇAMENTO APROVADO!
 
-    else:
-        st.success(f"Status do orçamento: {orc.data['status']}")
+🆔 ID: {orcamento_id}
+💰 Total: R$ {total:.2f}
+📦 Itens: {len(itens.data)}
+"""
 
-    st.stop()
+            url = f"https://api.telegram.org/bot{token}/sendMessage"
+
+            requests.post(url, json={
+                "chat_id": chat_id,
+                "text": msg
+            })
+
+            st.success("Orçamento aprovado com sucesso!")
+            st.rerun()
+
+        except Exception as e:
+            st.error("Erro ao aprovar orçamento:")
+            st.write(e)
+
+else:
+    st.success(f"Status do orçamento: {orc.data['status']}")
+
+st.stop()
     
 # -------------------------
 # FUNÇÕES DE DADOS
