@@ -764,18 +764,8 @@ for i in selecionados:
         }).execute()
 
     except Exception as e:
-        st.error("Erro ao criar orçamento:")
-        st.write("DETALHE:", getattr(e, "args", None))
-        st.write("RAW:", e)
-        st.stop()
-
-            # -------------------------
-            # LINK FINAL
-            # -------------------------
-            link = f"?orcamento={orcamento_id}"
-
-            st.success("Orçamento criado com sucesso!")
-            st.code(link)
+        st.error("Erro ao criar item do orçamento:")
+        st.write("DET
         
 # -------------------------
 # RANKING
