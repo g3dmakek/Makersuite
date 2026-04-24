@@ -702,6 +702,48 @@ else:
             salvar_dados(dados)
             st.success("Produtos excluídos!")
             st.rerun()
+
+# -------------------------
+# GERAR ORÇAMENTO
+# -------------------------
+
+if selecionados:
+    if st.button("📄 Gerar orçamento"):
+
+        user = st.session_state.get("user")
+
+        if not user:
+            st.error("Você precisa estar logado")
+        else:
+            import uuid
+
+            orcamento_id = str(uuid.uuid4())
+
+            # cria orçamento
+            supabase.table("orcamentos").insert({
+                "id": orcamento_id,
+                "user_id": user.id,
+                "status": "pendente"
+            }).execute()
+
+            # adiciona itens
+            for i in selecionados:
+                p = produtos[i]
+
+                supabase.table("orcamento_itens").insert({
+                    "orcamento_id": orcamento_id,
+                    "produto_id": p["id"],
+                    "nome": p["nome"],
+                    "preco": p["preco_venda"],
+                    "quantidade": p["quantidade"]
+                }).execute()
+
+            # gera link
+            link = f"?orcamento={orcamento_id}"
+
+            st.success("Orçamento criado!")
+            st.code(link)
+
         
 # -------------------------
 # RANKING
