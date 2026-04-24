@@ -313,6 +313,32 @@ if orcamento_id:
 
     st.subheader(f"💰 Total: R$ {total:.2f}")
 
+    # -------------------------
+    # BOTÃO DE APROVAÇÃO
+    # -------------------------
+    st.divider()
+
+    if orc.data["status"] == "pendente":
+
+        if st.button("✅ Aprovar orçamento", use_container_width=True):
+
+            try:
+                supabase.table("orcamentos") \
+                    .update({"status": "aprovado"}) \
+                    .eq("id", orcamento_id) \
+                    .execute()
+
+                st.success("Orçamento aprovado com sucesso!")
+
+                st.rerun()
+
+            except Exception as e:
+                st.error("Erro ao aprovar orçamento:")
+                st.write(e)
+
+    else:
+        st.success(f"Status do orçamento: {orc.data['status']}")
+
     st.stop()
     
 # -------------------------
