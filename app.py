@@ -836,7 +836,10 @@ if selecionados:
             link = f"?orcamento={orcamento_id}"
 
             st.success("Orçamento criado com sucesso!")
-            st.code(link)
+
+            url = f"?orcamento={orcamento_id}"
+
+            st.markdown(f"[👉 Abrir orçamento]({url})")
         
 # -------------------------
 # RANKING
